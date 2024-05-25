@@ -9,7 +9,7 @@ const logger = new Logger(); // You can customize the context here
 const configService = new ConfigService();
 const PROTOCOL: string = configService?.getOrThrow('protocol') ?? 'https';
 const HOST: string = configService?.getOrThrow('host') ?? 'localhost';
-const PORT = configService?.getOrThrow('port');
+const PORT: number = configService?.getOrThrow('port');
 
 const NestFactoryOptions: NestApplicationOptions = {
   bodyParser: true,
