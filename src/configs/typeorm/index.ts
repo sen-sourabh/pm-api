@@ -5,7 +5,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 config();
 const configService = new ConfigService();
 
-export const dataSourceOptions: DataSourceOptions = {
+export const DataSourcesOptions: DataSourceOptions = {
   type: configService?.getOrThrow('DATABASE_TYPE').toString(),
   host: configService?.getOrThrow('DATABASE_HOST').toString(),
   port: +configService?.getOrThrow('DATABASE_PORT').toString(),
@@ -19,5 +19,5 @@ export const dataSourceOptions: DataSourceOptions = {
   logger: 'file',
 };
 
-const dataSource = new DataSource(dataSourceOptions);
+const dataSource = new DataSource(DataSourcesOptions);
 export default dataSource;

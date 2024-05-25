@@ -4,7 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import configurations from './configs/configurations';
-import { dataSourceOptions } from './configs/typeorm';
+import { DataSourcesOptions } from './configs/typeorm';
+import { MessengerModule } from './core/modules/messenger/messenger.module';
 
 @Module({
   imports: [
@@ -14,8 +15,9 @@ import { dataSourceOptions } from './configs/typeorm';
       load: [configurations],
     }),
     TypeOrmModule.forRootAsync({
-      useFactory: () => dataSourceOptions,
+      useFactory: () => DataSourcesOptions,
     }),
+    MessengerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

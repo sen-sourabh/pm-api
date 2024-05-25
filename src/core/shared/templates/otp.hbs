@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>no-reply</title>
+    <style>
+        body {
+            display: flex;
+            font-size: 16px;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+        }
+        section .passcode {
+            margin-left: 30%;
+        }
+        .passcode {
+            border: 2px solid yellow;
+            font-weight: bolder;
+            width: 14%;
+            background-color: whitesmoke;
+            text-align: center;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <section>
+            <div style="align: center">
+                <img src="https://img.freepik.com/free-photo/hands-holding-word-welcome_53876-146862.jpg?t=st=1711270288~exp=1711273888~hmac=9c86fd40c87969ec66f27909beb08529cb2792cc2a4fab9fd500247b1f80303b&w=826" />
+            </div>
+            <div class="salutation">Hi, {{username}}</div>
+            <br>
+            <div class="content">
+                <p>
+                Thanks for {{purpose}} with ABC Company, Please use following <strong>OTP</strong> to verify yourself.
+                </p>
+            </div>
+            <div class="passcode">
+                {{otp}}
+            </div>
+            <div>Please find attachments about our Policies.</div>
+            <br>
+            <div class="closing">
+                <p>
+                    <i><strong>NOTE:</strong> This OTP will expire in {{expiry_time}} {{expiry_unit}}. Please use it promptly.</i>
+                </p>
+            </div>
+            <br>
+            <br>
+            <br>
+            <div class="regards">
+                <p>Regards,</p>
+                </p>ABC Company Pvt. Ltd.</p>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
