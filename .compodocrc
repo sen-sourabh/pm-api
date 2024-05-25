@@ -1,0 +1,13 @@
+{
+    "title": "Vault Documentation",
+    "version": "1.0.0",
+    "output": "documentation/",
+    "port": 4000,
+    "theme": "laravel",
+    "watch": true,
+    "silent": true,
+    "disableSourceCode": true,
+    "disablePrivate": true,
+    "hideGenerator": true,
+    "disableCoverage": true
+}
