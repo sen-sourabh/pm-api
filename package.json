@@ -25,7 +25,7 @@
     "migrate:cache:clean": "npx typeorm cache:clear --dataSource dist/configs/typeorm/",
     "migrate:db:sync": "npx typeorm schema:sync --dataSource dist/configs/typeorm/",
     "init:app": "npm ci && npm run build && npm run migrate:run && npm run start:dev",
-    "prepare": "node .husky/install.mjs"
+    "prepare": "husky"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
