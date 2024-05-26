@@ -1,6 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { dataSourceOptions } from '../../configs/typeorm';
+import { DataSourcesOptions } from '../../configs/typeorm';
 
 export class AlterDb1716637473056 implements MigrationInterface {
   private readonly logger = new Logger(AlterDb1716637473056.name);
@@ -8,7 +8,7 @@ export class AlterDb1716637473056 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     try {
       await queryRunner.query(
-        `ALTER DATABASE ${dataSourceOptions.database ?? ''} CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci`,
+        `ALTER DATABASE ${DataSourcesOptions?.database ?? ''} CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci`,
       );
       this.logger.log(`Up: Alter database executed`);
     } catch (error) {
