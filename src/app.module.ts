@@ -6,6 +6,8 @@ import { AppService } from './app.service';
 import configurations from './configs/configurations';
 import { DataSourcesOptions } from './configs/typeorm';
 import { MessengerModule } from './core/modules/messenger/messenger.module';
+import { WebhooksModule } from './core/modules/webhooks/webhooks.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { MessengerModule } from './core/modules/messenger/messenger.module';
       useFactory: () => DataSourcesOptions,
     }),
     MessengerModule,
+    UsersModule,
+    WebhooksModule,
   ],
   controllers: [AppController],
   providers: [AppService],

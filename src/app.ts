@@ -32,13 +32,13 @@ export const bootstrap = async () => {
   //Helemt
   app.use(helmet());
 
-  //Set global prefix for apis
-  app.setGlobalPrefix('api/v1');
+  //TODO: Set global prefix for apis
+  // app.setGlobalPrefix('v1');
 
   //Global Validation Pipe
   app.useGlobalPipes(new ValidationPipe());
 
-  //Swagger Documentation
+  //TODO: Swagger Documentation
   SwaggerConfig(app);
 
   //App Info

@@ -6,7 +6,7 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { VerificationEmailRequestDto } from './dtos';
+import { VerificationEmailRequestDto } from './dtos/messenger-request.dto';
 import { MessengerService } from './messenger.service';
 
 @ApiTags('Messenger')
@@ -30,8 +30,8 @@ export class MessengerController {
     status: 500,
     description: 'No such file or directory',
   })
-  @Post('send-otp')
   @HttpCode(200)
+  @Post('send-otp')
   sendOTP(@Body() body: VerificationEmailRequestDto) {
     return this.messengerService.sendEmail(body);
   }

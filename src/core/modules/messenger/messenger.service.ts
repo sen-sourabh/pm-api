@@ -8,7 +8,10 @@ import {
 import { promises as fsPromises } from 'fs';
 import { compile } from 'handlebars';
 import { generateOTP } from '../../utilities/security';
-import { EmailAttachmentsRequestDto, VerificationEmailRequestDto } from './dtos';
+import {
+  EmailAttachmentsRequestDto,
+  VerificationEmailRequestDto,
+} from './dtos/messenger-request.dto';
 
 @Injectable()
 export class MessengerService {

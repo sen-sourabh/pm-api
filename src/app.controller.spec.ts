@@ -16,7 +16,7 @@ describe('AppController', () => {
 
   describe('root', () => {
     it('should return "Welcome to the Vault!!"', () => {
-      expect(appController.getHello()).toBe('Welcome to the Vault!!');
+      expect(appController.isServerRunning()).toBe('Welcome to the Vault!!');
     });
   });
 });
