@@ -24,7 +24,7 @@
     "migrate:create": "npx typeorm migration:create src/database/migrations/",
     "migrate:cache:clean": "npx typeorm cache:clear --dataSource dist/configs/typeorm/",
     "migrate:db:sync": "npx typeorm schema:sync --dataSource dist/configs/typeorm/",
-    "init:app": "npm ci && npm run build && npm run migrate:run && npm run start:dev",
+    "init:vault": "npm ci && npm run build && npm run migrate:run && npm run start:dev",
     "prepare": "husky"
   },
   "dependencies": {
