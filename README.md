@@ -12,8 +12,8 @@ Vault - The Password Manager that allow to keep your password organized, encrypt
 ## Running the app
 
 ```bash
-# development
-$ git clone https://github.com/sen-sourabh/pm-api.git
+# local - Please take a fork first
+$ git clone <your_git_url>/pm-api.git
 $ npm run init:vault
 
 # production mode
@@ -29,7 +29,7 @@ $ npm run test
 
 ## Support
 
-Please just raise the PR and add reviewers
+Please take a fork, raise the PR and add reviewers.
 
 ## Stay in touch
 
