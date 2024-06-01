@@ -6,6 +6,6 @@ export class AppService {
   constructor(private readonly configService: ConfigService) {}
 
   isServerRunning(): string {
-    return `Server is Running fine on ${parseInt(this.configService.getOrThrow('port'))}`;
+    return `Vault is Running on ${parseInt(this.configService.getOrThrow('port'))}`;
   }
 }

@@ -18,11 +18,8 @@ const NestFactoryOptions: NestApplicationOptions = {
 };
 
 const AppInfo = (): void => {
-  // logger.verbose(`Project documentation ${PROTOCOL}://${HOST}:${PORT} | Please run 'npm run g:doc' along with`);
   logger.verbose(`Swagger documentation ${PROTOCOL}://${HOST}:${PORT}/api`);
   logger.verbose(`Server running on ${PROTOCOL}://${HOST}:${PORT}`);
-  // logger.verbose(`API v1 base url ${PROTOCOL}://${HOST}:${PORT}/api/v1`);
-  // logger.verbose(`To check, Is server running. Hit ${PROTOCOL}://${HOST}:${PORT}/api/v1/starter`);
 };
 
 export const bootstrap = async () => {
@@ -31,12 +28,13 @@ export const bootstrap = async () => {
   //Helemt
   app.use(helmet());
 
-  //TODO: Set global prefix for apis
-  // app.setGlobalPrefix('v1');
+  //To set the global prefix within the endpoints
+  app.setGlobalPrefix('api/v1');
 
   //Global Validation Pipe
   app.useGlobalPipes(new ValidationPipe());
 
+  //Swagger configurations
   SwaggerConfig(app);
 
   //This line should be after the All config initialization

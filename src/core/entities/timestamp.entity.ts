@@ -12,7 +12,6 @@ export class Timestamp extends Identifier {
   @ApiProperty({
     description: 'With record create it`ll be auto generated',
     example: '2024-06-01T14:31:42.123Z',
-    type: 'datetime',
     required: true,
     default: () => 'CURRENT_TIMESTAMP()',
     name: 'created_at',
@@ -26,7 +25,6 @@ export class Timestamp extends Identifier {
   @ApiProperty({
     description: 'With record update it`ll be auto generated',
     example: '2024-06-01T14:31:42.123Z',
-    type: 'datetime',
     required: false,
     default: () => 'CURRENT_TIMESTAMP()',
     name: 'updated_at',
