@@ -1,0 +1,441 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/v1/messenger/send-otp": {
+      "post": {
+        "operationId": "sendOTP",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerificationEmailRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Email sent successfully"
+          },
+          "400": {
+            "description": "All fields are required"
+          },
+          "404": {
+            "description": "Email template not found"
+          },
+          "500": {
+            "description": "No such file or directory"
+          }
+        },
+        "tags": [
+          "Messenger"
+        ]
+      }
+    },
+    "/api/v1/users": {
+      "post": {
+        "operationId": "create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      },
+      "get": {
+        "operationId": "findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/v1/users/{id}": {
+      "get": {
+        "operationId": "findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      },
+      "patch": {
+        "operationId": "update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      },
+      "delete": {
+        "operationId": "remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/v1/webhooks": {
+      "post": {
+        "operationId": "handleWebhook",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Webhooks"
+        ]
+      }
+    },
+    "/api/v1/vault": {
+      "get": {
+        "operationId": "isServerRunning",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Vault"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Vault-api",
+    "description": "Vault - Password manager",
+    "version": "1.0",
+    "contact": {
+      "name": "Vault",
+      "url": "Your website link",
+      "email": "Your official gmail"
+    }
+  },
+  "tags": [],
+  "servers": [
+    {
+      "url": "http://localhost:4000"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "VerificationEmailRequestDto": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "Name of the receiver",
+            "example": "Alan",
+            "maxLength": 100,
+            "nullable": false
+          },
+          "email": {
+            "description": "Receiver emails seperated by comma",
+            "example": [
+              "alan@gmail.com",
+              "alex@gmail.com"
+            ],
+            "nullable": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "subject": {
+            "type": "string",
+            "description": "Subject of sending email",
+            "example": "Here is the subject",
+            "nullable": false
+          },
+          "purpose": {
+            "type": "string",
+            "description": "Purpose of email",
+            "example": "Account Verification",
+            "nullable": false,
+            "enum": [
+              "Sign Up",
+              "Password Reset",
+              "Account Verification",
+              "Custom"
+            ]
+          },
+          "attachments": {
+            "type": "boolean",
+            "description": "Set to true, If mail content attachments",
+            "example": false,
+            "nullable": false
+          },
+          "expiry_time": {
+            "type": "number",
+            "description": "Time of expiry of pascode/link (If any included in email)",
+            "example": 10,
+            "nullable": false
+          },
+          "expiry_unit": {
+            "type": "string",
+            "description": "Unit of expiry time of passcode/link ()If any included in email)",
+            "example": "minutes",
+            "nullable": false,
+            "enum": [
+              "seconds",
+              "minutes",
+              "hours",
+              "days",
+              "weeks",
+              "months"
+            ]
+          }
+        },
+        "required": [
+          "username",
+          "email",
+          "subject",
+          "purpose",
+          "attachments",
+          "expiry_time",
+          "expiry_unit"
+        ]
+      },
+      "CreateUserDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id is the unique identifier",
+            "example": "e762634c-3e41-11eb-b897-0862660ccbd4",
+            "default": "uuid",
+            "nullable": false,
+            "uniqueItems": true
+          },
+          "created_at": {
+            "format": "T",
+            "type": "string",
+            "description": "With record create it`ll be auto generated",
+            "example": "2024-06-01T14:31:42.123Z",
+            "nullable": false
+          },
+          "updated_at": {
+            "format": "T",
+            "type": "string",
+            "description": "With record update it`ll be auto generated",
+            "example": "2024-06-01T14:31:42.123Z",
+            "nullable": true
+          },
+          "first_name": {
+            "type": "string",
+            "description": "first name of the user",
+            "example": "John"
+          },
+          "last_name": {
+            "type": "string",
+            "description": "last name of the user",
+            "example": "Snow"
+          },
+          "organization_name": {
+            "type": "string",
+            "description": "organization name of the user",
+            "example": "ABC Inc."
+          },
+          "organization_position": {
+            "type": "string",
+            "description": "position in organization of the user",
+            "example": "Sr. Manager"
+          },
+          "no_of_employees": {
+            "type": "string",
+            "description": "no of empoyees in organization of the user",
+            "example": "100"
+          },
+          "email": {
+            "type": "string",
+            "description": "unique email of the user",
+            "example": "example@gmail.com",
+            "uniqueItems": true
+          },
+          "password": {
+            "type": "string",
+            "description": "password of the user",
+            "example": "Welcome@123"
+          },
+          "otp": {
+            "type": "number",
+            "description": "otp of the user",
+            "example": 123456
+          },
+          "secret_key": {
+            "type": "string",
+            "description": "secret key of the user",
+            "example": "d75QBLtPQTRL0x0umobtGqgOWJbKf3yE5U75+bMGK9s="
+          },
+          "phone_number": {
+            "type": "number",
+            "description": "phone number of the user",
+            "example": 1234567890
+          },
+          "roles_id": {
+            "type": "number",
+            "description": "role id of the user",
+            "example": 1
+          },
+          "user_types_id": {
+            "type": "number",
+            "description": "user type id of the user",
+            "example": 1
+          },
+          "last_login": {
+            "format": "T",
+            "type": "string",
+            "description": "last login datetime of the user",
+            "example": "2024-06-01T14:31:42.123Z",
+            "default": null
+          },
+          "is_login": {
+            "type": "boolean",
+            "description": "whether user logged in or not",
+            "example": false
+          },
+          "is_enabled": {
+            "type": "boolean",
+            "description": "whether user enabled by admin or not",
+            "example": true
+          },
+          "is_deleted": {
+            "type": "boolean",
+            "description": "whether user deleted or not",
+            "example": false
+          }
+        },
+        "required": [
+          "id",
+          "created_at",
+          "email",
+          "password",
+          "roles_id",
+          "user_types_id",
+          "is_login",
+          "is_enabled",
+          "is_deleted"
+        ]
+      },
+      "UpdateUserDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "WebhookRequestDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "type of webhook request that is built-in",
+            "example": "user:created"
+          },
+          "payload": {
+            "type": "object",
+            "description": "payload data for webhook"
+          }
+        }
+      }
+    }
+  }
+}

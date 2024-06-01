@@ -126,7 +126,6 @@ export class User extends Timestamp {
   @ApiPropertyOptional({
     description: 'last login datetime of the user',
     example: '2024-06-01T14:31:42.123Z',
-    type: 'datetime',
     required: false,
     default: null,
     format: 'T',
