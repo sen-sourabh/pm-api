@@ -18,6 +18,7 @@ export const DataSourcesOptions: DataSourceOptions = {
   charset: 'utf8mb4_0900_ai_ci',
   logger: 'file',
   cache: !!configService?.getOrThrow('DATABASE_ORM_CACHE'),
+  timezone: 'Z',
 };
 
 const dataSource = new DataSource(DataSourcesOptions);

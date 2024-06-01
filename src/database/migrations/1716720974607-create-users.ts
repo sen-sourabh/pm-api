@@ -22,7 +22,7 @@ export class CreateUsers1716720974607 implements MigrationInterface {
                 roles_id int NOT NULL,
                 user_types_id int NOT NULL,
                 last_login timestamp NULL DEFAULT NULL,
-                is_login tinyint NOT NULL DEFAULT '1',
+                is_login tinyint NOT NULL DEFAULT '0',
                 is_enabled tinyint NOT NULL DEFAULT '1',
                 is_deleted tinyint NOT NULL DEFAULT '0',
                 created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,
