@@ -27,7 +27,6 @@ const AppInfo = (): void => {
 
 export const bootstrap = async () => {
   const app = await NestFactory.create(AppModule, NestFactoryOptions);
-  await app.listen(PORT);
 
   //Helemt
   app.use(helmet());
@@ -38,8 +37,10 @@ export const bootstrap = async () => {
   //Global Validation Pipe
   app.useGlobalPipes(new ValidationPipe());
 
-  //TODO: Swagger Documentation
   SwaggerConfig(app);
+
+  //This line should be after the All config initialization
+  await app.listen(PORT);
 
   //App Info
   AppInfo();
