@@ -14,9 +14,10 @@ export const DataSourcesOptions: DataSourceOptions = {
   database: configService?.getOrThrow('DATABASE_NAME').toString(),
   entities: ['dist/**/*.entity{.js}'], // corrected assignment
   migrations: ['dist/database/migrations/*.js'], // corrected assignment
-  synchronize: !!configService?.getOrThrow('DATABASE_SYNCHRONIZE').toString(),
+  synchronize: !!configService?.getOrThrow('DATABASE_SYNCHRONIZE'),
   charset: 'utf8mb4_0900_ai_ci',
   logger: 'file',
+  cache: !!configService?.getOrThrow('DATABASE_ORM_CACHE'),
 };
 
 const dataSource = new DataSource(DataSourcesOptions);
