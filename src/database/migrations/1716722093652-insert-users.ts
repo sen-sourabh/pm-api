@@ -15,5 +15,5 @@ export class InsertUsers1716722093652 implements MigrationInterface {
     }
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {}
+  public async down(): Promise<void> {}
 }

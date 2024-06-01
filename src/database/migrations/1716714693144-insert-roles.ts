@@ -15,5 +15,5 @@ export class InsertRoles1716714693144 implements MigrationInterface {
     }
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {}
+  public async down(): Promise<void> {}
 }
