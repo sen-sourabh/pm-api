@@ -1,8 +1,17 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiTags } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsArray, IsDateString, IsNumber, IsObject, IsOptional, IsString } from 'class-validator';
 
 export class ApiResponseMetadataModel {
+  @ApiProperty({
+    description: 'any extra query during list',
+    example: { id: 1 },
+    required: false,
+  })
+  @IsObject()
+  @IsOptional()
+  readonly query?: unknown;
+
   @ApiProperty({
     description: 'Page number',
     example: 1,
@@ -10,54 +19,30 @@ export class ApiResponseMetadataModel {
   })
   @IsNumber()
   @IsOptional()
-  pageNumber?: number;
+  readonly pageNumber?: number;
 
   @ApiProperty({
     description: 'No of records will be fetched in single request',
-    example: 10,
+    example: 25,
     required: false,
   })
   @IsNumber()
   @IsOptional()
-  pageSize?: number;
+  readonly pageSize?: number;
 }
 
+@ApiTags('ApiResponseModel')
 export class ApiResponseModel {
-  @ApiProperty({
-    description: 'Status code of the currect response',
-    example: 200,
-    required: true,
-  })
-  @IsNumber()
-  statusCode: number;
-
-  @ApiProperty({
-    description: 'Status of the currect response',
-    example: 'OK',
-    required: true,
-  })
-  @IsObject()
-  readonly status: string;
-
-  @ApiProperty({
-    description: 'Message of the currect response from an Api',
-    example: 'Operation Successful',
-    required: true,
-  })
-  @IsString()
-  readonly message: string;
-
   @ApiProperty({
     description: 'Actual data of the currect response',
     required: false,
   })
   @IsArray()
   @IsOptional()
-  readonly data?: Record<string, unknown> | Record<string, unknown>[];
+  readonly data?: unknown;
 
   @ApiProperty({
     description: 'Metadata of the currect response',
-    example: { pageNumber: 1, pageSize: 10 } as ApiResponseMetadataModel,
     required: false,
   })
   @IsObject()
@@ -66,11 +51,39 @@ export class ApiResponseModel {
   readonly metadata?: ApiResponseMetadataModel;
 
   @ApiProperty({
+    description: 'Status code of the currect response',
+    example: 200,
+    required: false,
+  })
+  @IsNumber()
+  @IsOptional()
+  readonly statusCode?: number;
+
+  @ApiProperty({
+    description: 'Status of the currect response',
+    example: 'OK',
+    required: false,
+  })
+  @IsObject()
+  @IsOptional()
+  readonly status?: string;
+
+  @ApiProperty({
+    description: 'Message of the currect response from an Api',
+    example: 'Operation Successful',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  readonly message?: string;
+
+  @ApiProperty({
     description: 'Timestamp of the currect response',
     example: '2024-03-25T10:16:58.962Z',
     format: new Date().toISOString(),
-    required: true,
+    required: false,
   })
   @IsDateString({ strict: true })
-  readonly timestamp: Date;
+  @IsOptional()
+  readonly timestamp?: Date;
 }

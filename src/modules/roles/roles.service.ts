@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateRoleDto } from './dto/create-role.dto';
-import { UpdateRoleDto } from './dto/update-role.dto';
+import { Order } from '../../core/shared/enums';
+import { ApiResponseModel } from '../../core/shared/models/api-response.model';
+import { CreateRoleDto } from './dto/create.dto';
+import { ListQueryRolesDto } from './dto/list.dto';
+import { UpdateRoleDto } from './dto/update.dto';
 import { Role } from './entities/role.entity';
 
 @Injectable()
@@ -13,8 +16,21 @@ export class RolesService {
     return 'This action adds a new role';
   }
 
-  findAll(): Promise<[Role[], number]> {
-    return this.rolesRepository.findAndCount();
+  async findAll(query?: Partial<ListQueryRolesDto>): Promise<ApiResponseModel> {
+    // console.log("query: ", query);
+    const { skip, take } = query;
+    delete query?.skip;
+    delete query?.take;
+    //We need a Pipe here
+    const result = await this.rolesRepository.find({
+      where: query,
+      skip,
+      take,
+      order: { id: Order.ASC },
+    });
+    // console.log("result: ", ...result);
+
+    return { data: result, metadata: { query } };
   }
 
   findOne(id: number) {

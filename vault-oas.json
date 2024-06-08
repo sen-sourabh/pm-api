@@ -83,10 +83,92 @@
       },
       "get": {
         "operationId": "findAll",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "id",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "name",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "is_default",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "is_enabled",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "is_deleted",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "created_at",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "updated_at",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "skip",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "take",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "returns list of roles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseModel"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -109,7 +191,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "return role by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Role"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -421,6 +510,120 @@
       "CreateRoleDto": {
         "type": "object",
         "properties": {}
+      },
+      "ApiResponseMetadataModel": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "object",
+            "description": "any extra query during list",
+            "example": {
+              "id": 1
+            }
+          },
+          "pageNumber": {
+            "type": "number",
+            "description": "Page number",
+            "example": 1
+          },
+          "pageSize": {
+            "type": "number",
+            "description": "No of records will be fetched in single request",
+            "example": 25
+          }
+        }
+      },
+      "ApiResponseModel": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "description": "Actual data of the currect response"
+          },
+          "metadata": {
+            "description": "Metadata of the currect response",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiResponseMetadataModel"
+              }
+            ]
+          },
+          "statusCode": {
+            "type": "number",
+            "description": "Status code of the currect response",
+            "example": 200
+          },
+          "status": {
+            "type": "string",
+            "description": "Status of the currect response",
+            "example": "OK"
+          },
+          "message": {
+            "type": "string",
+            "description": "Message of the currect response from an Api",
+            "example": "Operation Successful"
+          },
+          "timestamp": {
+            "format": "2024-06-08T15:49:01.678Z",
+            "type": "string",
+            "description": "Timestamp of the currect response",
+            "example": "2024-03-25T10:16:58.962Z"
+          }
+        }
+      },
+      "Role": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Id is the unique number identifier",
+            "example": 1,
+            "nullable": false,
+            "uniqueItems": true
+          },
+          "name": {
+            "type": "string",
+            "description": "name of the role",
+            "example": "Admin"
+          },
+          "is_default": {
+            "type": "boolean",
+            "description": "whether role is default or not",
+            "example": true
+          },
+          "is_enabled": {
+            "type": "boolean",
+            "description": "whether role is enabled or not",
+            "example": true
+          },
+          "is_deleted": {
+            "type": "boolean",
+            "description": "whether role is deleted or not",
+            "example": false
+          },
+          "created_at": {
+            "format": "T",
+            "type": "string",
+            "description": "With record create it`ll be auto generated",
+            "example": "2024-06-01T14:31:42.123Z",
+            "nullable": false
+          },
+          "updated_at": {
+            "format": "T",
+            "type": "string",
+            "description": "With record update it`ll be auto generated",
+            "example": "2024-06-01T14:31:42.123Z",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "is_default",
+          "is_enabled",
+          "is_deleted",
+          "created_at"
+        ]
       },
       "UpdateRoleDto": {
         "type": "object",
