@@ -34,6 +34,141 @@
         ]
       }
     },
+    "/api/v1/webhooks": {
+      "post": {
+        "operationId": "handleWebhook",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Webhooks"
+        ]
+      }
+    },
+    "/api/v1/roles": {
+      "post": {
+        "operationId": "create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRoleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Roles"
+        ]
+      },
+      "get": {
+        "operationId": "findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Roles"
+        ]
+      }
+    },
+    "/api/v1/roles/{id}": {
+      "get": {
+        "operationId": "findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Roles"
+        ]
+      },
+      "patch": {
+        "operationId": "update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRoleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Roles"
+        ]
+      },
+      "delete": {
+        "operationId": "remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Roles"
+        ]
+      }
+    },
     "/api/v1/users": {
       "post": {
         "operationId": "create",
@@ -149,30 +284,6 @@
         },
         "tags": [
           "Users"
-        ]
-      }
-    },
-    "/api/v1/webhooks": {
-      "post": {
-        "operationId": "handleWebhook",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/WebhookRequestDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "Webhooks"
         ]
       }
     },
@@ -293,6 +404,28 @@
           "expiry_unit"
         ]
       },
+      "WebhookRequestDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "type of webhook request that is built-in",
+            "example": "user:created"
+          },
+          "payload": {
+            "type": "object",
+            "description": "payload data for webhook"
+          }
+        }
+      },
+      "CreateRoleDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "UpdateRoleDto": {
+        "type": "object",
+        "properties": {}
+      },
       "CreateUserDto": {
         "type": "object",
         "properties": {}
@@ -302,25 +435,11 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "Id is the unique identifier",
+            "description": "Id is the unique uuid identifier",
             "example": "e762634c-3e41-11eb-b897-0862660ccbd4",
             "default": "uuid",
             "nullable": false,
             "uniqueItems": true
-          },
-          "created_at": {
-            "format": "T",
-            "type": "string",
-            "description": "With record create it`ll be auto generated",
-            "example": "2024-06-01T14:31:42.123Z",
-            "nullable": false
-          },
-          "updated_at": {
-            "format": "T",
-            "type": "string",
-            "description": "With record update it`ll be auto generated",
-            "example": "2024-06-01T14:31:42.123Z",
-            "nullable": true
           },
           "first_name": {
             "type": "string",
@@ -387,8 +506,7 @@
             "format": "T",
             "type": "string",
             "description": "last login datetime of the user",
-            "example": "2024-06-01T14:31:42.123Z",
-            "default": null
+            "example": "2024-06-01T14:31:42.123Z"
           },
           "is_login": {
             "type": "boolean",
@@ -404,37 +522,38 @@
             "type": "boolean",
             "description": "whether user deleted or not",
             "example": false
+          },
+          "created_at": {
+            "format": "T",
+            "type": "string",
+            "description": "With record create it`ll be auto generated",
+            "example": "2024-06-01T14:31:42.123Z",
+            "nullable": false
+          },
+          "updated_at": {
+            "format": "T",
+            "type": "string",
+            "description": "With record update it`ll be auto generated",
+            "example": "2024-06-01T14:31:42.123Z"
           }
         },
         "required": [
           "id",
-          "created_at",
           "email",
-          "password",
+          "secret_key",
+          "phone_number",
           "roles_id",
           "user_types_id",
           "is_login",
           "is_enabled",
-          "is_deleted"
+          "is_deleted",
+          "created_at",
+          "updated_at"
         ]
       },
       "UpdateUserDto": {
         "type": "object",
         "properties": {}
-      },
-      "WebhookRequestDto": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "description": "type of webhook request that is built-in",
-            "example": "user:created"
-          },
-          "payload": {
-            "type": "object",
-            "description": "payload data for webhook"
-          }
-        }
       }
     }
   }

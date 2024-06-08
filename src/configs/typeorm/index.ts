@@ -12,13 +12,16 @@ export const DataSourcesOptions: DataSourceOptions = {
   username: configService?.getOrThrow('DATABASE_USERNAME').toString(),
   password: configService?.getOrThrow('DATABASE_PASSWORD').toString(),
   database: configService?.getOrThrow('DATABASE_NAME').toString(),
-  entities: ['dist/**/*.entity{.js}'], // corrected assignment
+  entities: ['dist/**/*.entity.js'], // corrected assignment
   migrations: ['dist/database/migrations/*.js'], // corrected assignment
   synchronize: !!configService?.getOrThrow('DATABASE_SYNCHRONIZE'),
   charset: 'utf8mb4_0900_ai_ci',
   logger: 'file',
   cache: !!configService?.getOrThrow('DATABASE_ORM_CACHE'),
   timezone: 'Z',
+  dateStrings: true,
+  useUTC: true,
+  logging: 'all',
 };
 
 const dataSource = new DataSource(DataSourcesOptions);
