@@ -7,56 +7,76 @@ import {
   IsPhoneNumber,
   IsString,
 } from 'class-validator';
-import { Column, Entity } from 'typeorm';
-import { Timestamp } from '../../../core/entities/timestamp.entity';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity('users')
 @ApiTags('Users')
-export class User extends Timestamp {
+export class User {
+  @ApiProperty({
+    description: 'Id is the unique uuid identifier',
+    example: 'e762634c-3e41-11eb-b897-0862660ccbd4',
+    type: 'string',
+    required: true,
+    default: 'uuid',
+    name: 'id',
+    nullable: false,
+    uniqueItems: true,
+  })
+  @PrimaryGeneratedColumn('uuid')
+  @Column({ length: 150, type: 'varchar', primary: true })
+  @IsString()
+  id: string;
+
   @ApiPropertyOptional({
     description: 'first name of the user',
     example: 'John',
     required: false,
   })
-  @Column({ length: 100, type: 'varchar' })
+  @Column({ length: 100, type: 'varchar', nullable: true })
   @IsString()
-  readonly first_name?: string;
+  first_name?: string;
 
   @ApiPropertyOptional({
     description: 'last name of the user',
     example: 'Snow',
     required: false,
   })
-  @Column({ length: 100, type: 'varchar' })
+  @Column({ length: 100, type: 'varchar', nullable: true })
   @IsString()
-  readonly last_name?: string;
+  last_name?: string;
 
   @ApiPropertyOptional({
     description: 'organization name of the user',
     example: 'ABC Inc.',
     required: false,
   })
-  @Column({ length: 255, type: 'varchar', unique: true })
+  @Column({ length: 255, type: 'varchar', nullable: true })
   @IsString()
-  readonly organization_name?: string;
+  organization_name?: string;
 
   @ApiPropertyOptional({
     description: 'position in organization of the user',
     example: 'Sr. Manager',
     required: false,
   })
-  @Column({ length: 150, type: 'varchar' })
+  @Column({ length: 150, type: 'varchar', nullable: true })
   @IsString()
-  readonly organization_position?: string;
+  organization_position?: string;
 
   @ApiPropertyOptional({
     description: 'no of empoyees in organization of the user',
     example: '100',
     required: false,
   })
-  @Column({ length: 15, type: 'varchar' })
+  @Column({ length: 15, type: 'varchar', nullable: true })
   @IsString()
-  readonly no_of_employees?: string;
+  no_of_employees?: string;
 
   @ApiProperty({
     description: 'unique email of the user',
@@ -66,44 +86,43 @@ export class User extends Timestamp {
   })
   @Column({ length: 150, type: 'varchar', unique: true })
   @IsString({ message: 'email is required' })
-  readonly email: string;
+  email: string;
 
   @ApiProperty({
     description: 'password of the user',
     example: 'Welcome@123',
-    required: true,
+    required: false,
   })
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', nullable: true })
   @IsString({ message: 'password is required' })
-  readonly password: string;
+  password?: string;
 
   @ApiPropertyOptional({
     description: 'otp of the user',
     example: 123456,
     required: false,
   })
-  @Column({ type: 'int' })
+  @Column({ type: 'int', nullable: true })
   @IsNumber()
-  readonly otp?: number;
+  otp?: number;
 
   @ApiProperty({
     description: 'secret key of the user',
     example: 'd75QBLtPQTRL0x0umobtGqgOWJbKf3yE5U75+bMGK9s=',
-    required: false,
+    required: true,
   })
   @Column({ length: 255, type: 'varchar', unique: true })
   @IsString()
-  readonly secret_key: string;
+  secret_key: string;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'phone number of the user',
     example: 1234567890,
-    required: false,
+    required: true,
   })
   @Column({ type: 'bigint', unique: true })
   @IsPhoneNumber()
-  @IsOptional()
-  readonly phone_number?: number;
+  phone_number: number;
 
   @ApiProperty({
     description: 'role id of the user',
@@ -112,7 +131,7 @@ export class User extends Timestamp {
   })
   @Column({ type: 'int' })
   @IsNumber()
-  readonly roles_id: number;
+  roles_id: number;
 
   @ApiProperty({
     description: 'user type id of the user',
@@ -121,18 +140,17 @@ export class User extends Timestamp {
   })
   @Column({ type: 'int' })
   @IsNumber()
-  readonly user_types_id: number;
+  user_types_id: number;
 
   @ApiPropertyOptional({
     description: 'last login datetime of the user',
     example: '2024-06-01T14:31:42.123Z',
     required: false,
-    default: null,
     format: 'T',
   })
   @IsDateString({ strict: true, strictSeparator: true })
   @IsOptional()
-  readonly last_login?: Date;
+  last_login?: Date;
 
   @ApiProperty({
     description: 'whether user logged in or not',
@@ -141,7 +159,7 @@ export class User extends Timestamp {
   })
   @Column({ type: 'tinyint', default: '0' })
   @IsBoolean()
-  readonly is_login: boolean;
+  is_login: boolean;
 
   @ApiProperty({
     description: 'whether user enabled by admin or not',
@@ -150,7 +168,7 @@ export class User extends Timestamp {
   })
   @Column({ type: 'tinyint', default: '1' })
   @IsBoolean()
-  readonly is_enabled: boolean;
+  is_enabled: boolean;
 
   @ApiProperty({
     description: 'whether user deleted or not',
@@ -159,5 +177,28 @@ export class User extends Timestamp {
   })
   @Column({ type: 'tinyint', default: '0' })
   @IsBoolean()
-  readonly is_deleted: boolean;
+  is_deleted: boolean;
+
+  @ApiProperty({
+    description: 'With record create it`ll be auto generated',
+    example: '2024-06-01T14:31:42.123Z',
+    required: true,
+    name: 'created_at',
+    nullable: false,
+    format: 'T',
+  })
+  @IsDateString({ strict: true, strictSeparator: true })
+  @CreateDateColumn({ type: 'datetime' })
+  created_at: Date;
+
+  @ApiProperty({
+    description: 'With record update it`ll be auto generated',
+    example: '2024-06-01T14:31:42.123Z',
+    required: true,
+    name: 'updated_at',
+    format: 'T',
+  })
+  @IsDateString({ strict: true, strictSeparator: true })
+  @UpdateDateColumn({ type: 'datetime', nullable: true })
+  updated_at: Date;
 }
