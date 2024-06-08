@@ -4,6 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { SwaggerConfig } from './configs/swagger';
+import { ResponseInterceptor } from './core/shared/interceptors/response/response.interceptor';
 
 const logger = new Logger(); // You can customize the context here
 const configService = new ConfigService();
@@ -30,6 +31,9 @@ export const bootstrap = async () => {
 
   //To set the global prefix within the endpoints
   app.setGlobalPrefix('api/v1');
+
+  //Interceptors
+  app.useGlobalInterceptors(new ResponseInterceptor());
 
   //Global Validation Pipe
   app.useGlobalPipes(new ValidationPipe());
