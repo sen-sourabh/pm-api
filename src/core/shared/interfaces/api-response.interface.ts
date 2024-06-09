@@ -1,8 +1,8 @@
-import { ApiResponseCommonModel } from '../models/api-response.model';
+import { ApiResponseUnifiedModel } from '../models/api-response.model';
 
-export interface ApiResponseModel<T> extends ApiResponseCommonModel {
+export interface ApiResponseModel<T> extends ApiResponseUnifiedModel {
   data?: T;
-  metadata?: { query?: unknown };
+  metadata?: { query?: unknown; params?: unknown };
   statusCode?: number;
   status?: string;
   message?: string;

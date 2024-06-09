@@ -1,10 +1,22 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UsePipes,
+} from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
 import { CreateRoleDto } from './dto/create.dto';
 import { ListQueryRolesDto } from './dto/list.dto';
 import { UpdateRoleDto } from './dto/update.dto';
 import { Role } from './entities/role.entity';
+import { RolesPathParamsPipe } from './pipes/roles-path-params.pipe';
 import { RolesQueryParamsPipe } from './pipes/roles-query-params.pipe';
 import { RolesService } from './roles.service';
 
@@ -38,6 +50,7 @@ export class RolesController {
   })
   @Get(':id')
   @HttpCode(200)
+  @UsePipes(new RolesPathParamsPipe())
   findOneRole(@Param('id') id: string) {
     return this.rolesService.findOneRole(+id);
   }

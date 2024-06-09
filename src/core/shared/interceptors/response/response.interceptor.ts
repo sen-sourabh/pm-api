@@ -1,8 +1,8 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { Observable, map } from 'rxjs';
 import { getHttpStatusViaCode } from '../../../helpers/serializers';
-import { ResponseDto } from '../../dtos/response/response.dto';
-import { ApiResponseCommonModel } from '../../models/api-response.model';
+import { ApiResponseDto } from '../../dtos/response.dto';
+import { ApiResponseUnifiedModel } from '../../models/api-response.model';
 
 @Injectable()
 export class ResponseInterceptor implements NestInterceptor {
@@ -17,7 +17,7 @@ export class ResponseInterceptor implements NestInterceptor {
     // console.log('request.headers: ', request.headers);
 
     return next.handle().pipe(
-      map((data: ApiResponseCommonModel) => {
+      map((data: ApiResponseUnifiedModel) => {
         const response = context.switchToHttp().getResponse();
         // console.log(
         //   'After from Interceptor:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::',
@@ -28,7 +28,7 @@ export class ResponseInterceptor implements NestInterceptor {
     );
   }
 
-  serializeResponse = (data: ApiResponseCommonModel, response: any) => {
+  serializeResponse = (data: ApiResponseUnifiedModel, response: any) => {
     return {
       data: data?.data,
       metadata: data?.metadata,
@@ -36,6 +36,6 @@ export class ResponseInterceptor implements NestInterceptor {
       status: getHttpStatusViaCode(data, response),
       message: data?.message ?? response?.message ?? 'Operation successful',
       timestamp: new Date().toISOString(),
-    } as unknown as ResponseDto;
+    } as unknown as ApiResponseDto;
   };
 }
