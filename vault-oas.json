@@ -60,7 +60,7 @@
     },
     "/api/v1/roles": {
       "post": {
-        "operationId": "create",
+        "operationId": "createRole",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -82,7 +82,7 @@
         ]
       },
       "get": {
-        "operationId": "findAll",
+        "operationId": "findAllRoles",
         "parameters": [
           {
             "name": "id",
@@ -125,24 +125,6 @@
             }
           },
           {
-            "name": "created_at",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "format": "date-time",
-              "type": "string"
-            }
-          },
-          {
-            "name": "updated_at",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "format": "date-time",
-              "type": "string"
-            }
-          },
-          {
             "name": "skip",
             "required": false,
             "in": "query",
@@ -165,7 +147,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiResponseModel"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Role"
+                  }
                 }
               }
             }
@@ -178,7 +163,7 @@
     },
     "/api/v1/roles/{id}": {
       "get": {
-        "operationId": "findOne",
+        "operationId": "findOneRole",
         "parameters": [
           {
             "name": "id",
@@ -206,7 +191,7 @@
         ]
       },
       "patch": {
-        "operationId": "update",
+        "operationId": "updateRole",
         "parameters": [
           {
             "name": "id",
@@ -237,7 +222,7 @@
         ]
       },
       "delete": {
-        "operationId": "remove",
+        "operationId": "removeRole",
         "parameters": [
           {
             "name": "id",
@@ -260,7 +245,7 @@
     },
     "/api/v1/users": {
       "post": {
-        "operationId": "create",
+        "operationId": "createUser",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -289,7 +274,7 @@
         ]
       },
       "get": {
-        "operationId": "findAll",
+        "operationId": "findAllUsers",
         "parameters": [],
         "responses": {
           "200": {
@@ -303,7 +288,7 @@
     },
     "/api/v1/users/{id}": {
       "get": {
-        "operationId": "findOne",
+        "operationId": "findOneUser",
         "parameters": [
           {
             "name": "id",
@@ -324,7 +309,7 @@
         ]
       },
       "patch": {
-        "operationId": "update",
+        "operationId": "updateUser",
         "parameters": [
           {
             "name": "id",
@@ -355,7 +340,7 @@
         ]
       },
       "delete": {
-        "operationId": "remove",
+        "operationId": "removeUser",
         "parameters": [
           {
             "name": "id",
@@ -510,66 +495,6 @@
       "CreateRoleDto": {
         "type": "object",
         "properties": {}
-      },
-      "ApiResponseMetadataModel": {
-        "type": "object",
-        "properties": {
-          "query": {
-            "type": "object",
-            "description": "any extra query during list",
-            "example": {
-              "id": 1
-            }
-          },
-          "pageNumber": {
-            "type": "number",
-            "description": "Page number",
-            "example": 1
-          },
-          "pageSize": {
-            "type": "number",
-            "description": "No of records will be fetched in single request",
-            "example": 25
-          }
-        }
-      },
-      "ApiResponseModel": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "type": "object",
-            "description": "Actual data of the currect response"
-          },
-          "metadata": {
-            "description": "Metadata of the currect response",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/ApiResponseMetadataModel"
-              }
-            ]
-          },
-          "statusCode": {
-            "type": "number",
-            "description": "Status code of the currect response",
-            "example": 200
-          },
-          "status": {
-            "type": "string",
-            "description": "Status of the currect response",
-            "example": "OK"
-          },
-          "message": {
-            "type": "string",
-            "description": "Message of the currect response from an Api",
-            "example": "Operation Successful"
-          },
-          "timestamp": {
-            "format": "2024-06-08T15:49:01.678Z",
-            "type": "string",
-            "description": "Timestamp of the currect response",
-            "example": "2024-03-25T10:16:58.962Z"
-          }
-        }
       },
       "Role": {
         "type": "object",

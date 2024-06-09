@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsBoolean, IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 import { FindManyOptions } from 'typeorm';
 
 export class ListQueryRolesDto implements FindManyOptions {
@@ -33,15 +33,15 @@ export class ListQueryRolesDto implements FindManyOptions {
   @IsOptional()
   readonly is_deleted?: boolean;
 
-  @ApiPropertyOptional()
-  @IsDateString()
-  @IsOptional()
-  readonly created_at?: Date;
+  // @ApiPropertyOptional()
+  // @IsDateString()
+  // @IsOptional()
+  // readonly created_at?: Date;
 
-  @ApiPropertyOptional()
-  @IsDateString()
-  @IsOptional()
-  readonly updated_at?: Date;
+  // @ApiPropertyOptional()
+  // @IsDateString()
+  // @IsOptional()
+  // readonly updated_at?: Date;
 
   @ApiPropertyOptional()
   @IsNumber()

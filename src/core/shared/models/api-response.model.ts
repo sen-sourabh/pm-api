@@ -2,7 +2,8 @@ import { ApiProperty, ApiTags } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsArray, IsDateString, IsNumber, IsObject, IsOptional, IsString } from 'class-validator';
 
-export class ApiResponseMetadataModel {
+@ApiTags('ApiResponseMetadataCommonModel')
+export class ApiResponseMetadataCommonModel {
   @ApiProperty({
     description: 'any extra query during list',
     example: { id: 1 },
@@ -31,8 +32,8 @@ export class ApiResponseMetadataModel {
   readonly pageSize?: number;
 }
 
-@ApiTags('ApiResponseModel')
-export class ApiResponseModel {
+@ApiTags('ApiResponseCommonModel')
+export class ApiResponseCommonModel {
   @ApiProperty({
     description: 'Actual data of the currect response',
     required: false,
@@ -46,9 +47,9 @@ export class ApiResponseModel {
     required: false,
   })
   @IsObject()
-  @Type(() => ApiResponseMetadataModel)
+  @Type(() => ApiResponseMetadataCommonModel)
   @IsOptional()
-  readonly metadata?: ApiResponseMetadataModel;
+  readonly metadata?: ApiResponseMetadataCommonModel;
 
   @ApiProperty({
     description: 'Status code of the currect response',

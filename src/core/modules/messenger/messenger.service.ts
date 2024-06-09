@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { promises as fsPromises } from 'fs';
 import { compile } from 'handlebars';
-import { generateOTP } from '../../utilities/security';
+import { generateOTP } from '../../helpers/security';
 import {
   EmailAttachmentsRequestDto,
   VerificationEmailRequestDto,
