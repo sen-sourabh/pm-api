@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Order } from '../../core/shared/enums';
-import { ApiResponseModel } from '../../core/shared/models/api-response.model';
+import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
 import { CreateRoleDto } from './dto/create.dto';
 import { ListQueryRolesDto } from './dto/list.dto';
 import { UpdateRoleDto } from './dto/update.dto';
@@ -12,36 +12,34 @@ import { Role } from './entities/role.entity';
 export class RolesService {
   constructor(@InjectRepository(Role) private rolesRepository: Repository<Role>) {}
 
-  create(createRoleDto: CreateRoleDto) {
+  createRole(createRoleDto: CreateRoleDto) {
     return 'This action adds a new role';
   }
 
-  async findAll(query?: Partial<ListQueryRolesDto>): Promise<ApiResponseModel> {
-    // console.log("query: ", query);
+  async findAllRoles(query?: ListQueryRolesDto): Promise<ApiResponseModel<Role[]>> {
     const { skip, take } = query;
     delete query?.skip;
     delete query?.take;
-    //We need a Pipe here
+
     const result = await this.rolesRepository.find({
       where: query,
       skip,
       take,
       order: { id: Order.ASC },
     });
-    // console.log("result: ", ...result);
 
     return { data: result, metadata: { query } };
   }
 
-  findOne(id: number) {
+  findOneRole(id: number) {
     return this.rolesRepository.findOne({ where: { id } });
   }
 
-  update(id: number, updateRoleDto: UpdateRoleDto) {
+  updateRole(id: number, updateRoleDto: UpdateRoleDto) {
     return `This action updates a #${id} role`;
   }
 
-  remove(id: number) {
+  removeRole(id: number) {
     return `This action removes a #${id} role`;
   }
 }
