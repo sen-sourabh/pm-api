@@ -2,10 +2,10 @@ import { ApiProperty, ApiTags } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsArray, IsDateString, IsNumber, IsObject, IsOptional, IsString } from 'class-validator';
 
-@ApiTags('ApiResponseMetadataCommonModel')
-export class ApiResponseMetadataCommonModel {
+@ApiTags('ApiResponseMetadataUnifiedModel')
+export class ApiResponseMetadataUnifiedModel {
   @ApiProperty({
-    description: 'any extra query during list',
+    description: 'Query params during get or list operations',
     example: { id: 1 },
     required: false,
   })
@@ -14,26 +14,35 @@ export class ApiResponseMetadataCommonModel {
   readonly query?: unknown;
 
   @ApiProperty({
-    description: 'Page number',
-    example: 1,
+    description: 'Path parama during get or list operations',
+    example: { id: 1 },
     required: false,
   })
-  @IsNumber()
+  @IsObject()
   @IsOptional()
-  readonly pageNumber?: number;
+  readonly params?: unknown;
 
-  @ApiProperty({
-    description: 'No of records will be fetched in single request',
-    example: 25,
-    required: false,
-  })
-  @IsNumber()
-  @IsOptional()
-  readonly pageSize?: number;
+  // @ApiProperty({
+  //   description: 'Page number',
+  //   example: 1,
+  //   required: false,
+  // })
+  // @IsNumber()
+  // @IsOptional()
+  // readonly pageNumber?: number;
+
+  // @ApiProperty({
+  //   description: 'No of records will be fetched in single request',
+  //   example: 25,
+  //   required: false,
+  // })
+  // @IsNumber()
+  // @IsOptional()
+  // readonly pageSize?: number;
 }
 
-@ApiTags('ApiResponseCommonModel')
-export class ApiResponseCommonModel {
+@ApiTags('ApiResponseUnifiedModel')
+export class ApiResponseUnifiedModel {
   @ApiProperty({
     description: 'Actual data of the currect response',
     required: false,
@@ -47,9 +56,9 @@ export class ApiResponseCommonModel {
     required: false,
   })
   @IsObject()
-  @Type(() => ApiResponseMetadataCommonModel)
+  @Type(() => ApiResponseMetadataUnifiedModel)
   @IsOptional()
-  readonly metadata?: ApiResponseMetadataCommonModel;
+  readonly metadata?: ApiResponseMetadataUnifiedModel;
 
   @ApiProperty({
     description: 'Status code of the currect response',

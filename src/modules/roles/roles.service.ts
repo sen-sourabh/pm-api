@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Order } from '../../core/shared/enums';
@@ -21,18 +21,23 @@ export class RolesService {
     delete query?.skip;
     delete query?.take;
 
-    const result = await this.rolesRepository.find({
+    const data = await this.rolesRepository.find({
       where: query,
       skip,
       take,
       order: { id: Order.ASC },
     });
 
-    return { data: result, metadata: { query } };
+    return {
+      data,
+      metadata: { query },
+    };
   }
 
-  findOneRole(id: number) {
-    return this.rolesRepository.findOne({ where: { id } });
+  async findOneRole(id: number): Promise<ApiResponseModel<Role>> {
+    const data = await this.rolesRepository.findOne({ where: { id } });
+    if (!data) throw new NotFoundException(`Record not found by id: ${id}`);
+    return { data, metadata: { params: { id } } };
   }
 
   updateRole(id: number, updateRoleDto: UpdateRoleDto) {
