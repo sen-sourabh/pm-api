@@ -19,29 +19,29 @@ export class ListQueryRolesDto implements FindManyOptions {
   @IsBoolean()
   @Type(() => Boolean)
   @IsOptional()
-  readonly is_default?: boolean;
+  readonly isDefault?: boolean;
 
   @ApiPropertyOptional()
   @IsBoolean()
   @Type(() => Boolean)
   @IsOptional()
-  readonly is_enabled?: boolean;
+  readonly isEnabled?: boolean;
 
   @ApiPropertyOptional()
   @IsBoolean()
   @Type(() => Boolean)
   @IsOptional()
-  readonly is_deleted?: boolean;
+  readonly isDeleted?: boolean;
 
   // @ApiPropertyOptional()
   // @IsDateString()
   // @IsOptional()
-  // readonly created_at?: Date;
+  // readonly createdAt?: Date;
 
   // @ApiPropertyOptional()
   // @IsDateString()
   // @IsOptional()
-  // readonly updated_at?: Date;
+  // readonly updatedAt?: Date;
 
   @ApiPropertyOptional()
   @IsNumber()

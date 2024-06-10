@@ -1,22 +1,18 @@
 import { ApiProperty, ApiPropertyOptional, ApiTags } from '@nestjs/swagger';
-import {
-  IsBoolean,
-  IsDateString,
-  IsNumber,
-  IsOptional,
-  IsPhoneNumber,
-  IsString,
-} from 'class-validator';
+import { IsBoolean, IsDateString, IsNumber, IsPhoneNumber, IsString } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Role } from '../../roles/entities/role.entity';
+import { Usertype } from '../../usertypes/entities/usertype.entity';
 
-@Entity('users')
 @ApiTags('Users')
+@Entity('users')
 export class User {
   @ApiProperty({
     description: 'Id is the unique uuid identifier',
@@ -29,7 +25,7 @@ export class User {
     uniqueItems: true,
   })
   @PrimaryGeneratedColumn('uuid')
-  @Column({ length: 150, type: 'varchar', primary: true })
+  @Column({ length: 150, primary: true, generated: 'uuid' })
   @IsString()
   id: string;
 
@@ -40,7 +36,7 @@ export class User {
   })
   @Column({ length: 100, type: 'varchar', nullable: true })
   @IsString()
-  first_name?: string;
+  firstName?: string;
 
   @ApiPropertyOptional({
     description: 'last name of the user',
@@ -49,7 +45,7 @@ export class User {
   })
   @Column({ length: 100, type: 'varchar', nullable: true })
   @IsString()
-  last_name?: string;
+  lastName?: string;
 
   @ApiPropertyOptional({
     description: 'organization name of the user',
@@ -58,7 +54,7 @@ export class User {
   })
   @Column({ length: 255, type: 'varchar', nullable: true })
   @IsString()
-  organization_name?: string;
+  organizationName?: string;
 
   @ApiPropertyOptional({
     description: 'position in organization of the user',
@@ -67,7 +63,7 @@ export class User {
   })
   @Column({ length: 150, type: 'varchar', nullable: true })
   @IsString()
-  organization_position?: string;
+  organizationPosition?: string;
 
   @ApiPropertyOptional({
     description: 'no of empoyees in organization of the user',
@@ -76,7 +72,7 @@ export class User {
   })
   @Column({ length: 15, type: 'varchar', nullable: true })
   @IsString()
-  no_of_employees?: string;
+  noOfEmployees?: string;
 
   @ApiProperty({
     description: 'unique email of the user',
@@ -113,7 +109,7 @@ export class User {
   })
   @Column({ length: 255, type: 'varchar', unique: true })
   @IsString()
-  secret_key: string;
+  secretKey: string;
 
   @ApiProperty({
     description: 'phone number of the user',
@@ -122,83 +118,87 @@ export class User {
   })
   @Column({ type: 'bigint', unique: true })
   @IsPhoneNumber()
-  phone_number: number;
+  phoneNumber: number;
+
+  @ApiProperty({
+    description: 'last login date time of user',
+    example: '2024-06-01T14:31:42.123Z',
+    required: false,
+    name: 'last_login',
+    nullable: true,
+    format: 'T',
+  })
+  @IsDateString({ strict: true, strictSeparator: true })
+  lastLogin?: Date;
+
+  @ApiProperty({
+    description: 'whether user logged in or not',
+    example: 0,
+    required: true,
+  })
+  @Column({ type: 'tinyint', default: '0' })
+  @IsBoolean()
+  isLogin: boolean;
+
+  @ApiProperty({
+    description: 'whether user is enabled or not',
+    example: 1,
+    required: true,
+  })
+  @Column({ type: 'tinyint', default: '1' })
+  @IsBoolean()
+  isEnabled: boolean;
+
+  @ApiProperty({
+    description: 'whether user is deleted or not',
+    example: 0,
+    required: true,
+  })
+  @Column({ type: 'tinyint', default: '0' })
+  @IsBoolean()
+  isDeleted: boolean;
+
+  @ApiProperty({
+    description: 'With record create it`ll be auto generated',
+    example: '2024-06-01T14:31:42.123Z',
+    required: true,
+    name: 'createdAt',
+    nullable: false,
+    format: 'T',
+  })
+  @IsDateString({ strict: true, strictSeparator: true })
+  @CreateDateColumn({ type: 'datetime' })
+  createdAt: Date;
+
+  @ApiProperty({
+    description: 'With record update it`ll be auto generated',
+    example: '2024-06-01T14:31:42.123Z',
+    required: false,
+    name: 'updatedAt',
+    nullable: true,
+    format: 'T',
+  })
+  @IsDateString({ strict: true, strictSeparator: true })
+  @UpdateDateColumn({ type: 'datetime' })
+  updatedAt: Date;
 
   @ApiProperty({
     description: 'role id of the user',
     example: 1,
     required: true,
   })
+  @ManyToOne(() => Role, (role) => role.id, { cascade: ['remove', 'soft-remove'] })
   @Column({ type: 'int' })
   @IsNumber()
-  roles_id: number;
+  role: Role;
 
   @ApiProperty({
-    description: 'user type id of the user',
+    description: 'usertype id of the user',
     example: 1,
     required: true,
   })
+  @ManyToOne(() => Usertype, (usertype) => usertype.id, { cascade: ['remove', 'soft-remove'] })
   @Column({ type: 'int' })
   @IsNumber()
-  user_types_id: number;
-
-  @ApiPropertyOptional({
-    description: 'last login datetime of the user',
-    example: '2024-06-01T14:31:42.123Z',
-    required: false,
-    format: 'T',
-  })
-  @IsDateString({ strict: true, strictSeparator: true })
-  @IsOptional()
-  last_login?: Date;
-
-  @ApiProperty({
-    description: 'whether user logged in or not',
-    example: false,
-    required: true,
-  })
-  @Column({ type: 'tinyint', default: '0' })
-  @IsBoolean()
-  is_login: boolean;
-
-  @ApiProperty({
-    description: 'whether user enabled by admin or not',
-    example: true,
-    required: true,
-  })
-  @Column({ type: 'tinyint', default: '1' })
-  @IsBoolean()
-  is_enabled: boolean;
-
-  @ApiProperty({
-    description: 'whether user deleted or not',
-    example: false,
-    required: true,
-  })
-  @Column({ type: 'tinyint', default: '0' })
-  @IsBoolean()
-  is_deleted: boolean;
-
-  @ApiProperty({
-    description: 'With record create it`ll be auto generated',
-    example: '2024-06-01T14:31:42.123Z',
-    required: true,
-    name: 'created_at',
-    nullable: false,
-    format: 'T',
-  })
-  @IsDateString({ strict: true, strictSeparator: true })
-  @CreateDateColumn({ type: 'datetime' })
-  created_at: Date;
-
-  @ApiProperty({
-    description: 'With record update it`ll be auto generated',
-    example: '2024-06-01T14:31:42.123Z',
-    required: true,
-    name: 'updated_at',
-    format: 'T',
-  })
-  @IsDateString({ strict: true, strictSeparator: true })
-  @UpdateDateColumn({ type: 'datetime', nullable: true })
-  updated_at: Date;
+  usertype: Usertype;
 }
