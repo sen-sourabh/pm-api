@@ -13,14 +13,14 @@ export class QueryParamsPipe implements PipeTransform {
       if (isNaN(id)) throw new BadRequestException(`id shoud be a numeric value`);
       query = { ...query, id };
     }
-    if (!isMissing(value.is_default)) {
-      query = { ...query, is_default: value.is_default === 'true' };
+    if (!isMissing(value.isDefault)) {
+      query = { ...query, isDefault: value.isDefault === 'true' };
     }
-    if (!isMissing(value.is_enabled)) {
-      query = { ...query, is_enabled: value.is_enabled === 'true' };
+    if (!isMissing(value.isEnabled)) {
+      query = { ...query, isEnabled: value.isEnabled === 'true' };
     }
-    if (!isMissing(value.is_deleted)) {
-      query = { ...query, is_deleted: value.is_deleted === 'true' };
+    if (!isMissing(value.isDeleted)) {
+      query = { ...query, isDeleted: value.isDeleted === 'true' };
     }
 
     return {

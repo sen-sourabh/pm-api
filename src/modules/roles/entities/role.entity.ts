@@ -41,7 +41,7 @@ export class Role {
   })
   @Column({ type: 'tinyint', default: '1' })
   @IsBoolean()
-  is_default: boolean;
+  isDefault: boolean;
 
   @ApiProperty({
     description: 'whether role is enabled or not',
@@ -50,7 +50,7 @@ export class Role {
   })
   @Column({ type: 'tinyint', default: '1' })
   @IsBoolean()
-  is_enabled: boolean;
+  isEnabled: boolean;
 
   @ApiProperty({
     description: 'whether role is deleted or not',
@@ -59,29 +59,29 @@ export class Role {
   })
   @Column({ type: 'tinyint', default: '0' })
   @IsBoolean()
-  is_deleted: boolean;
+  isDeleted: boolean;
 
   @ApiProperty({
     description: 'With record create it`ll be auto generated',
     example: '2024-06-01T14:31:42.123Z',
     required: true,
-    name: 'created_at',
+    name: 'createdAt',
     nullable: false,
     format: 'T',
   })
   @IsDateString({ strict: true, strictSeparator: true })
   @CreateDateColumn({ type: 'datetime' })
-  created_at: Date;
+  createdAt: Date;
 
   @ApiProperty({
     description: 'With record update it`ll be auto generated',
     example: '2024-06-01T14:31:42.123Z',
     required: false,
-    name: 'updated_at',
+    name: 'updatedAt',
     nullable: true,
     format: 'T',
   })
   @IsDateString({ strict: true, strictSeparator: true })
   @UpdateDateColumn({ type: 'datetime' })
-  updated_at: Date;
+  updatedAt: Date;
 }

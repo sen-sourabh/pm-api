@@ -1,8 +1,8 @@
 export const USERTYPES = [
-    {
-        name: 'Organization'
-    },
-    {
-        name: 'Individual'
-    }
-]
+  {
+    name: 'Organization',
+  },
+  {
+    name: 'Individual',
+  },
+];

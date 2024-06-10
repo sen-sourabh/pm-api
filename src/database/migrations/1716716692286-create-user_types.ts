@@ -10,11 +10,11 @@ export class CreateUserTypes1716716692286 implements MigrationInterface {
               CREATE TABLE usertypes (
                   id int NOT NULL AUTO_INCREMENT,
                   name varchar(255) NOT NULL,
-                  is_default tinyint NOT NULL DEFAULT '1',
-                  is_enabled tinyint NOT NULL DEFAULT '1',
-                  is_deleted tinyint NOT NULL DEFAULT '0',
-                  created_at datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
-                  updated_at datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+                  isDefault tinyint NOT NULL DEFAULT '1',
+                  isEnabled tinyint NOT NULL DEFAULT '1',
+                  isDeleted tinyint NOT NULL DEFAULT '0',
+                  createdAt datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+                  updatedAt datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
                   PRIMARY KEY (id),
                   UNIQUE KEY name (name)
               )

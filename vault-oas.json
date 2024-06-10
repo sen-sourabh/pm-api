@@ -79,7 +79,7 @@
             }
           },
           {
-            "name": "is_default",
+            "name": "isDefault",
             "required": false,
             "in": "query",
             "schema": {
@@ -87,7 +87,7 @@
             }
           },
           {
-            "name": "is_enabled",
+            "name": "isEnabled",
             "required": false,
             "in": "query",
             "schema": {
@@ -95,7 +95,7 @@
             }
           },
           {
-            "name": "is_deleted",
+            "name": "isDeleted",
             "required": false,
             "in": "query",
             "schema": {
@@ -190,7 +190,7 @@
             }
           },
           {
-            "name": "is_default",
+            "name": "isDefault",
             "required": false,
             "in": "query",
             "schema": {
@@ -198,7 +198,7 @@
             }
           },
           {
-            "name": "is_enabled",
+            "name": "isEnabled",
             "required": false,
             "in": "query",
             "schema": {
@@ -206,7 +206,7 @@
             }
           },
           {
-            "name": "is_deleted",
+            "name": "isDeleted",
             "required": false,
             "in": "query",
             "schema": {
@@ -544,29 +544,29 @@
             "description": "name of the role",
             "example": "Admin"
           },
-          "is_default": {
+          "isDefault": {
             "type": "boolean",
             "description": "whether role is default or not",
             "example": 1
           },
-          "is_enabled": {
+          "isEnabled": {
             "type": "boolean",
             "description": "whether role is enabled or not",
             "example": 1
           },
-          "is_deleted": {
+          "isDeleted": {
             "type": "boolean",
             "description": "whether role is deleted or not",
             "example": 0
           },
-          "created_at": {
+          "createdAt": {
             "format": "T",
             "type": "string",
             "description": "With record create it`ll be auto generated",
             "example": "2024-06-01T14:31:42.123Z",
             "nullable": false
           },
-          "updated_at": {
+          "updatedAt": {
             "format": "T",
             "type": "string",
             "description": "With record update it`ll be auto generated",
@@ -577,10 +577,10 @@
         "required": [
           "id",
           "name",
-          "is_default",
-          "is_enabled",
-          "is_deleted",
-          "created_at"
+          "isDefault",
+          "isEnabled",
+          "isDeleted",
+          "createdAt"
         ]
       },
       "Usertype": {
@@ -595,32 +595,32 @@
           },
           "name": {
             "type": "string",
-            "description": "name of the user type",
+            "description": "name of the usertype",
             "example": "Individual"
           },
-          "is_default": {
+          "isDefault": {
             "type": "boolean",
-            "description": "whether user type is default or not",
+            "description": "whether usertype is default or not",
             "example": 1
           },
-          "is_enabled": {
+          "isEnabled": {
             "type": "boolean",
-            "description": "whether user type is enabled or not",
+            "description": "whether usertype is enabled or not",
             "example": 1
           },
-          "is_deleted": {
+          "isDeleted": {
             "type": "boolean",
-            "description": "whether user type is deleted or not",
+            "description": "whether usertype is deleted or not",
             "example": 0
           },
-          "created_at": {
+          "createdAt": {
             "format": "T",
             "type": "string",
             "description": "With record create it`ll be auto generated",
             "example": "2024-06-01T14:31:42.123Z",
             "nullable": false
           },
-          "updated_at": {
+          "updatedAt": {
             "format": "T",
             "type": "string",
             "description": "With record update it`ll be auto generated",
@@ -631,10 +631,10 @@
         "required": [
           "id",
           "name",
-          "is_default",
-          "is_enabled",
-          "is_deleted",
-          "created_at"
+          "isDefault",
+          "isEnabled",
+          "isDeleted",
+          "createdAt"
         ]
       },
       "CreateUserDto": {
@@ -652,27 +652,27 @@
             "nullable": false,
             "uniqueItems": true
           },
-          "first_name": {
+          "firstName": {
             "type": "string",
             "description": "first name of the user",
             "example": "John"
           },
-          "last_name": {
+          "lastName": {
             "type": "string",
             "description": "last name of the user",
             "example": "Snow"
           },
-          "organization_name": {
+          "organizationName": {
             "type": "string",
             "description": "organization name of the user",
             "example": "ABC Inc."
           },
-          "organization_position": {
+          "organizationPosition": {
             "type": "string",
             "description": "position in organization of the user",
             "example": "Sr. Manager"
           },
-          "no_of_employees": {
+          "noOfEmployees": {
             "type": "string",
             "description": "no of empoyees in organization of the user",
             "example": "100"
@@ -693,73 +693,82 @@
             "description": "otp of the user",
             "example": 123456
           },
-          "secret_key": {
+          "secretKey": {
             "type": "string",
             "description": "secret key of the user",
             "example": "d75QBLtPQTRL0x0umobtGqgOWJbKf3yE5U75+bMGK9s="
           },
-          "phone_number": {
+          "phoneNumber": {
             "type": "number",
             "description": "phone number of the user",
             "example": 1234567890
           },
-          "roles_id": {
-            "type": "number",
-            "description": "role id of the user",
-            "example": 1
-          },
-          "user_types_id": {
-            "type": "number",
-            "description": "user type id of the user",
-            "example": 1
-          },
           "last_login": {
             "format": "T",
             "type": "string",
-            "description": "last login datetime of the user",
-            "example": "2024-06-01T14:31:42.123Z"
+            "description": "last login date time of user",
+            "example": "2024-06-01T14:31:42.123Z",
+            "nullable": true
           },
-          "is_login": {
+          "isLogin": {
             "type": "boolean",
             "description": "whether user logged in or not",
-            "example": false
+            "example": 0
           },
-          "is_enabled": {
+          "isEnabled": {
             "type": "boolean",
-            "description": "whether user enabled by admin or not",
-            "example": true
+            "description": "whether user is enabled or not",
+            "example": 1
           },
-          "is_deleted": {
+          "isDeleted": {
             "type": "boolean",
-            "description": "whether user deleted or not",
-            "example": false
+            "description": "whether user is deleted or not",
+            "example": 0
           },
-          "created_at": {
+          "createdAt": {
             "format": "T",
             "type": "string",
             "description": "With record create it`ll be auto generated",
             "example": "2024-06-01T14:31:42.123Z",
             "nullable": false
           },
-          "updated_at": {
+          "updatedAt": {
             "format": "T",
             "type": "string",
             "description": "With record update it`ll be auto generated",
-            "example": "2024-06-01T14:31:42.123Z"
+            "example": "2024-06-01T14:31:42.123Z",
+            "nullable": true
+          },
+          "role": {
+            "description": "role id of the user",
+            "example": 1,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Role"
+              }
+            ]
+          },
+          "usertype": {
+            "description": "usertype id of the user",
+            "example": 1,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Usertype"
+              }
+            ]
           }
         },
         "required": [
           "id",
           "email",
-          "secret_key",
-          "phone_number",
-          "roles_id",
-          "user_types_id",
-          "is_login",
-          "is_enabled",
-          "is_deleted",
-          "created_at",
-          "updated_at"
+          "secretKey",
+          "phoneNumber",
+          "isLogin",
+          "isEnabled",
+          "isDeleted",
+          "createdAt",
+          "role",
+          "usertype"
         ]
       },
       "UpdateUserDto": {
