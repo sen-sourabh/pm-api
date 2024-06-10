@@ -7,30 +7,30 @@ export class CreateUserTypes1716716692286 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     try {
       await queryRunner.query(`
-              CREATE TABLE user_types (
+              CREATE TABLE usertypes (
                   id int NOT NULL AUTO_INCREMENT,
-                  name varchar(255) character set utf8mb4 collate utf8mb4_0900_ai_ci NOT NULL,
+                  name varchar(255) NOT NULL,
                   is_default tinyint NOT NULL DEFAULT '1',
                   is_enabled tinyint NOT NULL DEFAULT '1',
                   is_deleted tinyint NOT NULL DEFAULT '0',
-                  created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                  updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                  created_at datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+                  updated_at datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
                   PRIMARY KEY (id),
                   UNIQUE KEY name (name)
-              ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+              )
             `);
-      this.logger.log(`Up: Create user_types executed`);
+      this.logger.log(`Up: Create usertypes executed`);
     } catch (error) {
-      this.logger.error(`Up: Create user_types has an error: `, error?.message);
+      this.logger.error(`Up: Create usertypes has an error: `, error?.message);
     }
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     try {
-      await queryRunner.query(`DROP TABLE user_types`);
-      this.logger.log(`Down: Drop user_types executed`);
+      await queryRunner.query(`DROP TABLE usertypes`);
+      this.logger.log(`Down: Drop usertypes executed`);
     } catch (error) {
-      this.logger.error(`Down: Drop user_types has an error: `, error?.message);
+      this.logger.error(`Down: Drop usertypes has an error: `, error?.message);
     }
   }
 }

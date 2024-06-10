@@ -59,28 +59,6 @@
       }
     },
     "/api/v1/roles": {
-      "post": {
-        "operationId": "createRole",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateRoleDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "Roles"
-        ]
-      },
       "get": {
         "operationId": "findAllRoles",
         "parameters": [
@@ -170,7 +148,7 @@
             "required": true,
             "in": "path",
             "schema": {
-              "type": "string"
+              "type": "number"
             }
           }
         ],
@@ -189,57 +167,116 @@
         "tags": [
           "Roles"
         ]
-      },
-      "patch": {
-        "operationId": "updateRole",
+      }
+    },
+    "/api/v1/usertypes": {
+      "get": {
+        "operationId": "findAllUsertypes",
         "parameters": [
           {
             "name": "id",
-            "required": true,
-            "in": "path",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "name",
+            "required": false,
+            "in": "query",
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "is_default",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "is_enabled",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "is_deleted",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "skip",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "take",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
           }
         ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateRoleDto"
+        "responses": {
+          "200": {
+            "description": "returns list of usertypes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Usertype"
+                  }
+                }
               }
             }
           }
         },
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
         "tags": [
-          "Roles"
+          "Usertypes"
         ]
-      },
-      "delete": {
-        "operationId": "removeRole",
+      }
+    },
+    "/api/v1/usertypes/{id}": {
+      "get": {
+        "operationId": "findOneUsertype",
         "parameters": [
           {
             "name": "id",
             "required": true,
             "in": "path",
             "schema": {
-              "type": "string"
+              "type": "number"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "return usertype by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Usertype"
+                }
+              }
+            }
           }
         },
         "tags": [
-          "Roles"
+          "Usertypes"
         ]
       }
     },
@@ -492,10 +529,6 @@
           }
         }
       },
-      "CreateRoleDto": {
-        "type": "object",
-        "properties": {}
-      },
       "Role": {
         "type": "object",
         "properties": {
@@ -514,17 +547,17 @@
           "is_default": {
             "type": "boolean",
             "description": "whether role is default or not",
-            "example": true
+            "example": 1
           },
           "is_enabled": {
             "type": "boolean",
             "description": "whether role is enabled or not",
-            "example": true
+            "example": 1
           },
           "is_deleted": {
             "type": "boolean",
             "description": "whether role is deleted or not",
-            "example": false
+            "example": 0
           },
           "created_at": {
             "format": "T",
@@ -550,9 +583,59 @@
           "created_at"
         ]
       },
-      "UpdateRoleDto": {
+      "Usertype": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Id is the unique number identifier",
+            "example": 1,
+            "nullable": false,
+            "uniqueItems": true
+          },
+          "name": {
+            "type": "string",
+            "description": "name of the user type",
+            "example": "Individual"
+          },
+          "is_default": {
+            "type": "boolean",
+            "description": "whether user type is default or not",
+            "example": 1
+          },
+          "is_enabled": {
+            "type": "boolean",
+            "description": "whether user type is enabled or not",
+            "example": 1
+          },
+          "is_deleted": {
+            "type": "boolean",
+            "description": "whether user type is deleted or not",
+            "example": 0
+          },
+          "created_at": {
+            "format": "T",
+            "type": "string",
+            "description": "With record create it`ll be auto generated",
+            "example": "2024-06-01T14:31:42.123Z",
+            "nullable": false
+          },
+          "updated_at": {
+            "format": "T",
+            "type": "string",
+            "description": "With record update it`ll be auto generated",
+            "example": "2024-06-01T14:31:42.123Z",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "is_default",
+          "is_enabled",
+          "is_deleted",
+          "created_at"
+        ]
       },
       "CreateUserDto": {
         "type": "object",

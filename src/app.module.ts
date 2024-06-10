@@ -9,6 +9,7 @@ import { MessengerModule } from './core/modules/messenger/messenger.module';
 import { WebhooksModule } from './core/modules/webhooks/webhooks.module';
 import { RolesModule } from './modules/roles/roles.module';
 import { UsersModule } from './modules/users/users.module';
+import { UsertypesModule } from './modules/usertypes/usertypes.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { UsersModule } from './modules/users/users.module';
     MessengerModule,
     WebhooksModule,
     RolesModule,
+    UsertypesModule,
     UsersModule,
   ],
   controllers: [AppController],

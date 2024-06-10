@@ -8,9 +8,9 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@ApiTags('Roles')
-@Entity('roles')
-export class Role {
+@ApiTags('Usertypes')
+@Entity('usertypes')
+export class Usertype {
   @ApiProperty({
     description: 'Id is the unique number identifier',
     example: 1,
@@ -26,8 +26,8 @@ export class Role {
   id: number;
 
   @ApiProperty({
-    description: 'name of the role',
-    example: 'Admin',
+    description: 'name of the user type',
+    example: 'Individual',
     required: true,
   })
   @Column({ length: 255, type: 'varchar', unique: true })
@@ -35,7 +35,7 @@ export class Role {
   name: string;
 
   @ApiProperty({
-    description: 'whether role is default or not',
+    description: 'whether user type is default or not',
     example: 1,
     required: true,
   })
@@ -44,7 +44,7 @@ export class Role {
   is_default: boolean;
 
   @ApiProperty({
-    description: 'whether role is enabled or not',
+    description: 'whether user type is enabled or not',
     example: 1,
     required: true,
   })
@@ -53,7 +53,7 @@ export class Role {
   is_enabled: boolean;
 
   @ApiProperty({
-    description: 'whether role is deleted or not',
+    description: 'whether user type is deleted or not',
     example: 0,
     required: true,
   })
