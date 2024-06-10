@@ -7,11 +7,11 @@ export class InsertUserTypes1716716825550 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     try {
       await queryRunner.query(
-        `INSERT INTO user_types (name) VALUES ('Organization'), ('Individual')`,
+        `INSERT INTO usertypes (name) VALUES ('Organization'), ('Individual')`,
       );
-      this.logger.log(`Up: Insert user_types executed`);
+      this.logger.log(`Up: Insert usertypes executed`);
     } catch (error) {
-      this.logger.error(`Up: Insert user_types have an error: `, error?.message);
+      this.logger.error(`Up: Insert usertypes have an error: `, error?.message);
     }
   }
 

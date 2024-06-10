@@ -1,11 +1,18 @@
-import { ArgumentMetadata, Injectable, PipeTransform } from '@nestjs/common';
+import { ArgumentMetadata, BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
 import { isMissing } from '../../../core/helpers/validations';
-import { ListQueryRolesDto } from '../dto/list.dto';
 
 @Injectable()
-export class RolesQueryParamsPipe implements PipeTransform {
+export class QueryParamsPipe implements PipeTransform {
   transform(value: any, metadata: ArgumentMetadata) {
     let query = { ...value };
+    let id: number | undefined;
+    if (!isMissing(value.id)) {
+      if (typeof value?.id === 'string') {
+        id = parseInt(value?.id);
+      }
+      if (isNaN(id)) throw new BadRequestException(`id shoud be a numeric value`);
+      query = { ...query, id };
+    }
     if (!isMissing(value.is_default)) {
       query = { ...query, is_default: value.is_default === 'true' };
     }
@@ -18,6 +25,6 @@ export class RolesQueryParamsPipe implements PipeTransform {
 
     return {
       ...query,
-    } as ListQueryRolesDto;
+    };
   }
 }
