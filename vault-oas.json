@@ -295,12 +295,35 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
+            "description": "returns new created user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
             "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "$ref": "#/components/schemas/ApiBadErrorResponseModel"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiConflictErrorResponseModel"
                 }
               }
             }
@@ -312,10 +335,221 @@
       },
       "get": {
         "operationId": "findAllUsers",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "query",
+            "description": "Id is the unique uuid identifier",
+            "example": "e762634c-3e41-11eb-b897-0862660ccbd4",
+            "schema": {
+              "uniqueItems": true,
+              "nullable": false,
+              "default": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "firstName",
+            "required": false,
+            "in": "query",
+            "description": "first name of the user",
+            "example": "John",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lastName",
+            "required": false,
+            "in": "query",
+            "description": "last name of the user",
+            "example": "Snow",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "organizationName",
+            "required": false,
+            "in": "query",
+            "description": "organization name of the user",
+            "example": "ABC Inc.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "organizationPosition",
+            "required": false,
+            "in": "query",
+            "description": "position in organization of the user",
+            "example": "Sr. Manager",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "noOfEmployees",
+            "required": false,
+            "in": "query",
+            "description": "no of empoyees in organization of the user",
+            "example": "100",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "email",
+            "required": true,
+            "in": "query",
+            "description": "unique email of the user",
+            "example": "example@gmail.com",
+            "schema": {
+              "uniqueItems": true,
+              "type": "string"
+            }
+          },
+          {
+            "name": "password",
+            "required": false,
+            "in": "query",
+            "description": "password of the user",
+            "example": "Welcome@123",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "otp",
+            "required": false,
+            "in": "query",
+            "description": "otp of the user",
+            "example": 123456,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "secretKey",
+            "required": true,
+            "in": "query",
+            "description": "secret key of the user",
+            "example": "d75QBLtPQTRL0x0umobtGqgOWJbKf3yE5U75+bMGK9s=",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "phoneNumber",
+            "required": true,
+            "in": "query",
+            "description": "phone number of the user",
+            "example": 1234567890,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "last_login",
+            "required": false,
+            "in": "query",
+            "description": "last login date time of user",
+            "example": "2024-06-01T14:31:42.123Z",
+            "schema": {
+              "format": "T",
+              "nullable": true,
+              "type": "string"
+            }
+          },
+          {
+            "name": "isLogin",
+            "required": true,
+            "in": "query",
+            "description": "whether user logged in or not",
+            "example": 0,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "isEnabled",
+            "required": true,
+            "in": "query",
+            "description": "whether user is enabled or not",
+            "example": 1,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "isDeleted",
+            "required": true,
+            "in": "query",
+            "description": "whether user is deleted or not",
+            "example": 0,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "createdAt",
+            "required": true,
+            "in": "query",
+            "description": "With record create it`ll be auto generated",
+            "example": "2024-06-01T14:31:42.123Z",
+            "schema": {
+              "format": "T",
+              "nullable": false,
+              "type": "string"
+            }
+          },
+          {
+            "name": "updatedAt",
+            "required": false,
+            "in": "query",
+            "description": "With record update it`ll be auto generated",
+            "example": "2024-06-01T14:31:42.123Z",
+            "schema": {
+              "format": "T",
+              "nullable": true,
+              "type": "string"
+            }
+          },
+          {
+            "name": "role",
+            "required": true,
+            "in": "query",
+            "description": "role id of the user",
+            "example": 1,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "usertype",
+            "required": true,
+            "in": "query",
+            "description": "usertype id of the user",
+            "example": 1,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "returns list of users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -639,7 +873,65 @@
       },
       "CreateUserDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "description": "first name of the user",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "last name of the user",
+            "example": "Snow"
+          },
+          "organizationName": {
+            "type": "string",
+            "description": "organization name of the user",
+            "example": "ABC Inc."
+          },
+          "organizationPosition": {
+            "type": "string",
+            "description": "position in organization of the user",
+            "example": "Sr. Manager"
+          },
+          "noOfEmployees": {
+            "type": "string",
+            "description": "no of empoyees in organization of the user",
+            "example": "100"
+          },
+          "email": {
+            "type": "string",
+            "description": "unique email of the user",
+            "example": "example@gmail.com",
+            "uniqueItems": true
+          },
+          "password": {
+            "type": "string",
+            "description": "password of the user",
+            "example": "Welcome@123"
+          },
+          "phoneNumber": {
+            "type": "number",
+            "description": "phone number of the user",
+            "example": 1234567890
+          },
+          "role": {
+            "type": "number",
+            "description": "role id of the user",
+            "example": 1
+          },
+          "usertype": {
+            "type": "number",
+            "description": "usertype id of the user",
+            "example": 1
+          }
+        },
+        "required": [
+          "email",
+          "phoneNumber",
+          "role",
+          "usertype"
+        ]
       },
       "User": {
         "type": "object",
@@ -763,9 +1055,101 @@
           "usertype"
         ]
       },
+      "ApiBadErrorResponseModel": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "object",
+            "description": "Message of the currect error response",
+            "example": "Email should be unique"
+          },
+          "error": {
+            "type": "string",
+            "description": "",
+            "example": "Conflict"
+          },
+          "statusCode": {
+            "type": "number",
+            "description": "Status code of the currect error response",
+            "example": 409
+          }
+        }
+      },
+      "ApiConflictErrorResponseModel": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "object",
+            "description": "Message of the currect error response",
+            "example": "Email should be unique"
+          },
+          "error": {
+            "type": "string",
+            "description": "",
+            "example": "Conflict"
+          },
+          "statusCode": {
+            "type": "number",
+            "description": "Status code of the currect error response",
+            "example": 409
+          }
+        }
+      },
       "UpdateUserDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "description": "first name of the user",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "last name of the user",
+            "example": "Snow"
+          },
+          "organizationName": {
+            "type": "string",
+            "description": "organization name of the user",
+            "example": "ABC Inc."
+          },
+          "organizationPosition": {
+            "type": "string",
+            "description": "position in organization of the user",
+            "example": "Sr. Manager"
+          },
+          "noOfEmployees": {
+            "type": "string",
+            "description": "no of empoyees in organization of the user",
+            "example": "100"
+          },
+          "email": {
+            "type": "string",
+            "description": "unique email of the user",
+            "example": "example@gmail.com",
+            "uniqueItems": true
+          },
+          "password": {
+            "type": "string",
+            "description": "password of the user",
+            "example": "Welcome@123"
+          },
+          "phoneNumber": {
+            "type": "number",
+            "description": "phone number of the user",
+            "example": 1234567890
+          },
+          "role": {
+            "type": "number",
+            "description": "role id of the user",
+            "example": 1
+          },
+          "usertype": {
+            "type": "number",
+            "description": "usertype id of the user",
+            "example": 1
+          }
+        }
       }
     }
   }

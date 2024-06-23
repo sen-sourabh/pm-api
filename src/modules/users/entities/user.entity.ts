@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional, ApiTags } from '@nestjs/swagger';
-import { IsBoolean, IsDateString, IsNumber, IsPhoneNumber, IsString } from 'class-validator';
+import { IsBoolean, IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
@@ -27,7 +27,7 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   @Column({ length: 150, primary: true, generated: 'uuid' })
   @IsString()
-  id: string;
+  id?: string;
 
   @ApiPropertyOptional({
     description: 'first name of the user',
@@ -54,6 +54,7 @@ export class User {
   })
   @Column({ length: 255, type: 'varchar', nullable: true })
   @IsString()
+  @IsOptional()
   organizationName?: string;
 
   @ApiPropertyOptional({
@@ -63,6 +64,7 @@ export class User {
   })
   @Column({ length: 150, type: 'varchar', nullable: true })
   @IsString()
+  @IsOptional()
   organizationPosition?: string;
 
   @ApiPropertyOptional({
@@ -72,6 +74,7 @@ export class User {
   })
   @Column({ length: 15, type: 'varchar', nullable: true })
   @IsString()
+  @IsOptional()
   noOfEmployees?: string;
 
   @ApiProperty({
@@ -117,7 +120,7 @@ export class User {
     required: true,
   })
   @Column({ type: 'bigint', unique: true })
-  @IsPhoneNumber()
+  @IsNumber()
   phoneNumber: number;
 
   @ApiProperty({

@@ -1,15 +1,45 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { isMissing } from '../../core/helpers/validations';
+import { Order } from '../../core/shared/enums';
+import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
 import { CreateUserDto } from './dto/create-user.dto';
+import { ListQueryUsersDto } from './dto/list-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  createUser(createUserDto: CreateUserDto) {
-    return 'This action returns created user';
+  constructor(@InjectRepository(User) private usersRepository: Repository<User>) {}
+
+  async createUser(createUserData: CreateUserDto): Promise<ApiResponseModel<User>> {
+    const newUser = this.usersRepository.create(createUserData);
+    const data = await this.usersRepository.save(newUser);
+    console.log('newUser: ', data);
+    return {
+      data,
+      metadata: { body: newUser },
+      message: 'User created successfully',
+    };
   }
 
-  findAllUsers() {
-    return `This action returns all users`;
+  async findAllUsers(query?: ListQueryUsersDto): Promise<ApiResponseModel<User[]>> {
+    // const { skip, take } = query;
+    // delete query?.skip;
+    // delete query?.take;
+
+    const data = await this.usersRepository.find({
+      where: query,
+      // skip,
+      // take,
+      order: { id: Order.ASC },
+    });
+
+    return {
+      data,
+      metadata: { query },
+    };
   }
 
   findOneUser(id: number) {
@@ -22,5 +52,14 @@ export class UsersService {
 
   removeUser(id: number) {
     return `This action removes a #${id} user`;
+  }
+
+  async findUserByValue(query: Record<string, unknown>): Promise<boolean> {
+    const data = await this.usersRepository.findOne({ where: { ...query, isDeleted: false } });
+    console.log('User found: ', data);
+    if (isMissing(data)) {
+      return false;
+    }
+    return true;
   }
 }

@@ -32,7 +32,7 @@ export class RolesController {
   @UsePipes(new PathParamsPipe())
   @Get(':id')
   @HttpCode(200)
-  findOneRole(@Param('id') id: number) {
+  findOneRole(@Param('id') id: number): Promise<ApiResponseModel<Role>> {
     return this.rolesService.findOneRole(+id);
   }
 }
