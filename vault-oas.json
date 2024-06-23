@@ -740,22 +740,14 @@
             "nullable": true
           },
           "role": {
+            "type": "number",
             "description": "role id of the user",
-            "example": 1,
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Role"
-              }
-            ]
+            "example": 1
           },
           "usertype": {
+            "type": "number",
             "description": "usertype id of the user",
-            "example": 1,
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Usertype"
-              }
-            ]
+            "example": 1
           }
         },
         "required": [

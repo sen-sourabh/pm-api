@@ -187,18 +187,16 @@ export class User {
     example: 1,
     required: true,
   })
-  @ManyToOne(() => Role, (role) => role.id, { cascade: ['remove', 'soft-remove'] })
-  @Column({ type: 'int' })
-  @IsNumber()
-  role: Role;
+  @ManyToOne(() => Role)
+  @Column({ name: 'roleId', type: 'int' })
+  role: number;
 
   @ApiProperty({
     description: 'usertype id of the user',
     example: 1,
     required: true,
   })
-  @ManyToOne(() => Usertype, (usertype) => usertype.id, { cascade: ['remove', 'soft-remove'] })
-  @Column({ type: 'int' })
-  @IsNumber()
-  usertype: Usertype;
+  @ManyToOne(() => Usertype)
+  @Column({ name: 'usertypeId', type: 'int' })
+  usertype: number;
 }

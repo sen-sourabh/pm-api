@@ -25,8 +25,6 @@ export class CreateUsers1716720974607 implements MigrationInterface {
                 isDeleted tinyint NOT NULL DEFAULT '0',
                 createdAt datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
                 updatedAt datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
-                role int NOT NULL,
-                usertype int NOT NULL,
                 roleId int NOT NULL,
                 usertypeId int NOT NULL,
                 PRIMARY KEY (id),
