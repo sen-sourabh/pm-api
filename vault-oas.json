@@ -296,14 +296,11 @@
         },
         "responses": {
           "201": {
-            "description": "returns new created user",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/User"
-                  }
+                  "$ref": "#/components/schemas/User"
                 }
               }
             }
@@ -500,7 +497,26 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "return update user as per the identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
           }
         },
         "tags": [
@@ -871,11 +887,11 @@
             "type": "number",
             "description": "phone number of the user"
           },
-          "last_login": {
-            "format": "T",
+          "lastLogin": {
             "type": "string",
             "description": "last login date time of user",
-            "nullable": true
+            "nullable": true,
+            "format": "T"
           },
           "isLogin": {
             "type": "boolean",
@@ -939,22 +955,29 @@
             "type": "string",
             "description": "password of the user"
           },
+          "otp": {
+            "type": "number",
+            "description": "otp of the user"
+          },
           "phoneNumber": {
             "type": "number",
             "description": "phone number of the user"
           },
+          "isLogin": {
+            "type": "boolean",
+            "description": "whether user logged in or not"
+          },
+          "isEnabled": {
+            "type": "boolean",
+            "description": "whether user is enabled or not"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "description": "whether user is deleted or not"
+          },
           "role": {
             "type": "number",
             "description": "role of the user"
-          },
-          "usertype": {
-            "type": "number",
-            "description": "usertype of the user"
-          },
-          "email": {
-            "type": "string",
-            "description": "Unique email of the user",
-            "uniqueItems": true
           }
         }
       }

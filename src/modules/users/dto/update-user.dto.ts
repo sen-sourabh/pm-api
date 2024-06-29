@@ -1,8 +1,18 @@
-import { PartialType } from '@nestjs/swagger';
-import { IsOptional } from 'class-validator';
-import { CreateUserDto } from './create-user.dto';
+import { PickType } from '@nestjs/swagger';
+import { User } from '../entities/user.entity';
 
-export class UpdateUserDto extends PartialType(CreateUserDto) {
-  @IsOptional() // Make email optional for updates
-  email?: string;
-}
+export class UpdateUserDto extends PickType(User, [
+  'firstName',
+  'lastName',
+  'organizationName',
+  'organizationPosition',
+  'noOfEmployees',
+  'otp',
+  'password',
+  'phoneNumber',
+  'role',
+  // 'lastLogin',
+  'isLogin',
+  'isEnabled',
+  'isDeleted',
+]) {}

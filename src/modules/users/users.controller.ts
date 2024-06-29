@@ -30,20 +30,15 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @ApiResponse({
-    description: 'returns new created user',
-    type: [User],
-    status: 201,
-  })
-  @UsePipes(ValidateUserPipe, BodyParserPipe)
-  @HttpCode(201)
-  @Post()
   @ApiResponse({ status: 201, type: User })
   @ApiXResponses(
     ApiXResponsesEnum.Unauthorized,
     ApiXResponsesEnum.BadRequest,
     ApiXResponsesEnum.Conflict,
   )
+  @UsePipes(ValidateUserPipe, new BodyParserPipe())
+  @HttpCode(201)
+  @Post()
   createUser(@Body() createUserDto: CreateUserDto): Promise<ApiResponseModel<User>> {
     return this.usersService.createUser(createUserDto);
   }
@@ -55,8 +50,8 @@ export class UsersController {
   })
   @ApiXResponses(ApiXResponsesEnum.Unauthorized, ApiXResponsesEnum.BadRequest)
   @UsePipes(new QueryParamsPipe(), new PaginatePipe())
-  @Get()
   @HttpCode(200)
+  @Get()
   findAllUsers(@Query() listQueryUsersDto?: ListQueryUsersDto): Promise<ApiResponseModel<User[]>> {
     return this.usersService.findAllUsers(listQueryUsersDto);
   }
@@ -72,16 +67,28 @@ export class UsersController {
     ApiXResponsesEnum.NotFound,
   )
   @UsePipes(new PathParamsPipe())
-  @Get(':id')
   @HttpCode(200)
+  @Get(':id')
   findOneUser(@Param('id') id: string) {
     return this.usersService.findOneUser(id);
   }
 
+  @ApiResponse({
+    description: 'return update user as per the identifier',
+    type: User,
+    status: 200,
+  })
+  @ApiXResponses(
+    ApiXResponsesEnum.Unauthorized,
+    ApiXResponsesEnum.BadRequest,
+    ApiXResponsesEnum.Conflict,
+    ApiXResponsesEnum.NotFound,
+  )
+  @UsePipes(new PathParamsPipe(), ValidateUserPipe)
   @HttpCode(200)
   @Patch(':id')
   updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.updateUser(+id, updateUserDto);
+    return this.usersService.updateUser(id, updateUserDto);
   }
 
   @HttpCode(200)

@@ -108,7 +108,9 @@ export class User {
     required: false,
   })
   @Column({ type: 'int', nullable: true })
+  @Type(() => Number)
   @IsNumber()
+  @IsOptional()
   otp?: number;
 
   @ApiPropertyOptional({
@@ -117,7 +119,8 @@ export class User {
   })
   @Column({ length: 255, type: 'varchar', unique: true })
   @IsString()
-  secretKey: string;
+  @IsOptional()
+  secretKey?: string;
 
   @ApiPropertyOptional({
     description: 'phone number of the user',
@@ -127,17 +130,18 @@ export class User {
   @Type(() => Number)
   @IsNumber()
   @IsOptional()
-  phoneNumber: number;
+  phoneNumber?: number;
 
   @ApiPropertyOptional({
     description: 'last login date time of user',
     required: false,
-    name: 'last_login',
+    name: 'lastLogin',
     nullable: true,
     format: 'T',
   })
   @IsDateString({ strict: true, strictSeparator: true })
-  lastLogin?: Date;
+  @IsOptional()
+  lastLogin?: string;
 
   @ApiPropertyOptional({
     description: 'whether user logged in or not',
@@ -146,7 +150,8 @@ export class User {
   @Column({ type: 'tinyint', default: '0' })
   @Type(() => Boolean)
   @IsBoolean()
-  isLogin: boolean;
+  @IsOptional()
+  isLogin?: boolean;
 
   @ApiPropertyOptional({
     description: 'whether user is enabled or not',
@@ -156,7 +161,7 @@ export class User {
   @Type(() => Boolean)
   @IsBoolean()
   @IsOptional()
-  isEnabled: boolean;
+  isEnabled?: boolean;
 
   @ApiPropertyOptional({
     description: 'whether user is deleted or not',

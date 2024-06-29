@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../core/helpers/serializers';
@@ -48,8 +53,22 @@ export class UsersService {
     return { data, metadata: { params: { id } } };
   }
 
-  updateUser(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async updateUser(id: string, updateUserDto: UpdateUserDto): Promise<ApiResponseModel<User>> {
+    //Validate phone number is unique
+    await this.validateUpdate(id, updateUserDto);
+
+    //Actual user update
+    const updated = await this.usersRepository.update(id, updateUserDto);
+    if (!updated?.affected) {
+      throw new BadRequestException(`Not updated`);
+    }
+    //Get updated user
+    const { data } = await this.findOneUser(id);
+    return {
+      data,
+      metadata: { params: { id }, body: updateUserDto },
+      message: 'User updated successfully',
+    };
   }
 
   removeUser(id: number) {
@@ -62,5 +81,16 @@ export class UsersService {
       return false;
     }
     return true;
+  }
+
+  async validateUpdate(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+    const data = await this.usersRepository.findOne({
+      where: { phoneNumber: updateUserDto?.phoneNumber },
+    });
+
+    if (isMissing(data) || (!isMissing(data) && (data as Partial<User>)?.id === id?.toString())) {
+      return data;
+    }
+    throw new ConflictException(`Phone number should be unique`);
   }
 }
