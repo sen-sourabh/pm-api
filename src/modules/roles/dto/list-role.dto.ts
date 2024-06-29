@@ -54,10 +54,4 @@ export class ListQueryRolesDto implements FindManyOptions {
   @Type(() => Number)
   @IsOptional()
   take?: number;
-
-  // @ApiPropertyOptional()
-  // @IsNumber() // Remove this if order is not a number
-  // @IsEnum(Order, { always: true, message: 'order should be ASC or DESC' })
-  // @IsOptional()
-  // order?: typeof Order;
 }

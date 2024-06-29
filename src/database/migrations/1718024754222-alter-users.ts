@@ -15,5 +15,5 @@ export class AlterUsers1718024754222 implements MigrationInterface {
     }
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {}
+  public async down(): Promise<void> {}
 }

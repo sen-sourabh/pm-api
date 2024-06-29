@@ -1,20 +1,25 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import { IsNumber, IsOptional } from 'class-validator';
 
 export class ApiPaginateUnifiedModel {
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Page number',
+    example: 1,
     required: false,
   })
+  @Type(() => Number)
   @IsNumber()
   @IsOptional()
-  skip?: number;
+  pageNumber?: number;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'No of records will be fetched in single request',
+    example: 25,
     required: false,
   })
+  @Type(() => Number)
   @IsNumber()
   @IsOptional()
-  take?: number;
+  pageSize?: number;
 }

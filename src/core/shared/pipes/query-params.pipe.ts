@@ -1,9 +1,9 @@
-import { ArgumentMetadata, BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
+import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
 import { isMissing } from '../../../core/helpers/validations';
 
 @Injectable()
 export class QueryParamsPipe implements PipeTransform {
-  transform(value: any, metadata: ArgumentMetadata) {
+  transform(value: any) {
     let query = { ...value };
     let id: number | undefined;
     if (!isMissing(value.id)) {

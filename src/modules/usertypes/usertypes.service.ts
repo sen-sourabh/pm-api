@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { isMissing } from '../../core/helpers/validations';
-import { Order } from '../../core/shared/enums';
+import { OrderEnum } from '../../core/shared/enums';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
 import { ListQueryUsertypesDto } from './dto/list-usertype.dto';
 import { Usertype } from './entities/usertype.entity';
@@ -20,7 +20,7 @@ export class UsertypesService {
       where: query,
       skip,
       take,
-      order: { id: Order.ASC },
+      order: { id: OrderEnum.ASC },
     });
 
     return { data, metadata: { query } };
@@ -28,13 +28,12 @@ export class UsertypesService {
 
   async findOneUsertype(id: number): Promise<ApiResponseModel<Usertype>> {
     const data = await this.usertypesRepository.findOne({ where: { id } });
-    if (!data) throw new NotFoundException(`Record not found by id: ${id}`);
+    if (isMissing(data)) throw new NotFoundException(`Record not found by id: ${id}`);
     return { data, metadata: { params: { id } } };
   }
 
   async findUsertypeByValue(query: Record<string, unknown>): Promise<boolean> {
     const data = await this.usertypesRepository.findOne({ where: { ...query, isDeleted: false } });
-    console.log('Usertype found: ', data);
     if (isMissing(data)) {
       return false;
     }

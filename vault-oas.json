@@ -309,24 +309,13 @@
             }
           },
           "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiBadErrorResponseModel"
-                }
-              }
-            }
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "409": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiConflictErrorResponseModel"
-                }
-              }
-            }
+            "description": "Conflict"
           }
         },
         "tags": [
@@ -337,171 +326,40 @@
         "operationId": "findAllUsers",
         "parameters": [
           {
-            "name": "id",
-            "required": true,
-            "in": "query",
-            "description": "Id is the unique uuid identifier",
-            "example": "e762634c-3e41-11eb-b897-0862660ccbd4",
-            "schema": {
-              "uniqueItems": true,
-              "nullable": false,
-              "default": "uuid",
-              "type": "string"
-            }
-          },
-          {
-            "name": "firstName",
-            "required": false,
-            "in": "query",
-            "description": "first name of the user",
-            "example": "John",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "lastName",
-            "required": false,
-            "in": "query",
-            "description": "last name of the user",
-            "example": "Snow",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "organizationName",
-            "required": false,
-            "in": "query",
-            "description": "organization name of the user",
-            "example": "ABC Inc.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "organizationPosition",
-            "required": false,
-            "in": "query",
-            "description": "position in organization of the user",
-            "example": "Sr. Manager",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "noOfEmployees",
-            "required": false,
-            "in": "query",
-            "description": "no of empoyees in organization of the user",
-            "example": "100",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "email",
-            "required": true,
+            "required": false,
             "in": "query",
-            "description": "unique email of the user",
-            "example": "example@gmail.com",
+            "description": "Unique email of the user",
             "schema": {
               "uniqueItems": true,
-              "type": "string"
-            }
-          },
-          {
-            "name": "password",
-            "required": false,
-            "in": "query",
-            "description": "password of the user",
-            "example": "Welcome@123",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "otp",
-            "required": false,
-            "in": "query",
-            "description": "otp of the user",
-            "example": 123456,
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "name": "secretKey",
-            "required": true,
-            "in": "query",
-            "description": "secret key of the user",
-            "example": "d75QBLtPQTRL0x0umobtGqgOWJbKf3yE5U75+bMGK9s=",
-            "schema": {
               "type": "string"
             }
           },
           {
             "name": "phoneNumber",
-            "required": true,
+            "required": false,
             "in": "query",
             "description": "phone number of the user",
-            "example": 1234567890,
             "schema": {
               "type": "number"
             }
           },
           {
-            "name": "last_login",
+            "name": "isEnabled",
             "required": false,
             "in": "query",
-            "description": "last login date time of user",
-            "example": "2024-06-01T14:31:42.123Z",
-            "schema": {
-              "format": "T",
-              "nullable": true,
-              "type": "string"
-            }
-          },
-          {
-            "name": "isLogin",
-            "required": true,
-            "in": "query",
-            "description": "whether user logged in or not",
-            "example": 0,
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "isEnabled",
-            "required": true,
-            "in": "query",
             "description": "whether user is enabled or not",
-            "example": 1,
             "schema": {
               "type": "boolean"
             }
           },
           {
             "name": "isDeleted",
-            "required": true,
+            "required": false,
             "in": "query",
             "description": "whether user is deleted or not",
-            "example": 0,
             "schema": {
               "type": "boolean"
-            }
-          },
-          {
-            "name": "createdAt",
-            "required": true,
-            "in": "query",
-            "description": "With record create it`ll be auto generated",
-            "example": "2024-06-01T14:31:42.123Z",
-            "schema": {
-              "format": "T",
-              "nullable": false,
-              "type": "string"
             }
           },
           {
@@ -509,7 +367,6 @@
             "required": false,
             "in": "query",
             "description": "With record update it`ll be auto generated",
-            "example": "2024-06-01T14:31:42.123Z",
             "schema": {
               "format": "T",
               "nullable": true,
@@ -518,20 +375,38 @@
           },
           {
             "name": "role",
-            "required": true,
+            "required": false,
             "in": "query",
-            "description": "role id of the user",
-            "example": 1,
+            "description": "role of the user",
             "schema": {
               "type": "number"
             }
           },
           {
             "name": "usertype",
-            "required": true,
+            "required": false,
             "in": "query",
-            "description": "usertype id of the user",
+            "description": "usertype of the user",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageNumber",
+            "required": false,
+            "in": "query",
+            "description": "Page number",
             "example": 1,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "description": "No of records will be fetched in single request",
+            "example": 25,
             "schema": {
               "type": "number"
             }
@@ -550,6 +425,12 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         },
         "tags": [
@@ -572,7 +453,23 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "return user as per the identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
           }
         },
         "tags": [
@@ -876,18 +773,15 @@
         "properties": {
           "firstName": {
             "type": "string",
-            "description": "first name of the user",
-            "example": "John"
+            "description": "first name of the user"
           },
           "lastName": {
             "type": "string",
-            "description": "last name of the user",
-            "example": "Snow"
+            "description": "last name of the user"
           },
           "organizationName": {
             "type": "string",
-            "description": "organization name of the user",
-            "example": "ABC Inc."
+            "description": "organization name of the user"
           },
           "organizationPosition": {
             "type": "string",
@@ -896,41 +790,32 @@
           },
           "noOfEmployees": {
             "type": "string",
-            "description": "no of empoyees in organization of the user",
-            "example": "100"
-          },
-          "email": {
-            "type": "string",
-            "description": "unique email of the user",
-            "example": "example@gmail.com",
-            "uniqueItems": true
+            "description": "no of empoyees in organization of the user"
           },
           "password": {
             "type": "string",
-            "description": "password of the user",
-            "example": "Welcome@123"
+            "description": "password of the user"
           },
           "phoneNumber": {
             "type": "number",
-            "description": "phone number of the user",
-            "example": 1234567890
+            "description": "phone number of the user"
           },
           "role": {
             "type": "number",
-            "description": "role id of the user",
-            "example": 1
+            "description": "role of the user"
           },
           "usertype": {
             "type": "number",
-            "description": "usertype id of the user",
-            "example": 1
+            "description": "usertype of the user"
+          },
+          "email": {
+            "type": "string",
+            "description": "Unique email of the user",
+            "uniqueItems": true
           }
         },
         "required": [
-          "email",
-          "phoneNumber",
-          "role",
-          "usertype"
+          "email"
         ]
       },
       "User": {
@@ -946,18 +831,15 @@
           },
           "firstName": {
             "type": "string",
-            "description": "first name of the user",
-            "example": "John"
+            "description": "first name of the user"
           },
           "lastName": {
             "type": "string",
-            "description": "last name of the user",
-            "example": "Snow"
+            "description": "last name of the user"
           },
           "organizationName": {
             "type": "string",
-            "description": "organization name of the user",
-            "example": "ABC Inc."
+            "description": "organization name of the user"
           },
           "organizationPosition": {
             "type": "string",
@@ -966,132 +848,66 @@
           },
           "noOfEmployees": {
             "type": "string",
-            "description": "no of empoyees in organization of the user",
-            "example": "100"
+            "description": "no of empoyees in organization of the user"
           },
           "email": {
             "type": "string",
-            "description": "unique email of the user",
-            "example": "example@gmail.com",
+            "description": "Unique email of the user",
             "uniqueItems": true
           },
           "password": {
             "type": "string",
-            "description": "password of the user",
-            "example": "Welcome@123"
+            "description": "password of the user"
           },
           "otp": {
             "type": "number",
-            "description": "otp of the user",
-            "example": 123456
+            "description": "otp of the user"
           },
           "secretKey": {
             "type": "string",
-            "description": "secret key of the user",
-            "example": "d75QBLtPQTRL0x0umobtGqgOWJbKf3yE5U75+bMGK9s="
+            "description": "secret key of the user"
           },
           "phoneNumber": {
             "type": "number",
-            "description": "phone number of the user",
-            "example": 1234567890
+            "description": "phone number of the user"
           },
           "last_login": {
             "format": "T",
             "type": "string",
             "description": "last login date time of user",
-            "example": "2024-06-01T14:31:42.123Z",
             "nullable": true
           },
           "isLogin": {
             "type": "boolean",
-            "description": "whether user logged in or not",
-            "example": 0
+            "description": "whether user logged in or not"
           },
           "isEnabled": {
             "type": "boolean",
-            "description": "whether user is enabled or not",
-            "example": 1
+            "description": "whether user is enabled or not"
           },
           "isDeleted": {
             "type": "boolean",
-            "description": "whether user is deleted or not",
-            "example": 0
+            "description": "whether user is deleted or not"
           },
           "createdAt": {
             "format": "T",
             "type": "string",
             "description": "With record create it`ll be auto generated",
-            "example": "2024-06-01T14:31:42.123Z",
             "nullable": false
           },
           "updatedAt": {
             "format": "T",
             "type": "string",
             "description": "With record update it`ll be auto generated",
-            "example": "2024-06-01T14:31:42.123Z",
             "nullable": true
           },
           "role": {
             "type": "number",
-            "description": "role id of the user",
-            "example": 1
+            "description": "role of the user"
           },
           "usertype": {
             "type": "number",
-            "description": "usertype id of the user",
-            "example": 1
-          }
-        },
-        "required": [
-          "id",
-          "email",
-          "secretKey",
-          "phoneNumber",
-          "isLogin",
-          "isEnabled",
-          "isDeleted",
-          "createdAt",
-          "role",
-          "usertype"
-        ]
-      },
-      "ApiBadErrorResponseModel": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "object",
-            "description": "Message of the currect error response",
-            "example": "Email should be unique"
-          },
-          "error": {
-            "type": "string",
-            "description": "",
-            "example": "Conflict"
-          },
-          "statusCode": {
-            "type": "number",
-            "description": "Status code of the currect error response",
-            "example": 409
-          }
-        }
-      },
-      "ApiConflictErrorResponseModel": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "object",
-            "description": "Message of the currect error response",
-            "example": "Email should be unique"
-          },
-          "error": {
-            "type": "string",
-            "description": "",
-            "example": "Conflict"
-          },
-          "statusCode": {
-            "type": "number",
-            "description": "Status code of the currect error response",
-            "example": 409
+            "description": "usertype of the user"
           }
         }
       },
@@ -1100,18 +916,15 @@
         "properties": {
           "firstName": {
             "type": "string",
-            "description": "first name of the user",
-            "example": "John"
+            "description": "first name of the user"
           },
           "lastName": {
             "type": "string",
-            "description": "last name of the user",
-            "example": "Snow"
+            "description": "last name of the user"
           },
           "organizationName": {
             "type": "string",
-            "description": "organization name of the user",
-            "example": "ABC Inc."
+            "description": "organization name of the user"
           },
           "organizationPosition": {
             "type": "string",
@@ -1120,34 +933,28 @@
           },
           "noOfEmployees": {
             "type": "string",
-            "description": "no of empoyees in organization of the user",
-            "example": "100"
-          },
-          "email": {
-            "type": "string",
-            "description": "unique email of the user",
-            "example": "example@gmail.com",
-            "uniqueItems": true
+            "description": "no of empoyees in organization of the user"
           },
           "password": {
             "type": "string",
-            "description": "password of the user",
-            "example": "Welcome@123"
+            "description": "password of the user"
           },
           "phoneNumber": {
             "type": "number",
-            "description": "phone number of the user",
-            "example": 1234567890
+            "description": "phone number of the user"
           },
           "role": {
             "type": "number",
-            "description": "role id of the user",
-            "example": 1
+            "description": "role of the user"
           },
           "usertype": {
             "type": "number",
-            "description": "usertype id of the user",
-            "example": 1
+            "description": "usertype of the user"
+          },
+          "email": {
+            "type": "string",
+            "description": "Unique email of the user",
+            "uniqueItems": true
           }
         }
       }
