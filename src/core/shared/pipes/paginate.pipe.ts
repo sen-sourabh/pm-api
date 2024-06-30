@@ -7,7 +7,6 @@ export class PaginatePipe implements PipeTransform {
     pageSize = parseInt(pageSize ?? 24, 10);
 
     pageNumber = Math.max(0, (pageNumber - 1) * pageSize);
-    pageSize = Math.max(24, pageSize);
 
     value = {
       ...value,

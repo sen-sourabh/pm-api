@@ -1,6 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { getPagination } from '../../core/helpers/serializers';
 import { isMissing } from '../../core/helpers/validations';
 import { OrderEnum } from '../../core/shared/enums';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
@@ -12,21 +18,24 @@ export class RolesService {
   constructor(@InjectRepository(Role) private rolesRepository: Repository<Role>) {}
 
   async findAllRoles(query?: ListQueryRolesDto): Promise<ApiResponseModel<Role[]>> {
-    const { skip, take } = query;
-    delete query?.skip;
-    delete query?.take;
+    try {
+      const { skip, take } = getPagination(query);
 
-    const data = await this.rolesRepository.find({
-      where: query,
-      skip,
-      take,
-      order: { updatedAt: OrderEnum.DESC },
-    });
+      const data = await this.rolesRepository.find({
+        where: query,
+        skip,
+        take,
+        order: { updatedAt: OrderEnum.DESC },
+      });
 
-    return {
-      data,
-      metadata: { query },
-    };
+      return {
+        data,
+        metadata: { query },
+      };
+    } catch (error) {
+      Logger.error(`Error in list roles: ${error.message}`);
+      throw new InternalServerErrorException(`Error in list roles: ${error.message}`);
+    }
   }
 
   async findOneRole(id: number): Promise<ApiResponseModel<Role>> {
@@ -36,10 +45,15 @@ export class RolesService {
   }
 
   async findRoleByValue(query: Record<string, unknown>): Promise<boolean> {
-    const data = await this.rolesRepository.findOne({ where: { ...query, isDeleted: false } });
-    if (isMissing(data)) {
+    try {
+      const data = await this.rolesRepository.findOne({ where: { ...query, isDeleted: false } });
+      if (isMissing(data)) {
+        return false;
+      }
+      return true;
+    } catch (error) {
+      Logger.error(`Error in role operation: ${error.message}`);
       return false;
     }
-    return true;
   }
 }

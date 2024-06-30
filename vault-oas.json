@@ -63,17 +63,10 @@
         "operationId": "findAllRoles",
         "parameters": [
           {
-            "name": "id",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
             "name": "name",
             "required": false,
             "in": "query",
+            "description": "name of the role",
             "schema": {
               "type": "string"
             }
@@ -82,6 +75,7 @@
             "name": "isDefault",
             "required": false,
             "in": "query",
+            "description": "The role is default or not",
             "schema": {
               "type": "boolean"
             }
@@ -90,6 +84,7 @@
             "name": "isEnabled",
             "required": false,
             "in": "query",
+            "description": "The role is enabled or not",
             "schema": {
               "type": "boolean"
             }
@@ -98,22 +93,27 @@
             "name": "isDeleted",
             "required": false,
             "in": "query",
+            "description": "The role is deleted or not",
             "schema": {
               "type": "boolean"
             }
           },
           {
-            "name": "skip",
+            "name": "pageNumber",
             "required": false,
             "in": "query",
+            "description": "Page number",
+            "example": 1,
             "schema": {
               "type": "number"
             }
           },
           {
-            "name": "take",
+            "name": "pageSize",
             "required": false,
             "in": "query",
+            "description": "No of records will be fetched in single request",
+            "example": 25,
             "schema": {
               "type": "number"
             }
@@ -132,6 +132,12 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         },
         "tags": [
@@ -154,7 +160,7 @@
         ],
         "responses": {
           "200": {
-            "description": "return role by id",
+            "description": "return role as per the identifier",
             "content": {
               "application/json": {
                 "schema": {
@@ -162,6 +168,15 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
           }
         },
         "tags": [
@@ -174,17 +189,10 @@
         "operationId": "findAllUsertypes",
         "parameters": [
           {
-            "name": "id",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
             "name": "name",
             "required": false,
             "in": "query",
+            "description": "name of the usertype",
             "schema": {
               "type": "string"
             }
@@ -193,6 +201,7 @@
             "name": "isDefault",
             "required": false,
             "in": "query",
+            "description": "The usertype is default or not",
             "schema": {
               "type": "boolean"
             }
@@ -201,6 +210,7 @@
             "name": "isEnabled",
             "required": false,
             "in": "query",
+            "description": "The usertype is enabled or not",
             "schema": {
               "type": "boolean"
             }
@@ -209,22 +219,27 @@
             "name": "isDeleted",
             "required": false,
             "in": "query",
+            "description": "The usertype is deleted or not",
             "schema": {
               "type": "boolean"
             }
           },
           {
-            "name": "skip",
+            "name": "pageNumber",
             "required": false,
             "in": "query",
+            "description": "Page number",
+            "example": 1,
             "schema": {
               "type": "number"
             }
           },
           {
-            "name": "take",
+            "name": "pageSize",
             "required": false,
             "in": "query",
+            "description": "No of records will be fetched in single request",
+            "example": 25,
             "schema": {
               "type": "number"
             }
@@ -243,6 +258,12 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         },
         "tags": [
@@ -265,7 +286,7 @@
         ],
         "responses": {
           "200": {
-            "description": "return usertype by id",
+            "description": "return usertype as per the identifier",
             "content": {
               "application/json": {
                 "schema": {
@@ -273,6 +294,15 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
           }
         },
         "tags": [
@@ -704,46 +734,35 @@
           },
           "name": {
             "type": "string",
-            "description": "name of the role",
-            "example": "Admin"
+            "description": "name of the role"
           },
           "isDefault": {
             "type": "boolean",
-            "description": "whether role is default or not",
-            "example": 1
+            "description": "The role is default or not"
           },
           "isEnabled": {
             "type": "boolean",
-            "description": "whether role is enabled or not",
-            "example": 1
+            "description": "The role is enabled or not"
           },
           "isDeleted": {
             "type": "boolean",
-            "description": "whether role is deleted or not",
-            "example": 0
+            "description": "The role is deleted or not"
           },
           "createdAt": {
             "format": "T",
             "type": "string",
             "description": "With record create it`ll be auto generated",
-            "example": "2024-06-01T14:31:42.123Z",
             "nullable": false
           },
           "updatedAt": {
             "format": "T",
             "type": "string",
             "description": "With record update it`ll be auto generated",
-            "example": "2024-06-01T14:31:42.123Z",
             "nullable": true
           }
         },
         "required": [
-          "id",
-          "name",
-          "isDefault",
-          "isEnabled",
-          "isDeleted",
-          "createdAt"
+          "id"
         ]
       },
       "Usertype": {
@@ -758,46 +777,35 @@
           },
           "name": {
             "type": "string",
-            "description": "name of the usertype",
-            "example": "Individual"
+            "description": "name of the usertype"
           },
           "isDefault": {
             "type": "boolean",
-            "description": "whether usertype is default or not",
-            "example": 1
+            "description": "The usertype is default or not"
           },
           "isEnabled": {
             "type": "boolean",
-            "description": "whether usertype is enabled or not",
-            "example": 1
+            "description": "The usertype is enabled or not"
           },
           "isDeleted": {
             "type": "boolean",
-            "description": "whether usertype is deleted or not",
-            "example": 0
+            "description": "The usertype is deleted or not"
           },
           "createdAt": {
             "format": "T",
             "type": "string",
             "description": "With record create it`ll be auto generated",
-            "example": "2024-06-01T14:31:42.123Z",
             "nullable": false
           },
           "updatedAt": {
             "format": "T",
             "type": "string",
             "description": "With record update it`ll be auto generated",
-            "example": "2024-06-01T14:31:42.123Z",
             "nullable": true
           }
         },
         "required": [
-          "id",
-          "name",
-          "isDefault",
-          "isEnabled",
-          "isDeleted",
-          "createdAt"
+          "id"
         ]
       },
       "CreateUserDto": {

@@ -1,57 +1,8 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
-import { FindManyOptions } from 'typeorm';
+import { IntersectionType, PickType } from '@nestjs/swagger';
+import { ApiPaginateUnifiedModel } from '../../../core/shared/models/api-paginate.model';
+import { Role } from '../entities/role.entity';
 
-export class ListQueryRolesDto implements FindManyOptions {
-  @ApiPropertyOptional()
-  @IsNumber()
-  @Type(() => Number)
-  @IsOptional()
-  readonly id?: number;
-
-  @ApiPropertyOptional()
-  @IsString()
-  @IsOptional()
-  readonly name?: string;
-
-  @ApiPropertyOptional()
-  @IsBoolean()
-  @Type(() => Boolean)
-  @IsOptional()
-  readonly isDefault?: boolean;
-
-  @ApiPropertyOptional()
-  @IsBoolean()
-  @Type(() => Boolean)
-  @IsOptional()
-  readonly isEnabled?: boolean;
-
-  @ApiPropertyOptional()
-  @IsBoolean()
-  @Type(() => Boolean)
-  @IsOptional()
-  readonly isDeleted?: boolean;
-
-  // @ApiPropertyOptional()
-  // @IsDateString()
-  // @IsOptional()
-  // readonly createdAt?: Date;
-
-  // @ApiPropertyOptional()
-  // @IsDateString()
-  // @IsOptional()
-  // readonly updatedAt?: Date;
-
-  @ApiPropertyOptional()
-  @IsNumber()
-  @Type(() => Number)
-  @IsOptional()
-  skip?: number;
-
-  @ApiPropertyOptional()
-  @IsNumber()
-  @Type(() => Number)
-  @IsOptional()
-  take?: number;
-}
+export class ListQueryRolesDto extends IntersectionType(
+  PickType(Role, ['name', 'isDefault', 'isEnabled', 'isDeleted']),
+  ApiPaginateUnifiedModel,
+) {}

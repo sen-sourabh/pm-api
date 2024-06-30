@@ -1,6 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { getPagination } from '../../core/helpers/serializers';
 import { isMissing } from '../../core/helpers/validations';
 import { OrderEnum } from '../../core/shared/enums';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
@@ -12,18 +18,21 @@ export class UsertypesService {
   constructor(@InjectRepository(Usertype) private usertypesRepository: Repository<Usertype>) {}
 
   async findAllUsertypes(query?: ListQueryUsertypesDto): Promise<ApiResponseModel<Usertype[]>> {
-    const { skip, take } = query;
-    delete query?.skip;
-    delete query?.take;
+    try {
+      const { skip, take } = getPagination(query);
 
-    const data = await this.usertypesRepository.find({
-      where: query,
-      skip,
-      take,
-      order: { id: OrderEnum.ASC },
-    });
+      const data = await this.usertypesRepository.find({
+        where: query,
+        skip,
+        take,
+        order: { id: OrderEnum.ASC },
+      });
 
-    return { data, metadata: { query } };
+      return { data, metadata: { query } };
+    } catch (error) {
+      Logger.debug(`Error in list usertype: ${error?.message}`);
+      throw new InternalServerErrorException(`Error in list usertype: ${error?.message}`);
+    }
   }
 
   async findOneUsertype(id: number): Promise<ApiResponseModel<Usertype>> {
@@ -33,10 +42,17 @@ export class UsertypesService {
   }
 
   async findUsertypeByValue(query: Record<string, unknown>): Promise<boolean> {
-    const data = await this.usertypesRepository.findOne({ where: { ...query, isDeleted: false } });
-    if (isMissing(data)) {
+    try {
+      const data = await this.usertypesRepository.findOne({
+        where: { ...query, isDeleted: false },
+      });
+      if (isMissing(data)) {
+        return false;
+      }
+      return true;
+    } catch (error) {
+      Logger.error(`Error in user operation: ${error.message}`);
       return false;
     }
-    return true;
   }
 }

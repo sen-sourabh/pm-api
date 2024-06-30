@@ -57,55 +57,40 @@ export class UsersService {
   }
 
   async findOneUser(id: string): Promise<ApiResponseModel<User>> {
-    try {
-      const data = await this.usersRepository.findOne({ where: { id } });
-      if (isMissing(data)) {
-        throw new NotFoundException(`Record not found with id: ${id}`);
-      }
-      return { data, metadata: { params: { id } } };
-    } catch (error) {
-      Logger.error(`Error in get user: ${error.message}`);
-      throw new InternalServerErrorException(`Error in get user: ${error.message}`);
+    const data = await this.usersRepository.findOne({ where: { id } });
+    if (isMissing(data)) {
+      throw new NotFoundException(`Record not found with id: ${id}`);
     }
+    return { data, metadata: { params: { id } } };
   }
 
   async updateUser(id: string, updateUserDto: UpdateUserDto): Promise<ApiResponseModel<User>> {
-    try {
-      //Actual user update
-      const updated = await this.usersRepository.update(id, updateUserDto);
-      if (!updated?.affected) {
-        throw new BadRequestException(`Not updated`);
-      }
-      //Get updated user
-      const { data } = await this.findOneUser(id);
-      return {
-        data,
-        metadata: { params: { id }, body: updateUserDto },
-        message: 'User updated successfully',
-      };
-    } catch (error) {
-      Logger.error(`Error in update user: ${error.message}`);
-      throw new InternalServerErrorException(`Error in update user: ${error.message}`);
+    //Actual user update
+    const updated = await this.usersRepository.update(id, updateUserDto);
+    if (!updated?.affected) {
+      throw new BadRequestException(`Not updated`);
     }
+    //Get updated user
+    const { data } = await this.findOneUser(id);
+    return {
+      data,
+      metadata: { params: { id }, body: updateUserDto },
+      message: 'User updated successfully',
+    };
   }
 
   async removeUser(id: string): Promise<ApiResponseModel<User>> {
-    try {
-      const deleted = await this.usersRepository.update(id, { isDeleted: true });
-      if (!deleted?.affected) {
-        throw new BadRequestException(`Not deleted`);
-      }
-      //Get deleted user
-      const { data } = await this.findOneUser(id);
-      return {
-        data,
-        metadata: { params: { id } },
-        message: 'User deleted successfully',
-      };
-    } catch (error) {
-      Logger.error(`Error in delete user: ${error.message}`);
-      throw new InternalServerErrorException(`Error in delete user: ${error.message}`);
+    const deleted = await this.usersRepository.update(id, { isDeleted: true });
+    if (!deleted?.affected) {
+      throw new BadRequestException(`Not deleted`);
     }
+    //Get deleted user
+    const { data } = await this.findOneUser(id);
+    return {
+      data,
+      metadata: { params: { id } },
+      message: 'User deleted successfully',
+    };
   }
 
   async findUserByValue(query: Record<string, unknown>): Promise<boolean> {
@@ -117,7 +102,7 @@ export class UsersService {
       return true;
     } catch (error) {
       Logger.error(`Error in user operation: ${error.message}`);
-      throw new InternalServerErrorException(`Error in user operation: ${error.message}`);
+      return false;
     }
   }
 }
