@@ -1,12 +1,20 @@
-export enum Order {
+export enum OrderEnum {
   ASC = 'ASC',
   DESC = 'DESC',
 }
 
-export enum HttpStatusViaCode {
+export enum HttpStatusViaCodeEnum {
   Info = 'info',
   Success = 'success',
   Redirect = 'redirect',
-  Client_Error = 'client_error',
-  Server_Error = 'server_error',
+  ClientError = 'client_error',
+  ServerError = 'server_error',
+}
+
+export enum ApiXResponsesEnum {
+  BadRequest = 'bad_request',
+  Unauthorized = 'unauthorized',
+  NotImplemented = 'not_implemented',
+  NotFound = 'not_found',
+  Conflict = 'conflict',
 }

@@ -1,5 +1,6 @@
-import { ApiProperty, ApiTags } from '@nestjs/swagger';
-import { IsBoolean, IsDateString, IsNumber, IsString } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional, ApiTags } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsBoolean, IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
@@ -22,48 +23,51 @@ export class Role {
   })
   @PrimaryGeneratedColumn()
   @Column({ type: 'int', generated: 'increment', primary: true })
+  @Type(() => Number)
   @IsNumber()
   id: number;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'name of the role',
-    example: 'Admin',
     required: true,
   })
   @Column({ length: 255, type: 'varchar', unique: true })
   @IsString()
-  name: string;
+  @IsOptional()
+  name?: string;
 
-  @ApiProperty({
-    description: 'whether role is default or not',
-    example: 1,
-    required: true,
+  @ApiPropertyOptional({
+    description: 'The role is default or not',
+    required: false,
   })
   @Column({ type: 'tinyint', default: '1' })
+  @Type(() => Boolean)
   @IsBoolean()
-  isDefault: boolean;
+  @IsOptional()
+  isDefault?: boolean;
 
-  @ApiProperty({
-    description: 'whether role is enabled or not',
-    example: 1,
-    required: true,
+  @ApiPropertyOptional({
+    description: 'The role is enabled or not',
+    required: false,
   })
   @Column({ type: 'tinyint', default: '1' })
+  @Type(() => Boolean)
   @IsBoolean()
-  isEnabled: boolean;
+  @IsOptional()
+  isEnabled?: boolean;
 
-  @ApiProperty({
-    description: 'whether role is deleted or not',
-    example: 0,
+  @ApiPropertyOptional({
+    description: 'The role is deleted or not',
     required: true,
   })
   @Column({ type: 'tinyint', default: '0' })
+  @Type(() => Boolean)
   @IsBoolean()
-  isDeleted: boolean;
+  @IsOptional()
+  isDeleted?: boolean;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'With record create it`ll be auto generated',
-    example: '2024-06-01T14:31:42.123Z',
     required: true,
     name: 'createdAt',
     nullable: false,
@@ -71,11 +75,11 @@ export class Role {
   })
   @IsDateString({ strict: true, strictSeparator: true })
   @CreateDateColumn({ type: 'datetime' })
-  createdAt: Date;
+  @IsOptional()
+  createdAt?: Date;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'With record update it`ll be auto generated',
-    example: '2024-06-01T14:31:42.123Z',
     required: false,
     name: 'updatedAt',
     nullable: true,
@@ -83,5 +87,6 @@ export class Role {
   })
   @IsDateString({ strict: true, strictSeparator: true })
   @UpdateDateColumn({ type: 'datetime' })
-  updatedAt: Date;
+  @IsOptional()
+  updatedAt?: Date;
 }

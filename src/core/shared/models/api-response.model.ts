@@ -22,6 +22,15 @@ export class ApiResponseMetadataUnifiedModel {
   @IsOptional()
   readonly params?: unknown;
 
+  @ApiProperty({
+    description: 'request body to create entry in vault',
+    example: { some_field: 'value' },
+    required: false,
+  })
+  @IsObject()
+  @IsOptional()
+  readonly body?: unknown;
+
   // @ApiProperty({
   //   description: 'Page number',
   //   example: 1,

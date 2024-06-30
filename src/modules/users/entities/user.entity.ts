@@ -1,5 +1,14 @@
 import { ApiProperty, ApiPropertyOptional, ApiTags } from '@nestjs/swagger';
-import { IsBoolean, IsDateString, IsNumber, IsPhoneNumber, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsBoolean,
+  IsDateString,
+  IsEmail,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsStrongPassword,
+} from 'class-validator';
 import {
   Column,
   CreateDateColumn,
@@ -14,7 +23,7 @@ import { Usertype } from '../../usertypes/entities/usertype.entity';
 @ApiTags('Users')
 @Entity('users')
 export class User {
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Id is the unique uuid identifier',
     example: 'e762634c-3e41-11eb-b897-0862660ccbd4',
     type: 'string',
@@ -27,140 +36,148 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   @Column({ length: 150, primary: true, generated: 'uuid' })
   @IsString()
-  id: string;
+  id?: string;
 
   @ApiPropertyOptional({
     description: 'first name of the user',
-    example: 'John',
-    required: false,
+    required: true,
   })
   @Column({ length: 100, type: 'varchar', nullable: true })
   @IsString()
+  @IsOptional()
   firstName?: string;
 
   @ApiPropertyOptional({
     description: 'last name of the user',
-    example: 'Snow',
     required: false,
   })
   @Column({ length: 100, type: 'varchar', nullable: true })
   @IsString()
+  @IsOptional()
   lastName?: string;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'organization name of the user',
-    example: 'ABC Inc.',
     required: false,
   })
   @Column({ length: 255, type: 'varchar', nullable: true })
   @IsString()
+  @IsOptional()
   organizationName?: string;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'position in organization of the user',
     example: 'Sr. Manager',
     required: false,
   })
   @Column({ length: 150, type: 'varchar', nullable: true })
   @IsString()
+  @IsOptional()
   organizationPosition?: string;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'no of empoyees in organization of the user',
-    example: '100',
     required: false,
   })
   @Column({ length: 15, type: 'varchar', nullable: true })
   @IsString()
+  @IsOptional()
   noOfEmployees?: string;
 
-  @ApiProperty({
-    description: 'unique email of the user',
-    example: 'example@gmail.com',
+  @ApiPropertyOptional({
+    description: 'Unique email of the user',
     required: true,
     uniqueItems: true,
   })
   @Column({ length: 150, type: 'varchar', unique: true })
-  @IsString({ message: 'email is required' })
-  email: string;
+  @IsString({ message: 'email must be a string' })
+  @IsEmail({}, { message: 'Invalid email format' })
+  @IsOptional()
+  email?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'password of the user',
-    example: 'Welcome@123',
     required: false,
   })
   @Column({ type: 'varchar', nullable: true })
-  @IsString({ message: 'password is required' })
+  @IsString({ message: 'password must be a string' })
+  @IsStrongPassword({}, { message: 'password must be strong' })
+  @IsOptional()
   password?: string;
 
   @ApiPropertyOptional({
     description: 'otp of the user',
-    example: 123456,
     required: false,
   })
   @Column({ type: 'int', nullable: true })
+  @Type(() => Number)
   @IsNumber()
+  @IsOptional()
   otp?: number;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'secret key of the user',
-    example: 'd75QBLtPQTRL0x0umobtGqgOWJbKf3yE5U75+bMGK9s=',
     required: true,
   })
   @Column({ length: 255, type: 'varchar', unique: true })
   @IsString()
-  secretKey: string;
+  @IsOptional()
+  secretKey?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'phone number of the user',
-    example: 1234567890,
     required: true,
   })
-  @Column({ type: 'bigint', unique: true })
-  @IsPhoneNumber()
-  phoneNumber: number;
+  @Column({ type: 'bigint' })
+  @Type(() => Number)
+  @IsNumber()
+  @IsOptional()
+  phoneNumber?: number;
 
-  @ApiProperty({
-    description: 'last login date time of user',
-    example: '2024-06-01T14:31:42.123Z',
+  @ApiPropertyOptional({
+    description: "The date time of user's last login",
     required: false,
-    name: 'last_login',
+    name: 'lastLogin',
     nullable: true,
     format: 'T',
   })
   @IsDateString({ strict: true, strictSeparator: true })
+  @Column({ type: 'datetime', nullable: true })
+  @IsOptional()
   lastLogin?: Date;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'whether user logged in or not',
-    example: 0,
     required: true,
   })
   @Column({ type: 'tinyint', default: '0' })
+  @Type(() => Boolean)
   @IsBoolean()
-  isLogin: boolean;
+  @IsOptional()
+  isLogin?: boolean;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'whether user is enabled or not',
-    example: 1,
     required: true,
   })
   @Column({ type: 'tinyint', default: '1' })
+  @Type(() => Boolean)
   @IsBoolean()
-  isEnabled: boolean;
+  @IsOptional()
+  isEnabled?: boolean;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'whether user is deleted or not',
-    example: 0,
     required: true,
   })
   @Column({ type: 'tinyint', default: '0' })
+  @Type(() => Boolean)
   @IsBoolean()
-  isDeleted: boolean;
+  @IsOptional()
+  isDeleted?: boolean;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'With record create it`ll be auto generated',
-    example: '2024-06-01T14:31:42.123Z',
     required: true,
     name: 'createdAt',
     nullable: false,
@@ -168,11 +185,11 @@ export class User {
   })
   @IsDateString({ strict: true, strictSeparator: true })
   @CreateDateColumn({ type: 'datetime' })
-  createdAt: Date;
+  @IsOptional()
+  createdAt?: Date;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'With record update it`ll be auto generated',
-    example: '2024-06-01T14:31:42.123Z',
     required: false,
     name: 'updatedAt',
     nullable: true,
@@ -180,20 +197,19 @@ export class User {
   })
   @IsDateString({ strict: true, strictSeparator: true })
   @UpdateDateColumn({ type: 'datetime' })
-  updatedAt: Date;
+  @IsOptional()
+  updatedAt?: Date;
 
-  @ApiProperty({
-    description: 'role id of the user',
-    example: 1,
+  @ApiPropertyOptional({
+    description: 'role of the user',
     required: true,
   })
   @ManyToOne(() => Role)
   @Column({ name: 'roleId', type: 'int' })
   role: number;
 
-  @ApiProperty({
-    description: 'usertype id of the user',
-    example: 1,
+  @ApiPropertyOptional({
+    description: 'usertype of the user',
     required: true,
   })
   @ManyToOne(() => Usertype)

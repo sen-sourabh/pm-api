@@ -7,7 +7,7 @@ import { ApiResponseUnifiedModel } from '../../models/api-response.model';
 @Injectable()
 export class ResponseInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    const request = context.switchToHttp().getRequest();
+    // const request = context.switchToHttp().getRequest();
     // console.log(
     //   'Before from Interceptor:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::',
     // );

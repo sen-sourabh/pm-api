@@ -63,17 +63,10 @@
         "operationId": "findAllRoles",
         "parameters": [
           {
-            "name": "id",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
             "name": "name",
             "required": false,
             "in": "query",
+            "description": "name of the role",
             "schema": {
               "type": "string"
             }
@@ -82,6 +75,7 @@
             "name": "isDefault",
             "required": false,
             "in": "query",
+            "description": "The role is default or not",
             "schema": {
               "type": "boolean"
             }
@@ -90,6 +84,7 @@
             "name": "isEnabled",
             "required": false,
             "in": "query",
+            "description": "The role is enabled or not",
             "schema": {
               "type": "boolean"
             }
@@ -98,22 +93,27 @@
             "name": "isDeleted",
             "required": false,
             "in": "query",
+            "description": "The role is deleted or not",
             "schema": {
               "type": "boolean"
             }
           },
           {
-            "name": "skip",
+            "name": "pageNumber",
             "required": false,
             "in": "query",
+            "description": "Page number",
+            "example": 1,
             "schema": {
               "type": "number"
             }
           },
           {
-            "name": "take",
+            "name": "pageSize",
             "required": false,
             "in": "query",
+            "description": "No of records will be fetched in single request",
+            "example": 25,
             "schema": {
               "type": "number"
             }
@@ -132,6 +132,12 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         },
         "tags": [
@@ -154,7 +160,7 @@
         ],
         "responses": {
           "200": {
-            "description": "return role by id",
+            "description": "return role as per the identifier",
             "content": {
               "application/json": {
                 "schema": {
@@ -162,6 +168,15 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
           }
         },
         "tags": [
@@ -174,17 +189,10 @@
         "operationId": "findAllUsertypes",
         "parameters": [
           {
-            "name": "id",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
             "name": "name",
             "required": false,
             "in": "query",
+            "description": "name of the usertype",
             "schema": {
               "type": "string"
             }
@@ -193,6 +201,7 @@
             "name": "isDefault",
             "required": false,
             "in": "query",
+            "description": "The usertype is default or not",
             "schema": {
               "type": "boolean"
             }
@@ -201,6 +210,7 @@
             "name": "isEnabled",
             "required": false,
             "in": "query",
+            "description": "The usertype is enabled or not",
             "schema": {
               "type": "boolean"
             }
@@ -209,22 +219,27 @@
             "name": "isDeleted",
             "required": false,
             "in": "query",
+            "description": "The usertype is deleted or not",
             "schema": {
               "type": "boolean"
             }
           },
           {
-            "name": "skip",
+            "name": "pageNumber",
             "required": false,
             "in": "query",
+            "description": "Page number",
+            "example": 1,
             "schema": {
               "type": "number"
             }
           },
           {
-            "name": "take",
+            "name": "pageSize",
             "required": false,
             "in": "query",
+            "description": "No of records will be fetched in single request",
+            "example": 25,
             "schema": {
               "type": "number"
             }
@@ -243,6 +258,12 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         },
         "tags": [
@@ -265,7 +286,7 @@
         ],
         "responses": {
           "200": {
-            "description": "return usertype by id",
+            "description": "return usertype as per the identifier",
             "content": {
               "application/json": {
                 "schema": {
@@ -273,6 +294,15 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
           }
         },
         "tags": [
@@ -295,7 +325,7 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "",
             "content": {
               "application/json": {
@@ -304,6 +334,15 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
           }
         },
         "tags": [
@@ -312,10 +351,113 @@
       },
       "get": {
         "operationId": "findAllUsers",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "email",
+            "required": false,
+            "in": "query",
+            "description": "Unique email of the user",
+            "schema": {
+              "uniqueItems": true,
+              "type": "string"
+            }
+          },
+          {
+            "name": "phoneNumber",
+            "required": false,
+            "in": "query",
+            "description": "phone number of the user",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "isEnabled",
+            "required": false,
+            "in": "query",
+            "description": "whether user is enabled or not",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "isDeleted",
+            "required": false,
+            "in": "query",
+            "description": "whether user is deleted or not",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "updatedAt",
+            "required": false,
+            "in": "query",
+            "description": "With record update it`ll be auto generated",
+            "schema": {
+              "format": "T",
+              "nullable": true,
+              "type": "string"
+            }
+          },
+          {
+            "name": "role",
+            "required": false,
+            "in": "query",
+            "description": "role of the user",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "usertype",
+            "required": false,
+            "in": "query",
+            "description": "usertype of the user",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageNumber",
+            "required": false,
+            "in": "query",
+            "description": "Page number",
+            "example": 1,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "description": "No of records will be fetched in single request",
+            "example": 25,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "returns list of users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         },
         "tags": [
@@ -338,7 +480,23 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "return user as per the identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
           }
         },
         "tags": [
@@ -369,7 +527,26 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "return update user as per the identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
           }
         },
         "tags": [
@@ -390,7 +567,23 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "return deleted user as per the identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
           }
         },
         "tags": [
@@ -541,46 +734,35 @@
           },
           "name": {
             "type": "string",
-            "description": "name of the role",
-            "example": "Admin"
+            "description": "name of the role"
           },
           "isDefault": {
             "type": "boolean",
-            "description": "whether role is default or not",
-            "example": 1
+            "description": "The role is default or not"
           },
           "isEnabled": {
             "type": "boolean",
-            "description": "whether role is enabled or not",
-            "example": 1
+            "description": "The role is enabled or not"
           },
           "isDeleted": {
             "type": "boolean",
-            "description": "whether role is deleted or not",
-            "example": 0
+            "description": "The role is deleted or not"
           },
           "createdAt": {
             "format": "T",
             "type": "string",
             "description": "With record create it`ll be auto generated",
-            "example": "2024-06-01T14:31:42.123Z",
             "nullable": false
           },
           "updatedAt": {
             "format": "T",
             "type": "string",
             "description": "With record update it`ll be auto generated",
-            "example": "2024-06-01T14:31:42.123Z",
             "nullable": true
           }
         },
         "required": [
-          "id",
-          "name",
-          "isDefault",
-          "isEnabled",
-          "isDeleted",
-          "createdAt"
+          "id"
         ]
       },
       "Usertype": {
@@ -595,51 +777,87 @@
           },
           "name": {
             "type": "string",
-            "description": "name of the usertype",
-            "example": "Individual"
+            "description": "name of the usertype"
           },
           "isDefault": {
             "type": "boolean",
-            "description": "whether usertype is default or not",
-            "example": 1
+            "description": "The usertype is default or not"
           },
           "isEnabled": {
             "type": "boolean",
-            "description": "whether usertype is enabled or not",
-            "example": 1
+            "description": "The usertype is enabled or not"
           },
           "isDeleted": {
             "type": "boolean",
-            "description": "whether usertype is deleted or not",
-            "example": 0
+            "description": "The usertype is deleted or not"
           },
           "createdAt": {
             "format": "T",
             "type": "string",
             "description": "With record create it`ll be auto generated",
-            "example": "2024-06-01T14:31:42.123Z",
             "nullable": false
           },
           "updatedAt": {
             "format": "T",
             "type": "string",
             "description": "With record update it`ll be auto generated",
-            "example": "2024-06-01T14:31:42.123Z",
             "nullable": true
           }
         },
         "required": [
-          "id",
-          "name",
-          "isDefault",
-          "isEnabled",
-          "isDeleted",
-          "createdAt"
+          "id"
         ]
       },
       "CreateUserDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "description": "first name of the user"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "last name of the user"
+          },
+          "organizationName": {
+            "type": "string",
+            "description": "organization name of the user"
+          },
+          "organizationPosition": {
+            "type": "string",
+            "description": "position in organization of the user",
+            "example": "Sr. Manager"
+          },
+          "noOfEmployees": {
+            "type": "string",
+            "description": "no of empoyees in organization of the user"
+          },
+          "password": {
+            "type": "string",
+            "description": "password of the user"
+          },
+          "role": {
+            "type": "number",
+            "description": "role of the user"
+          },
+          "usertype": {
+            "type": "number",
+            "description": "usertype of the user"
+          },
+          "email": {
+            "type": "string",
+            "description": "Unique email of the user",
+            "uniqueItems": true
+          },
+          "phoneNumber": {
+            "type": "number",
+            "description": "phone number of the user"
+          }
+        },
+        "required": [
+          "email",
+          "phoneNumber"
+        ]
       },
       "User": {
         "type": "object",
@@ -654,18 +872,15 @@
           },
           "firstName": {
             "type": "string",
-            "description": "first name of the user",
-            "example": "John"
+            "description": "first name of the user"
           },
           "lastName": {
             "type": "string",
-            "description": "last name of the user",
-            "example": "Snow"
+            "description": "last name of the user"
           },
           "organizationName": {
             "type": "string",
-            "description": "organization name of the user",
-            "example": "ABC Inc."
+            "description": "organization name of the user"
           },
           "organizationPosition": {
             "type": "string",
@@ -674,98 +889,128 @@
           },
           "noOfEmployees": {
             "type": "string",
-            "description": "no of empoyees in organization of the user",
-            "example": "100"
+            "description": "no of empoyees in organization of the user"
           },
           "email": {
             "type": "string",
-            "description": "unique email of the user",
-            "example": "example@gmail.com",
+            "description": "Unique email of the user",
             "uniqueItems": true
           },
           "password": {
             "type": "string",
-            "description": "password of the user",
-            "example": "Welcome@123"
+            "description": "password of the user"
           },
           "otp": {
             "type": "number",
-            "description": "otp of the user",
-            "example": 123456
+            "description": "otp of the user"
           },
           "secretKey": {
             "type": "string",
-            "description": "secret key of the user",
-            "example": "d75QBLtPQTRL0x0umobtGqgOWJbKf3yE5U75+bMGK9s="
+            "description": "secret key of the user"
           },
           "phoneNumber": {
             "type": "number",
-            "description": "phone number of the user",
-            "example": 1234567890
+            "description": "phone number of the user"
           },
-          "last_login": {
+          "lastLogin": {
             "format": "T",
             "type": "string",
-            "description": "last login date time of user",
-            "example": "2024-06-01T14:31:42.123Z",
+            "description": "The date time of user's last login",
             "nullable": true
           },
           "isLogin": {
             "type": "boolean",
-            "description": "whether user logged in or not",
-            "example": 0
+            "description": "whether user logged in or not"
           },
           "isEnabled": {
             "type": "boolean",
-            "description": "whether user is enabled or not",
-            "example": 1
+            "description": "whether user is enabled or not"
           },
           "isDeleted": {
             "type": "boolean",
-            "description": "whether user is deleted or not",
-            "example": 0
+            "description": "whether user is deleted or not"
           },
           "createdAt": {
             "format": "T",
             "type": "string",
             "description": "With record create it`ll be auto generated",
-            "example": "2024-06-01T14:31:42.123Z",
             "nullable": false
           },
           "updatedAt": {
             "format": "T",
             "type": "string",
             "description": "With record update it`ll be auto generated",
-            "example": "2024-06-01T14:31:42.123Z",
             "nullable": true
           },
           "role": {
             "type": "number",
-            "description": "role id of the user",
-            "example": 1
+            "description": "role of the user"
           },
           "usertype": {
             "type": "number",
-            "description": "usertype id of the user",
-            "example": 1
+            "description": "usertype of the user"
           }
-        },
-        "required": [
-          "id",
-          "email",
-          "secretKey",
-          "phoneNumber",
-          "isLogin",
-          "isEnabled",
-          "isDeleted",
-          "createdAt",
-          "role",
-          "usertype"
-        ]
+        }
       },
       "UpdateUserDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "description": "first name of the user"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "last name of the user"
+          },
+          "organizationName": {
+            "type": "string",
+            "description": "organization name of the user"
+          },
+          "organizationPosition": {
+            "type": "string",
+            "description": "position in organization of the user",
+            "example": "Sr. Manager"
+          },
+          "noOfEmployees": {
+            "type": "string",
+            "description": "no of empoyees in organization of the user"
+          },
+          "password": {
+            "type": "string",
+            "description": "password of the user"
+          },
+          "otp": {
+            "type": "number",
+            "description": "otp of the user"
+          },
+          "phoneNumber": {
+            "type": "number",
+            "description": "phone number of the user"
+          },
+          "lastLogin": {
+            "format": "T",
+            "type": "string",
+            "description": "The date time of user's last login",
+            "nullable": true
+          },
+          "isLogin": {
+            "type": "boolean",
+            "description": "whether user logged in or not"
+          },
+          "isEnabled": {
+            "type": "boolean",
+            "description": "whether user is enabled or not"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "description": "whether user is deleted or not"
+          },
+          "role": {
+            "type": "number",
+            "description": "role of the user"
+          }
+        }
       }
     }
   }
