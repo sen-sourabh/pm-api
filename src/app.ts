@@ -4,7 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { SwaggerConfig } from './configs/swagger';
-import { ResponseInterceptor } from './core/shared/interceptors/response/response.interceptor';
+import { ResponseInterceptor } from './core/shared/interceptors/response.interceptor';
 
 const logger = new Logger(); // You can customize the context here
 const configService = new ConfigService();

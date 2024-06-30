@@ -8,11 +8,15 @@ import {
   Patch,
   Post,
   Query,
+  UseFilters,
+  UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiXResponses } from '../../core/shared/decorators/apply-filters/apply-filters.decorator';
 import { ApiXResponsesEnum } from '../../core/shared/enums';
+import { HttpExceptionFilter } from '../../core/shared/exception-filters/http-exception.filter';
+import { LoggingInterceptor } from '../../core/shared/interceptors/logging.interceptor';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
 import { PaginatePipe } from '../../core/shared/pipes/paginate.pipe';
 import { PathParamsPipe } from '../../core/shared/pipes/path-params.pipe';
@@ -27,6 +31,8 @@ import { UsersService } from './users.service';
 
 @ApiTags('Users')
 @Controller('users')
+@UseFilters(HttpExceptionFilter)
+@UseInterceptors(LoggingInterceptor)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

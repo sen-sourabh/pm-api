@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 export class ValidateUserGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
-    console.log('Request: ', request?.body);
+    console.log('Validate User Guard: ', request?.body);
 
     return false;
   }
