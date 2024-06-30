@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsDateString, IsJSON, IsOptional, IsString } from 'class-validator';
+import { IsDateString, IsJSON, IsNumber, IsOptional, IsString } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
@@ -51,6 +51,15 @@ export class ActivityLog {
   @IsJSON()
   @IsOptional()
   response?: Record<string, unknown>;
+
+  @ApiPropertyOptional({
+    description: 'http status code of the final response',
+    required: true,
+  })
+  @Column({ type: 'int', default: null })
+  @IsNumber()
+  @IsOptional()
+  responseCode?: number;
 
   @ApiPropertyOptional({
     description: 'ipAddress of the request',

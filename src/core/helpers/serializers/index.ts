@@ -33,7 +33,7 @@ export const getPagination = (query: any) => {
 
 export const buildActivityLog = (request: any, response: any) => {
   return {
-    // headers: request?.headers,
+    headers: request?.headers,
     request: {
       url: request?.url,
       method: request?.method,
@@ -42,12 +42,17 @@ export const buildActivityLog = (request: any, response: any) => {
       params: request?.params,
     },
     response: String(response?.statusCode)?.startsWith('2') ? response?.statusCode : response,
+    responseCode: +response?.statusCode,
     ipAddress: request?.ip,
-    // location: null,
+    location: null,
   };
 };
 
 export const logErrorOnTerminal = (data: any) => {
+  delete data?.headers;
+  delete data?.location;
+  delete data?.responseCode;
+
   switch (String(data?.response?.statusCode)?.[0]) {
     case '3':
       Logger.verbose(`${JSON.stringify(data).toString()}`);
