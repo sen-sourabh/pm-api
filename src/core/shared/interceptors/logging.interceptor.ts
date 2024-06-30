@@ -10,13 +10,15 @@ export class LoggingInterceptor implements NestInterceptor {
   constructor(private readonly activityLogService: ActivityLogsService) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    const handler = context?.getClass()?.name?.toString();
+
     return next.handle().pipe(
       tap(async () => {
         const request = context.switchToHttp().getRequest();
         const response = context.switchToHttp().getResponse();
 
         //To Activity Log
-        const activityLog = buildActivityLog(request, response);
+        const activityLog = buildActivityLog(handler, request, response);
         await this.activityLogService.createActivityLog(activityLog);
       }),
     );

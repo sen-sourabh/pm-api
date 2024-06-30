@@ -21,7 +21,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     };
 
     //To Activity Logs
-    const activityLog = buildActivityLog(request, exceptionResponse);
+    const activityLog = buildActivityLog(null, request, exceptionResponse);
     await this.activityLogService.createActivityLog(activityLog);
 
     response.status(status).json(exceptionResponse);

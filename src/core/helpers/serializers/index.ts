@@ -31,8 +31,10 @@ export const getPagination = (query: any) => {
   return { skip, take, query } as { skip: number; take: number; query: any };
 };
 
-export const buildActivityLog = (request: any, response: any) => {
+export const buildActivityLog = (handler: string | null, request: any, response: any) => {
   return {
+    handler,
+    method: request?.method,
     headers: request?.headers,
     request: {
       url: request?.url,
@@ -49,6 +51,8 @@ export const buildActivityLog = (request: any, response: any) => {
 };
 
 export const logErrorOnTerminal = (data: any) => {
+  delete data?.handler;
+  delete data?.method;
   delete data?.headers;
   delete data?.location;
   delete data?.responseCode;
