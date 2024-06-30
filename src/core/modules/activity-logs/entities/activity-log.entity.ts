@@ -26,6 +26,33 @@ export class ActivityLog {
   id?: string;
 
   @ApiPropertyOptional({
+    description: 'module where on this request happen',
+    required: true,
+  })
+  @Column({ default: null })
+  @IsString()
+  @IsOptional()
+  handler?: string;
+
+  @ApiPropertyOptional({
+    description: 'method of the request',
+    required: true,
+  })
+  @Column({ default: null })
+  @IsString()
+  @IsOptional()
+  method?: string;
+
+  @ApiPropertyOptional({
+    description: 'http status code of the final response',
+    required: true,
+  })
+  @Column({ type: 'int', default: null })
+  @IsNumber()
+  @IsOptional()
+  responseCode?: number;
+
+  @ApiPropertyOptional({
     description: 'header of the request',
     required: true,
   })
@@ -51,15 +78,6 @@ export class ActivityLog {
   @IsJSON()
   @IsOptional()
   response?: Record<string, unknown>;
-
-  @ApiPropertyOptional({
-    description: 'http status code of the final response',
-    required: true,
-  })
-  @Column({ type: 'int', default: null })
-  @IsNumber()
-  @IsOptional()
-  responseCode?: number;
 
   @ApiPropertyOptional({
     description: 'ipAddress of the request',
