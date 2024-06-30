@@ -53,6 +53,7 @@ export class User {
   })
   @Column({ length: 100, type: 'varchar', nullable: true })
   @IsString()
+  @IsOptional()
   lastName?: string;
 
   @ApiProperty({
@@ -90,8 +91,8 @@ export class User {
   })
   @Column({ length: 150, type: 'varchar', unique: true })
   @IsString({ message: 'email must be a string' })
-  @IsOptional()
   @IsEmail({}, { message: 'Invalid email format' })
+  @IsOptional()
   email?: string;
 
   @ApiPropertyOptional({
@@ -100,7 +101,8 @@ export class User {
   })
   @Column({ type: 'varchar', nullable: true })
   @IsString({ message: 'password must be a string' })
-  @IsStrongPassword({}, { message: 'Password must be strong' })
+  @IsStrongPassword({}, { message: 'password must be strong' })
+  @IsOptional()
   password?: string;
 
   @ApiPropertyOptional({
@@ -126,22 +128,23 @@ export class User {
     description: 'phone number of the user',
     required: true,
   })
-  @Column({ type: 'bigint', unique: true })
+  @Column({ type: 'bigint' })
   @Type(() => Number)
   @IsNumber()
   @IsOptional()
   phoneNumber?: number;
 
   @ApiPropertyOptional({
-    description: 'last login date time of user',
+    description: "The date time of user's last login",
     required: false,
     name: 'lastLogin',
     nullable: true,
     format: 'T',
   })
   @IsDateString({ strict: true, strictSeparator: true })
+  @Column({ type: 'datetime', nullable: true })
   @IsOptional()
-  lastLogin?: string;
+  lastLogin?: Date;
 
   @ApiPropertyOptional({
     description: 'whether user logged in or not',
@@ -171,7 +174,7 @@ export class User {
   @Type(() => Boolean)
   @IsBoolean()
   @IsOptional()
-  isDeleted: boolean;
+  isDeleted?: boolean;
 
   @ApiPropertyOptional({
     description: 'With record create it`ll be auto generated',
@@ -182,7 +185,8 @@ export class User {
   })
   @IsDateString({ strict: true, strictSeparator: true })
   @CreateDateColumn({ type: 'datetime' })
-  createdAt: Date;
+  @IsOptional()
+  createdAt?: Date;
 
   @ApiPropertyOptional({
     description: 'With record update it`ll be auto generated',
@@ -194,7 +198,7 @@ export class User {
   @IsDateString({ strict: true, strictSeparator: true })
   @UpdateDateColumn({ type: 'datetime' })
   @IsOptional()
-  updatedAt: Date;
+  updatedAt?: Date;
 
   @ApiPropertyOptional({
     description: 'role of the user',

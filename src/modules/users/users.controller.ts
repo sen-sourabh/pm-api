@@ -91,9 +91,20 @@ export class UsersController {
     return this.usersService.updateUser(id, updateUserDto);
   }
 
+  @ApiResponse({
+    description: 'return deleted user as per the identifier',
+    type: User,
+    status: 200,
+  })
+  @ApiXResponses(
+    ApiXResponsesEnum.Unauthorized,
+    ApiXResponsesEnum.BadRequest,
+    ApiXResponsesEnum.NotFound,
+  )
+  @UsePipes(new PathParamsPipe(), ValidateUserPipe)
   @HttpCode(200)
   @Delete(':id')
   removeUser(@Param('id') id: string) {
-    return this.usersService.removeUser(+id);
+    return this.usersService.removeUser(id);
   }
 }

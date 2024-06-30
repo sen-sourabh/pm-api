@@ -537,7 +537,23 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "return deleted user as per the identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
           }
         },
         "tags": [
@@ -812,10 +828,6 @@
             "type": "string",
             "description": "password of the user"
           },
-          "phoneNumber": {
-            "type": "number",
-            "description": "phone number of the user"
-          },
           "role": {
             "type": "number",
             "description": "role of the user"
@@ -828,10 +840,15 @@
             "type": "string",
             "description": "Unique email of the user",
             "uniqueItems": true
+          },
+          "phoneNumber": {
+            "type": "number",
+            "description": "phone number of the user"
           }
         },
         "required": [
-          "email"
+          "email",
+          "phoneNumber"
         ]
       },
       "User": {
@@ -888,10 +905,10 @@
             "description": "phone number of the user"
           },
           "lastLogin": {
+            "format": "T",
             "type": "string",
-            "description": "last login date time of user",
-            "nullable": true,
-            "format": "T"
+            "description": "The date time of user's last login",
+            "nullable": true
           },
           "isLogin": {
             "type": "boolean",
@@ -962,6 +979,12 @@
           "phoneNumber": {
             "type": "number",
             "description": "phone number of the user"
+          },
+          "lastLogin": {
+            "format": "T",
+            "type": "string",
+            "description": "The date time of user's last login",
+            "nullable": true
           },
           "isLogin": {
             "type": "boolean",

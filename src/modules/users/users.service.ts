@@ -1,7 +1,8 @@
 import {
   BadRequestException,
-  ConflictException,
   Injectable,
+  InternalServerErrorException,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -20,77 +21,103 @@ export class UsersService {
   constructor(@InjectRepository(User) private usersRepository: Repository<User>) {}
 
   async createUser(createUserData: CreateUserDto): Promise<ApiResponseModel<User>> {
-    const newUser = this.usersRepository.create(createUserData);
-    const data = await this.usersRepository.save(newUser);
-    return {
-      data,
-      metadata: { body: createUserData },
-      message: 'User created successfully',
-    };
+    try {
+      const newUser = this.usersRepository.create(createUserData);
+      const data = await this.usersRepository.save(newUser);
+      return {
+        data,
+        metadata: { body: createUserData },
+        message: 'User created successfully',
+      };
+    } catch (error) {
+      Logger.error(`Error in create user: ${error.message}`);
+      throw new InternalServerErrorException(`Error in create user: ${error.message}`);
+    }
   }
 
   async findAllUsers(query?: ListQueryUsersDto): Promise<ApiResponseModel<User[]>> {
-    const { skip, take } = getPagination(query);
+    try {
+      const { skip, take } = getPagination(query);
 
-    const data = await this.usersRepository.find({
-      where: query,
-      skip,
-      take,
-      order: { updatedAt: OrderEnum.DESC },
-    });
+      const data = await this.usersRepository.find({
+        where: query,
+        skip,
+        take,
+        order: { updatedAt: OrderEnum.DESC },
+      });
 
-    return {
-      data,
-      metadata: { query },
-    };
+      return {
+        data,
+        metadata: { query },
+      };
+    } catch (error) {
+      Logger.error(`Error in list user: ${error.message}`);
+      throw new InternalServerErrorException(`Error in list user: ${error.message}`);
+    }
   }
 
   async findOneUser(id: string): Promise<ApiResponseModel<User>> {
-    const data = await this.usersRepository.findOne({ where: { id } });
-    if (isMissing(data)) {
-      throw new NotFoundException(`Record not found with id: ${id}`);
+    try {
+      const data = await this.usersRepository.findOne({ where: { id } });
+      if (isMissing(data)) {
+        throw new NotFoundException(`Record not found with id: ${id}`);
+      }
+      return { data, metadata: { params: { id } } };
+    } catch (error) {
+      Logger.error(`Error in get user: ${error.message}`);
+      throw new InternalServerErrorException(`Error in get user: ${error.message}`);
     }
-    return { data, metadata: { params: { id } } };
   }
 
   async updateUser(id: string, updateUserDto: UpdateUserDto): Promise<ApiResponseModel<User>> {
-    //Validate phone number is unique
-    await this.validateUpdate(id, updateUserDto);
-
-    //Actual user update
-    const updated = await this.usersRepository.update(id, updateUserDto);
-    if (!updated?.affected) {
-      throw new BadRequestException(`Not updated`);
+    try {
+      //Actual user update
+      const updated = await this.usersRepository.update(id, updateUserDto);
+      if (!updated?.affected) {
+        throw new BadRequestException(`Not updated`);
+      }
+      //Get updated user
+      const { data } = await this.findOneUser(id);
+      return {
+        data,
+        metadata: { params: { id }, body: updateUserDto },
+        message: 'User updated successfully',
+      };
+    } catch (error) {
+      Logger.error(`Error in update user: ${error.message}`);
+      throw new InternalServerErrorException(`Error in update user: ${error.message}`);
     }
-    //Get updated user
-    const { data } = await this.findOneUser(id);
-    return {
-      data,
-      metadata: { params: { id }, body: updateUserDto },
-      message: 'User updated successfully',
-    };
   }
 
-  removeUser(id: number) {
-    return `This action removes a #${id} user`;
+  async removeUser(id: string): Promise<ApiResponseModel<User>> {
+    try {
+      const deleted = await this.usersRepository.update(id, { isDeleted: true });
+      if (!deleted?.affected) {
+        throw new BadRequestException(`Not deleted`);
+      }
+      //Get deleted user
+      const { data } = await this.findOneUser(id);
+      return {
+        data,
+        metadata: { params: { id } },
+        message: 'User deleted successfully',
+      };
+    } catch (error) {
+      Logger.error(`Error in delete user: ${error.message}`);
+      throw new InternalServerErrorException(`Error in delete user: ${error.message}`);
+    }
   }
 
   async findUserByValue(query: Record<string, unknown>): Promise<boolean> {
-    const data = await this.usersRepository.findOne({ where: { ...query, isDeleted: false } });
-    if (isMissing(data)) {
-      return false;
+    try {
+      const data = await this.usersRepository.findOne({ where: { ...query } });
+      if (isMissing(data)) {
+        return false;
+      }
+      return true;
+    } catch (error) {
+      Logger.error(`Error in user operation: ${error.message}`);
+      throw new InternalServerErrorException(`Error in user operation: ${error.message}`);
     }
-    return true;
-  }
-
-  async validateUpdate(id: string, updateUserDto: UpdateUserDto): Promise<User> {
-    const data = await this.usersRepository.findOne({
-      where: { phoneNumber: updateUserDto?.phoneNumber },
-    });
-
-    if (isMissing(data) || (!isMissing(data) && (data as Partial<User>)?.id === id?.toString())) {
-      return data;
-    }
-    throw new ConflictException(`Phone number should be unique`);
   }
 }

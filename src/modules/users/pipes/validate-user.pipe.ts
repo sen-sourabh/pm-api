@@ -23,7 +23,7 @@ export class ValidateUserPipe implements PipeTransform {
     metadata: ArgumentMetadata,
   ) {
     if (metadata.metatype !== CreateUserDto || metadata?.type === 'param') {
-      await this.whenUpdate(value as UpdateUserDto);
+      await this.whenUpdateOrDelete(value as UpdateUserDto);
     } else {
       await this.whenCreate(value as CreateUserDto);
     }
@@ -31,10 +31,10 @@ export class ValidateUserPipe implements PipeTransform {
     return value;
   }
 
-  whenUpdate = async (value: UpdateUserDto) => {
+  whenUpdateOrDelete = async (value: UpdateUserDto) => {
     //Record found during update
     if (!isMissing(value) && typeof value === 'string') {
-      const isRecrodFound = this.usersService.findUserByValue({ id: value });
+      const isRecrodFound = await this.usersService.findUserByValue({ id: value });
       if (!isRecrodFound) throw new NotFoundException(`Record not found with id: ${value}`);
     }
 
@@ -48,13 +48,6 @@ export class ValidateUserPipe implements PipeTransform {
       throw new ConflictException(`Email should be unique`);
     }
 
-    //Validate user If it is unique by phone or not
-    const isPhoneUnique = await this.usersService.findUserByValue({
-      phoneNumber: value?.phoneNumber,
-    });
-    if (isPhoneUnique) {
-      throw new ConflictException(`Phone Number should be unique`);
-    }
     return true;
   };
 }
