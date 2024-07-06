@@ -9,6 +9,7 @@ import {
   Post,
   Query,
   UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiXResponses } from '../../core/shared/decorators/apply-filters/apply-filters.decorator';
@@ -84,7 +85,7 @@ export class UsersController {
     ApiXResponsesEnum.Conflict,
     ApiXResponsesEnum.NotFound,
   )
-  @UsePipes(new PathParamsPipe(), ValidateUserPipe)
+  @UsePipes(new ValidationPipe({ whitelist: true }), new PathParamsPipe(), ValidateUserPipe)
   @HttpCode(200)
   @Patch(':id')
   updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {

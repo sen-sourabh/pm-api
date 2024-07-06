@@ -1,5 +1,6 @@
 import {
   ArgumentMetadata,
+  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
@@ -23,6 +24,9 @@ export class ValidateUserPipe implements PipeTransform {
     metadata: ArgumentMetadata,
   ) {
     if (metadata.metatype !== CreateUserDto || metadata?.type === 'param') {
+      if (Object.keys(value).length === 0) {
+        throw new BadRequestException('At least a field is required to update');
+      }
       await this.whenUpdateOrDelete(value as UpdateUserDto);
     } else {
       await this.whenCreate(value as CreateUserDto);
