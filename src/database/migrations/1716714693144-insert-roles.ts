@@ -6,9 +6,7 @@ export class InsertRoles1716714693144 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     try {
-      await queryRunner.query(
-        `INSERT INTO roles (name) VALUES ('Super Admin'), ('Admin'), ('Collaborator')`,
-      );
+      await queryRunner.query(`INSERT INTO roles (name) VALUES ('admin'), ('collaborator')`);
       this.logger.log(`Up: Insert roles executed`);
     } catch (error) {
       this.logger.error(`Up: Insert roles have an error: `, error?.message);
