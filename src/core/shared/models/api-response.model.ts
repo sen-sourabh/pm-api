@@ -30,24 +30,6 @@ export class ApiResponseMetadataUnifiedModel {
   @IsObject()
   @IsOptional()
   readonly body?: unknown;
-
-  // @ApiProperty({
-  //   description: 'Page number',
-  //   example: 1,
-  //   required: false,
-  // })
-  // @IsNumber()
-  // @IsOptional()
-  // readonly pageNumber?: number;
-
-  // @ApiProperty({
-  //   description: 'No of records will be fetched in single request',
-  //   example: 25,
-  //   required: false,
-  // })
-  // @IsNumber()
-  // @IsOptional()
-  // readonly pageSize?: number;
 }
 
 @ApiTags('ApiResponseUnifiedModel')

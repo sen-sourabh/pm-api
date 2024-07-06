@@ -53,12 +53,15 @@ export class MessengerService {
       //Handle Response
       if (response.messageId) {
         return {
-          message: 'Email sent successfully.',
-          metadata: {
+          data: {
             messageId: response?.messageId,
             accepted: response?.accepted,
             rejected: response?.rejected,
           },
+          metadata: {
+            body: data,
+          },
+          message: 'Email sent successfully.',
         };
       }
       return response;

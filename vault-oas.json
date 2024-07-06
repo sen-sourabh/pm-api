@@ -390,17 +390,6 @@
             }
           },
           {
-            "name": "updatedAt",
-            "required": false,
-            "in": "query",
-            "description": "With record update it`ll be auto generated",
-            "schema": {
-              "format": "T",
-              "nullable": true,
-              "type": "string"
-            }
-          },
-          {
             "name": "role",
             "required": false,
             "in": "query",
