@@ -11,6 +11,7 @@ import { getPagination } from '../../core/helpers/serializers';
 import { isMissing } from '../../core/helpers/validations';
 import { OrderEnum } from '../../core/shared/enums';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
+import { ApiQueryParamUnifiedModel } from '../../core/shared/models/api-query.model';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ListQueryUsersDto } from './dto/list-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -37,10 +38,11 @@ export class UsersService {
 
   async findAllUsers(query?: ListQueryUsersDto): Promise<ApiResponseModel<User[]>> {
     try {
-      const { skip, take } = getPagination(query);
+      const { skip, take, relations } = getPagination(query);
 
       const data = await this.usersRepository.find({
         where: query,
+        relations: relations && ['role', 'usertype'],
         skip,
         take,
         order: { updatedAt: OrderEnum.DESC },
@@ -56,8 +58,16 @@ export class UsersService {
     }
   }
 
-  async findOneUser(id: string): Promise<ApiResponseModel<User>> {
-    const data = await this.usersRepository.findOne({ where: { id } });
+  async findOneUser(
+    id: string,
+    query?: ApiQueryParamUnifiedModel,
+  ): Promise<ApiResponseModel<User>> {
+    const { relations } = getPagination(query);
+
+    const data = await this.usersRepository.findOne({
+      where: { id },
+      relations: relations && ['role', 'usertype'],
+    });
     if (isMissing(data)) {
       throw new NotFoundException(`Record not found with id: ${id}`);
     }

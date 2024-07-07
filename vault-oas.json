@@ -426,6 +426,15 @@
             "schema": {
               "type": "number"
             }
+          },
+          {
+            "name": "relation",
+            "required": false,
+            "in": "query",
+            "description": "To fetch the entities with their relation`s data",
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
@@ -464,6 +473,15 @@
             "in": "path",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "relation",
+            "required": false,
+            "in": "query",
+            "description": "To fetch the entities with their relation`s data",
+            "schema": {
+              "type": "boolean"
             }
           }
         ],
