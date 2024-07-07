@@ -1,43 +1,144 @@
 import { Logger } from '@nestjs/common';
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class CreateUsers1716720974607 implements MigrationInterface {
   private readonly logger = new Logger(CreateUsers1716720974607.name);
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     try {
-      await queryRunner.query(`
-            CREATE TABLE users (
-                id varchar(150) NOT NULL DEFAULT (uuid()),
-                firstName varchar(100) NULL,
-                lastName varchar(100) NULL,
-                organizationName varchar(255) NULL,
-                organizationPosition varchar(150) NULL,
-                noOfEmployees varchar(15) NULL,
-                email varchar(150) NOT NULL,
-                password longtext NOT NULL,
-                otp int NULL,
-                secretKey varchar(255) NOT NULL,
-                phoneNumber bigint NOT NULL,
-                lastLogin datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
-                isLogin tinyint NOT NULL DEFAULT '0',
-                isEnabled tinyint NOT NULL DEFAULT '1',
-                isDeleted tinyint NOT NULL DEFAULT '0',
-                createdAt datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
-                updatedAt datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
-                roleId int NOT NULL,
-                usertypeId int NOT NULL,
-                PRIMARY KEY (id),
-                UNIQUE KEY organizationName (organizationName),
-                UNIQUE KEY email (email),
-                UNIQUE KEY secretKey (secretKey),
-                UNIQUE KEY phoneNumber (phoneNumber),
-                KEY (roleId),
-                KEY (usertypeId),
-                FOREIGN KEY (usertypeId) REFERENCES usertypes (id),
-                FOREIGN KEY (roleId) REFERENCES roles (id)
-              )
-            `);
+      await queryRunner.createTable(
+        new Table({
+          name: 'users',
+          columns: [
+            {
+              name: 'id',
+              type: 'varchar',
+              isPrimary: true,
+              isGenerated: true,
+              generationStrategy: 'uuid',
+              isNullable: false,
+            },
+            {
+              name: 'firstName',
+              type: 'varchar',
+              length: '100',
+              isNullable: true,
+            },
+            {
+              name: 'lastName',
+              type: 'varchar',
+              length: '100',
+              isNullable: true,
+            },
+            {
+              name: 'organizationName',
+              type: 'varchar',
+              length: '255',
+              isNullable: true,
+            },
+            {
+              name: 'organizationPosition',
+              type: 'varchar',
+              length: '150',
+              isNullable: true,
+            },
+            {
+              name: 'noOfEmployees',
+              type: 'varchar',
+              length: '15',
+              isNullable: true,
+            },
+            {
+              name: 'email',
+              type: 'varchar',
+              length: '150',
+              isUnique: true,
+            },
+            {
+              name: 'password',
+              type: 'varchar',
+              isNullable: true,
+            },
+            {
+              name: 'otp',
+              type: 'int',
+              isNullable: true,
+            },
+            {
+              name: 'secretKey',
+              type: 'varchar',
+              length: '255',
+              isUnique: true,
+            },
+            {
+              name: 'phoneNumber',
+              type: 'bigint',
+            },
+            {
+              name: 'lastLogin',
+              type: 'datetime',
+              isNullable: true,
+            },
+            {
+              name: 'isLogin',
+              type: 'tinyint',
+              default: 0,
+            },
+            {
+              name: 'isEnabled',
+              type: 'tinyint',
+              default: 1,
+            },
+            {
+              name: 'isDeleted',
+              type: 'tinyint',
+              default: 0,
+            },
+            {
+              name: 'createdAt',
+              type: 'datetime',
+              default: 'CURRENT_TIMESTAMP',
+              isNullable: false,
+            },
+            {
+              name: 'updatedAt',
+              type: 'datetime',
+              default: 'CURRENT_TIMESTAMP',
+              onUpdate: 'CURRENT_TIMESTAMP',
+              isNullable: false,
+            },
+            {
+              name: 'roleId',
+              type: 'int',
+              isNullable: false,
+            },
+            {
+              name: 'usertypeId',
+              type: 'int',
+              isNullable: false,
+            },
+          ],
+          foreignKeys: [
+            // Foreign key for role association
+            {
+              name: 'FK_users_roles',
+              columnNames: ['roleId'],
+              referencedTableName: 'roles',
+              referencedColumnNames: ['id'],
+              onDelete: 'CASCADE', // Optional: Set deletion behavior (e.g., CASCADE, SET NULL)
+            },
+            // Foreign key for usertype association
+            {
+              name: 'FK_users_usertypes',
+              columnNames: ['usertypeId'],
+              referencedTableName: 'usertypes',
+              referencedColumnNames: ['id'],
+              onDelete: 'CASCADE', // Optional: Set deletion behavior (e.g., CASCADE, SET NULL)
+            },
+          ],
+        }),
+        false, // Skip table type check as it can vary across databases
+      );
       this.logger.log(`Up: Create users executed`);
     } catch (error) {
       this.logger.error(`Up: Create users has an error: `, error?.message);
@@ -46,7 +147,7 @@ export class CreateUsers1716720974607 implements MigrationInterface {
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     try {
-      await queryRunner.query(`DROP TABLE users`);
+      await queryRunner.dropTable('users');
       this.logger.log(`Down: Drop users executed`);
     } catch (error) {
       this.logger.error(`Down: Drop users has an error: `, error?.message);
