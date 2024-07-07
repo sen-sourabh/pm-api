@@ -7,7 +7,6 @@ export class CreateDb1716637473056 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     try {
-      await queryRunner.createDatabase(`${DataSourcesOptions?.database ?? 'vault_db'}`, true);
       await queryRunner.query(
         `ALTER DATABASE ${DataSourcesOptions?.database ?? 'vault_db'} CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci`,
       );
