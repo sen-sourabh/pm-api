@@ -1,12 +1,11 @@
 import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { SeederOptions } from 'typeorm-extension';
 
 config();
 const configService = new ConfigService();
 
-export const DataSourcesOptions: DataSourceOptions & SeederOptions = {
+export const DataSourcesOptions: DataSourceOptions = {
   type: configService?.getOrThrow('DATABASE_TYPE').toString(),
   host: configService?.getOrThrow('DATABASE_HOST').toString(),
   port: +configService?.getOrThrow('DATABASE_PORT').toString(),

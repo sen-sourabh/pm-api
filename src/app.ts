@@ -8,9 +8,9 @@ import { ResponseInterceptor } from './core/shared/interceptors/response.interce
 
 const logger = new Logger(); // You can customize the context here
 const configService = new ConfigService();
-const PROTOCOL: string = configService?.getOrThrow('protocol') ?? 'https';
-const HOST: string = configService?.getOrThrow('host') ?? 'localhost';
-const PORT: number = configService?.getOrThrow('port');
+const PROTOCOL: string = configService?.getOrThrow('PROTOCOL') ?? 'https';
+const HOST: string = configService?.getOrThrow('HOST') ?? 'localhost';
+const PORT: number = configService?.getOrThrow('PORT');
 
 const NestFactoryOptions: NestApplicationOptions = {
   bodyParser: true,
