@@ -25,10 +25,11 @@ export const getHttpStatusViaCode = (data: ApiResponseUnifiedModel, response: an
 };
 
 export const getPagination = (query: any) => {
-  const { pageNumber: skip, pageSize: take } = query;
+  const { pageNumber: skip, pageSize: take, relation: relations } = query;
   delete query?.pageNumber;
   delete query?.pageSize;
-  return { skip, take, query } as { skip: number; take: number; query: any };
+  delete query?.relation;
+  return { skip, take, relations } as { skip: number; take: number; relations: boolean };
 };
 
 export const buildActivityLog = (handler: string | null, request: any, response: any) => {

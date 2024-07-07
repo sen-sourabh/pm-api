@@ -15,6 +15,7 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiXResponses } from '../../core/shared/decorators/apply-filters/apply-filters.decorator';
 import { ApiXResponsesEnum } from '../../core/shared/enums';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
+import { ApiQueryParamUnifiedModel } from '../../core/shared/models/api-query.model';
 import { PaginatePipe } from '../../core/shared/pipes/paginate.pipe';
 import { PathParamsPipe } from '../../core/shared/pipes/path-params.pipe';
 import { QueryParamsPipe } from '../../core/shared/pipes/query-params.pipe';
@@ -70,8 +71,8 @@ export class UsersController {
   @UsePipes(new PathParamsPipe())
   @HttpCode(200)
   @Get(':id')
-  findOneUser(@Param('id') id: string) {
-    return this.usersService.findOneUser(id);
+  findOneUser(@Param('id') id: string, @Query() query?: ApiQueryParamUnifiedModel) {
+    return this.usersService.findOneUser(id, query);
   }
 
   @ApiResponse({
