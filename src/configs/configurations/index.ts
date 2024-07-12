@@ -1,4 +1,5 @@
 export default () => ({
+  env: process.env?.ENV,
   protocol: process.env?.PROTOCOL ?? 'https',
   host: process.env?.HOST ?? 'localhost',
   port: parseInt(process.env?.PORT, 10) ?? 4000,
@@ -34,5 +35,10 @@ export default () => ({
         strict: !!process.env?.SMTP_TEMPLATE_OPTIONS_STRICT,
       },
     },
+  },
+  cache: {
+    isGlobal: !!process.env?.CACHE_IS_GLOBAL,
+    max: +process.env?.CACHE_MAX,
+    ttl: +process.env?.CACHE_TTL,
   },
 });

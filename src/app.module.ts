@@ -1,9 +1,11 @@
+import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { cacheModuleOptions } from './configs/cache';
 import configurations from './configs/configurations';
 import { DataSourcesOptions } from './configs/typeorm';
 import { ActivityLogsModule } from './core/modules/activity-logs/activity-logs.module';
@@ -21,6 +23,9 @@ import { UsertypesModule } from './modules/usertypes/usertypes.module';
       envFilePath: ['.env'],
       isGlobal: true,
       load: [configurations],
+    }),
+    CacheModule.registerAsync({
+      useFactory: () => cacheModuleOptions,
     }),
     TypeOrmModule.forRootAsync({
       useFactory: () => DataSourcesOptions,
@@ -42,6 +47,10 @@ import { UsertypesModule } from './modules/usertypes/usertypes.module';
     {
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CacheInterceptor,
     },
   ],
 })

@@ -47,6 +47,7 @@ export class UsersService {
         take,
         order: { updatedAt: OrderEnum.DESC },
       });
+      console.log('hello');
 
       return {
         data,
