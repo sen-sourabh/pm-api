@@ -1,6 +1,43 @@
 {
   "openapi": "3.0.0",
   "paths": {
+    "/api/v1/auth/login": {
+      "post": {
+        "operationId": "login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "returns the access_token for logged in user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponseModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
     "/api/v1/messenger/send-otp": {
       "post": {
         "operationId": "sendOTP",
@@ -631,13 +668,41 @@
   ],
   "components": {
     "securitySchemes": {
-      "bearer": {
-        "scheme": "bearer",
-        "bearerFormat": "JWT",
-        "type": "http"
+      "basic": {
+        "type": "http",
+        "scheme": "basic"
       }
     },
     "schemas": {
+      "LoginRequestDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "email of the user",
+            "uniqueItems": true
+          },
+          "password": {
+            "type": "string",
+            "description": "password of the user"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "LoginResponseModel": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "access token for user"
+          }
+        },
+        "required": [
+          "access_token"
+        ]
+      },
       "VerificationEmailRequestDto": {
         "type": "object",
         "properties": {

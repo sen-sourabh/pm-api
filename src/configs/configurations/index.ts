@@ -12,7 +12,14 @@ export default () => ({
     synchronize: !!process.env?.DATABASE_SYNCHRONIZE,
   },
   jwt: {
-    secret_key: process.env?.JWT_SECRET_KEY,
+    secret: process.env?.JWT_SECRET_KEY,
+    signOptions: {
+      expiresIn: process.env?.JWT_SIGN_EXPIRY,
+    },
+    global: !!process.env?.JWT_GLOBAL,
+    verifyOptions: {
+      complete: !!process.env?.JWT_VERIFY_COMPLETE,
+    },
   },
   smtp: {
     transport: {

@@ -33,7 +33,9 @@ const SwaggerLoader = () => {
     .setDescription('Vault - Password manager')
     .setVersion('1.0')
     .setContact('Vault', 'Your website link', 'Your official gmail') // Set Contact information
-    .addBearerAuth() // Enable Bearer authentication for your API
+    .addBasicAuth({
+      type: 'http',
+    })
     .addServer('http://localhost:4000')
     .build();
 };

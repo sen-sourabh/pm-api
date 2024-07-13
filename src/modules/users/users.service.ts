@@ -115,4 +115,17 @@ export class UsersService {
       return false;
     }
   }
+
+  async findUser(query: Record<string, unknown>): Promise<User> {
+    try {
+      const data = await this.usersRepository.findOne({ where: { ...query } });
+      if (!data) {
+        return null;
+      }
+      return data;
+    } catch (error) {
+      Logger.error(`Error in user operation: ${error.message}`);
+      return null;
+    }
+  }
 }
