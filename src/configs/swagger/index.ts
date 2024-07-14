@@ -36,6 +36,7 @@ const SwaggerLoader = () => {
     .addBasicAuth({
       type: 'http',
     })
+    .addBearerAuth()
     .addServer('http://localhost:4000')
     .build();
 };

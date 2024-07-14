@@ -635,6 +635,104 @@
         ]
       }
     },
+    "/api/v1/activity-logs": {
+      "get": {
+        "operationId": "findAllActivityLogs",
+        "parameters": [
+          {
+            "name": "handler",
+            "required": false,
+            "in": "query",
+            "description": "module where on this request happen",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "method",
+            "required": false,
+            "in": "query",
+            "description": "method of the request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "responseCode",
+            "required": false,
+            "in": "query",
+            "description": "http status code of the final response",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "ipAddress",
+            "required": false,
+            "in": "query",
+            "description": "ipAddress of the request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "updatedAt",
+            "required": false,
+            "in": "query",
+            "description": "With record update it`ll be auto generated",
+            "schema": {
+              "format": "T",
+              "nullable": true,
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageNumber",
+            "required": false,
+            "in": "query",
+            "description": "Page number",
+            "example": 1,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "description": "No of records will be fetched in single request",
+            "example": 25,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "returns list of activity logs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ActivityLog"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [
+          "Activity Logs"
+        ]
+      }
+    },
     "/api/v1/vault": {
       "get": {
         "operationId": "isServerRunning",
@@ -671,6 +769,11 @@
       "basic": {
         "type": "http",
         "scheme": "basic"
+      },
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
       }
     },
     "schemas": {
@@ -1081,6 +1184,63 @@
           "role": {
             "type": "number",
             "description": "role of the user"
+          }
+        }
+      },
+      "ActivityLog": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id is the unique uuid identifier",
+            "example": "e762634c-3e41-11eb-b897-0862660ccbd4",
+            "default": "uuid",
+            "nullable": false,
+            "uniqueItems": true
+          },
+          "handler": {
+            "type": "string",
+            "description": "module where on this request happen"
+          },
+          "method": {
+            "type": "string",
+            "description": "method of the request"
+          },
+          "responseCode": {
+            "type": "number",
+            "description": "http status code of the final response"
+          },
+          "headers": {
+            "type": "object",
+            "description": "header of the request"
+          },
+          "request": {
+            "type": "object",
+            "description": "actual request that includes query/body/path params"
+          },
+          "response": {
+            "type": "object",
+            "description": "response of the request"
+          },
+          "ipAddress": {
+            "type": "string",
+            "description": "ipAddress of the request"
+          },
+          "location": {
+            "type": "string",
+            "description": "location of the request"
+          },
+          "createdAt": {
+            "format": "T",
+            "type": "string",
+            "description": "With record create it`ll be auto generated",
+            "nullable": false
+          },
+          "updatedAt": {
+            "format": "T",
+            "type": "string",
+            "description": "With record update it`ll be auto generated",
+            "nullable": true
           }
         }
       }

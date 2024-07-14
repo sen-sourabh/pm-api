@@ -15,7 +15,7 @@ export const fetchHeaders = (request: any) => {
   // const { authorization } = request?.headers;
   // if(authorization?.toString()?.startsWith('Basic')) {
   const payload = base64Decode(request?.headers?.authorization?.split(' ')?.[1]);
-  let userdata = payload?.split(':');
+  const userdata = payload?.split(':');
 
   return {
     email: userdata?.[0],
