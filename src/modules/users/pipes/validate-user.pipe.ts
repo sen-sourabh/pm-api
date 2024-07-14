@@ -13,11 +13,7 @@ import { UsersService } from '../users.service';
 
 @Injectable()
 export class ValidateUserPipe implements PipeTransform {
-  constructor(
-    private readonly usersService: UsersService,
-    // private readonly rolesService: RolesService,
-    // private readonly usertypesService: UsertypesService,
-  ) {}
+  constructor(private readonly usersService: UsersService) {}
 
   async transform(
     value: Partial<CreateUserDto | UpdateUserDto | Record<string, unknown>>,
