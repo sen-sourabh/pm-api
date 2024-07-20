@@ -19,7 +19,7 @@ import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(User) private usersRepository: Repository<User>) {}
+  constructor(@InjectRepository(User) private readonly usersRepository: Repository<User>) {}
 
   async createUser(createUserData: CreateUserDto): Promise<ApiResponseModel<User>> {
     try {

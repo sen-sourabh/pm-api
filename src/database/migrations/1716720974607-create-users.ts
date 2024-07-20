@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import { printMigrationErrorLogs } from '../../core/helpers/file-operations';
 
 export class CreateUsers1716720974607 implements MigrationInterface {
   private readonly logger = new Logger(CreateUsers1716720974607.name);
@@ -141,7 +142,7 @@ export class CreateUsers1716720974607 implements MigrationInterface {
       );
       this.logger.log(`Up: Create users executed`);
     } catch (error) {
-      this.logger.error(`Up: Create users has an error: `, error?.message);
+      printMigrationErrorLogs(this.logger, 'users', error?.message);
     }
   }
 

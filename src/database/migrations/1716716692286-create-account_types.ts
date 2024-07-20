@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import { printMigrationErrorLogs } from '../../core/helpers/file-operations';
 
 export class CreateAccountTypes1716716692286 implements MigrationInterface {
   private readonly logger = new Logger(CreateAccountTypes1716716692286.name);
@@ -57,7 +58,7 @@ export class CreateAccountTypes1716716692286 implements MigrationInterface {
       );
       this.logger.log(`Up: Create accounttypes executed`);
     } catch (error) {
-      this.logger.error(`Up: Create accounttypes has an error: `, error?.message);
+      printMigrationErrorLogs(this.logger, 'accounttypes', error?.message);
     }
   }
 

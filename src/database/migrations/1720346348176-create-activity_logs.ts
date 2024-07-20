@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import { printMigrationErrorLogs } from '../../core/helpers/file-operations';
 
 export class CreateActivityLogs1720346348176 implements MigrationInterface {
   private readonly logger = new Logger(CreateActivityLogs1720346348176.name);
@@ -83,18 +84,18 @@ export class CreateActivityLogs1720346348176 implements MigrationInterface {
         }),
         false,
       );
-      this.logger.log(`Up: Create activity logs executed`);
+      this.logger.log(`Up: Create activity_logs executed`);
     } catch (error) {
-      this.logger.error(`Up: Create activity logs has an error: `, error?.message);
+      printMigrationErrorLogs(this.logger, 'activity_logs', error?.message);
     }
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     try {
       await queryRunner.dropTable('activity_logs');
-      this.logger.log(`Down: Drop activity logs executed`);
+      this.logger.log(`Down: Drop activity_logs executed`);
     } catch (error) {
-      this.logger.error(`Down: Drop activity logs has an error: `, error?.message);
+      this.logger.error(`Down: Drop activity_logs has an error: `, error?.message);
     }
   }
 }

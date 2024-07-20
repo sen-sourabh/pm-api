@@ -15,3 +15,8 @@ export const writeJsonToFile = (data: any) => {
     logger.error(`Error Swagger's OAS file: ${error}`);
   }
 };
+
+export const printMigrationErrorLogs = (log: Logger, table: string, message: string): void => {
+  if (message?.trim()?.toString()?.endsWith('already exists')) log.warn(message);
+  else log.error(`Up: Create ${table} has an error: `, message);
+};
