@@ -2,32 +2,50 @@ import { Logger } from '@nestjs/common';
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 import { printMigrationErrorLogs } from '../../core/helpers/file-operations';
 
-export class CreateRoles1716714313286 implements MigrationInterface {
-  private readonly logger = new Logger(CreateRoles1716714313286.name);
+export class CreateVaults1721486255876 implements MigrationInterface {
+  private readonly logger = new Logger(CreateVaults1721486255876.name);
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     try {
       await queryRunner.createTable(
         new Table({
-          name: 'roles',
+          name: 'vaults',
           columns: [
             {
               name: 'id',
-              type: 'int',
+              type: 'varchar',
               isPrimary: true,
               isGenerated: true,
-              generationStrategy: 'increment',
+              generationStrategy: 'uuid',
+              isNullable: false,
             },
             {
               name: 'name',
               type: 'varchar',
-              length: '255',
-              isUnique: true,
+              length: '100',
+              isNullable: true,
             },
             {
-              name: 'isDefault',
-              type: 'tinyint',
-              default: 1,
+              name: 'caption',
+              type: 'varchar',
+              length: '100',
+              isNullable: true,
+            },
+            {
+              name: 'description',
+              type: 'varchar',
+              length: '255',
+              isNullable: true,
+            },
+            {
+              name: 'userId',
+              type: 'varchar',
+              isNullable: false,
+            },
+            {
+              name: 'lastAccess',
+              type: 'datetime',
+              isNullable: true,
             },
             {
               name: 'isEnabled',
@@ -56,18 +74,18 @@ export class CreateRoles1716714313286 implements MigrationInterface {
         }),
         false, // Skip table type check as it can vary across databases
       );
-      this.logger.log(`Up: Create roles executed`);
+      this.logger.log(`Up: Create vaults executed`);
     } catch (error) {
-      printMigrationErrorLogs(this.logger, 'roles', error?.message);
+      printMigrationErrorLogs(this.logger, 'vaults', error?.message);
     }
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     try {
-      await queryRunner.dropTable('roles');
-      this.logger.log(`Down: Drop roles executed`);
+      await queryRunner.dropTable('vaults');
+      this.logger.log(`Down: Drop vaults executed`);
     } catch (error) {
-      this.logger.error(`Down: Drop roles has an error: `, error?.message);
+      this.logger.error(`Down: Drop vaults has an error: `, error?.message);
     }
   }
 }

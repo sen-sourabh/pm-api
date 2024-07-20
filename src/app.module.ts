@@ -22,6 +22,8 @@ import { RolesController } from './modules/roles/roles.controller';
 import { RolesModule } from './modules/roles/roles.module';
 import { UsersController } from './modules/users/users.controller';
 import { UsersModule } from './modules/users/users.module';
+import { VaultsController } from './modules/vaults/vaults.controller';
+import { VaultsModule } from './modules/vaults/vaults.module';
 
 @Module({
   imports: [
@@ -40,6 +42,7 @@ import { UsersModule } from './modules/users/users.module';
     AccounttypesModule,
     UsersModule,
     ActivityLogsModule,
+    VaultsModule,
   ],
   controllers: [AppController],
   providers: [
@@ -63,6 +66,12 @@ export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthMiddleware)
-      .forRoutes(UsersController, RolesController, AccounttypesController, ActivityLogsController);
+      .forRoutes(
+        ActivityLogsController,
+        AccounttypesController,
+        RolesController,
+        UsersController,
+        VaultsController,
+      );
   }
 }
