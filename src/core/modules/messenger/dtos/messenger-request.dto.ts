@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import { IsArray, IsBoolean, IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 import { EmailPurposeEnum, ExpiryTimeUnitEnum } from '../enums';
 
@@ -58,6 +59,7 @@ export class VerificationEmailRequestDto {
     nullable: false,
     required: true,
   })
+  @Type(() => Number)
   @IsNumber({ allowNaN: false, maxDecimalPlaces: 0, allowInfinity: false })
   readonly expiry_time: number;
 

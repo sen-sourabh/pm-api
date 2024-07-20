@@ -113,7 +113,7 @@ export class CreateUsers1716720974607 implements MigrationInterface {
               isNullable: false,
             },
             {
-              name: 'usertypeId',
+              name: 'accounttypeId',
               type: 'int',
               isNullable: false,
             },
@@ -127,11 +127,11 @@ export class CreateUsers1716720974607 implements MigrationInterface {
               referencedColumnNames: ['id'],
               onDelete: 'CASCADE', // Optional: Set deletion behavior (e.g., CASCADE, SET NULL)
             },
-            // Foreign key for usertype association
+            // Foreign key for accounttype association
             {
-              name: 'FK_users_usertypes',
-              columnNames: ['usertypeId'],
-              referencedTableName: 'usertypes',
+              name: 'FK_users_accounttypes',
+              columnNames: ['accounttypeId'],
+              referencedTableName: 'accounttypes',
               referencedColumnNames: ['id'],
               onDelete: 'CASCADE', // Optional: Set deletion behavior (e.g., CASCADE, SET NULL)
             },

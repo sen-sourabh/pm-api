@@ -1,7 +1,8 @@
-import { Controller, Get, HttpCode, Param, Query, UsePipes } from '@nestjs/common';
+import { Controller, Get, HttpCode, Param, Query, UseGuards, UsePipes } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiXResponses } from '../../core/shared/decorators/apply-filters/apply-filters.decorator';
 import { ApiXResponsesEnum } from '../../core/shared/enums';
+import { JwtAuthGuard } from '../../core/shared/guards/jwt-auth.guard';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
 import { PaginatePipe } from '../../core/shared/pipes/paginate.pipe';
 import { PathParamsPipe } from '../../core/shared/pipes/path-params.pipe';
@@ -10,6 +11,7 @@ import { ListQueryRolesDto } from './dto/list-role.dto';
 import { Role } from './entities/role.entity';
 import { RolesService } from './roles.service';
 
+@UseGuards(JwtAuthGuard)
 @ApiTags('Roles')
 @Controller('roles')
 export class RolesController {

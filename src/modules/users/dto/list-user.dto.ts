@@ -4,7 +4,7 @@ import { ApiQueryParamUnifiedModel } from '../../../core/shared/models/api-query
 import { User } from '../entities/user.entity';
 
 export class ListQueryUsersDto extends IntersectionType(
-  PickType(User, ['email', 'isDeleted', 'isEnabled', 'phoneNumber', 'role', 'usertype']),
+  PickType(User, ['email', 'isDeleted', 'isEnabled', 'phoneNumber', 'role', 'accounttype']),
   ApiPaginateUnifiedModel,
   ApiQueryParamUnifiedModel,
 ) {}

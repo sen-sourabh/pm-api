@@ -42,7 +42,7 @@ export class UsersService {
 
       const data = await this.usersRepository.find({
         where: query,
-        relations: relations && ['role', 'usertype'],
+        relations: relations && ['role', 'accounttype'],
         skip,
         take,
         order: { updatedAt: OrderEnum.DESC },
@@ -62,11 +62,11 @@ export class UsersService {
     id: string,
     query?: ApiQueryParamUnifiedModel,
   ): Promise<ApiResponseModel<User>> {
-    const { relations } = getPagination(query);
+    const { relations } = query ? getPagination(query) : { relations: false };
 
     const data = await this.usersRepository.findOne({
       where: { id },
-      relations: relations && ['role', 'usertype'],
+      relations: relations && ['role', 'accounttype'],
     });
     if (isMissing(data)) {
       throw new NotFoundException(`Record not found with id: ${id}`);

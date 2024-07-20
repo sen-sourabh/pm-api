@@ -15,13 +15,13 @@ import { HttpExceptionFilter } from './core/shared/exception-filters/http-except
 import { TokenExpiredExceptionFilter } from './core/shared/exception-filters/token-expire.filter';
 import { LoggingInterceptor } from './core/shared/interceptors/logging.interceptor';
 import { AuthMiddleware } from './core/shared/middlewares/auth.middleware';
+import { AccounttypesController } from './modules/accounttypes/accounttypes.controller';
+import { AccounttypesModule } from './modules/accounttypes/accounttypes.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { RolesController } from './modules/roles/roles.controller';
 import { RolesModule } from './modules/roles/roles.module';
 import { UsersController } from './modules/users/users.controller';
 import { UsersModule } from './modules/users/users.module';
-import { UsertypesController } from './modules/usertypes/usertypes.controller';
-import { UsertypesModule } from './modules/usertypes/usertypes.module';
 
 @Module({
   imports: [
@@ -37,7 +37,7 @@ import { UsertypesModule } from './modules/usertypes/usertypes.module';
     MessengerModule,
     WebhooksModule,
     RolesModule,
-    UsertypesModule,
+    AccounttypesModule,
     UsersModule,
     ActivityLogsModule,
   ],
@@ -63,6 +63,6 @@ export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthMiddleware)
-      .forRoutes(UsersController, RolesController, UsertypesController, ActivityLogsController);
+      .forRoutes(UsersController, RolesController, AccounttypesController, ActivityLogsController);
   }
 }

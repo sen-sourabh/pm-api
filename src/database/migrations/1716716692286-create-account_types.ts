@@ -1,14 +1,14 @@
 import { Logger } from '@nestjs/common';
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class CreateUserTypes1716716692286 implements MigrationInterface {
-  private readonly logger = new Logger(CreateUserTypes1716716692286.name);
+export class CreateAccountTypes1716716692286 implements MigrationInterface {
+  private readonly logger = new Logger(CreateAccountTypes1716716692286.name);
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     try {
       await queryRunner.createTable(
         new Table({
-          name: 'usertypes',
+          name: 'accounttypes',
           columns: [
             {
               name: 'id',
@@ -55,18 +55,18 @@ export class CreateUserTypes1716716692286 implements MigrationInterface {
         }),
         false, // Skip table type check as it can vary across databases
       );
-      this.logger.log(`Up: Create usertypes executed`);
+      this.logger.log(`Up: Create accounttypes executed`);
     } catch (error) {
-      this.logger.error(`Up: Create usertypes has an error: `, error?.message);
+      this.logger.error(`Up: Create accounttypes has an error: `, error?.message);
     }
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     try {
-      await queryRunner.dropTable('usertypes');
-      this.logger.log(`Down: Drop usertypes executed`);
+      await queryRunner.dropTable('accounttypes');
+      this.logger.log(`Down: Drop accounttypes executed`);
     } catch (error) {
-      this.logger.error(`Down: Drop usertypes has an error: `, error?.message);
+      this.logger.error(`Down: Drop accounttypes has an error: `, error?.message);
     }
   }
 }

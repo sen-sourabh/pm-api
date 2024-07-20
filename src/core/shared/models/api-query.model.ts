@@ -6,9 +6,11 @@ export class ApiQueryParamUnifiedModel {
   @ApiPropertyOptional({
     description: 'To fetch the entities with their relation`s data',
     type: 'boolean',
+    default: false,
+    required: false,
   })
   @Type(() => Boolean)
   @IsBoolean()
   @IsOptional()
-  relation: boolean;
+  relation?: boolean;
 }

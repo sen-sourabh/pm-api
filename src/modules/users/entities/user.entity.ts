@@ -17,8 +17,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Accounttype } from '../../accounttypes/entities/accounttype.entity';
 import { Role } from '../../roles/entities/role.entity';
-import { Usertype } from '../../usertypes/entities/usertype.entity';
 
 @ApiTags('Users')
 @Entity('users')
@@ -206,13 +206,15 @@ export class User {
   })
   @ManyToOne(() => Role)
   @Column({ name: 'roleId', type: 'int' })
+  @Type(() => Number)
   role: number;
 
   @ApiPropertyOptional({
-    description: 'usertype of the user',
+    description: 'accounttype of the user',
     required: true,
   })
-  @ManyToOne(() => Usertype)
-  @Column({ name: 'usertypeId', type: 'int' })
-  usertype: number;
+  @ManyToOne(() => Accounttype)
+  @Column({ name: 'accounttypeId', type: 'int' })
+  @Type(() => Number)
+  accounttype: number;
 }

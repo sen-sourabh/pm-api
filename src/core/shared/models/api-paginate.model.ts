@@ -6,6 +6,7 @@ export class ApiPaginateUnifiedModel {
   @ApiPropertyOptional({
     description: 'Page number',
     example: 1,
+    default: 1,
     required: false,
   })
   @Type(() => Number)
@@ -16,6 +17,7 @@ export class ApiPaginateUnifiedModel {
   @ApiPropertyOptional({
     description: 'No of records will be fetched in single request',
     example: 25,
+    default: 25,
     required: false,
   })
   @Type(() => Number)
