@@ -27,10 +27,7 @@ export class AuthService {
     if (!data) throw new NotFoundException(`User not found`);
     return {
       data: {
-        access_token: this.jwtService.sign({ ...data }),
-      },
-      metadata: {
-        body: loginRequestDto,
+        access_token: this.jwtService.sign({ email, secretKey: data?.secretKey }),
       },
     };
   }

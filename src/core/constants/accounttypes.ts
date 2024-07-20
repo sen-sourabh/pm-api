@@ -1,4 +1,4 @@
-export const USERTYPES = [
+export const ACCOUNTTYPES = [
   {
     name: 'Organization',
   },

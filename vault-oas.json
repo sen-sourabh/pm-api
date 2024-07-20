@@ -142,6 +142,7 @@
             "description": "Page number",
             "example": 1,
             "schema": {
+              "default": 1,
               "type": "number"
             }
           },
@@ -152,6 +153,7 @@
             "description": "No of records will be fetched in single request",
             "example": 25,
             "schema": {
+              "default": 25,
               "type": "number"
             }
           }
@@ -221,15 +223,15 @@
         ]
       }
     },
-    "/api/v1/usertypes": {
+    "/api/v1/accounttypes": {
       "get": {
-        "operationId": "findAllUsertypes",
+        "operationId": "findAllAccounttypes",
         "parameters": [
           {
             "name": "name",
             "required": false,
             "in": "query",
-            "description": "name of the usertype",
+            "description": "name of the accounttype",
             "schema": {
               "type": "string"
             }
@@ -238,7 +240,7 @@
             "name": "isDefault",
             "required": false,
             "in": "query",
-            "description": "The usertype is default or not",
+            "description": "The accounttype is default or not",
             "schema": {
               "type": "boolean"
             }
@@ -247,7 +249,7 @@
             "name": "isEnabled",
             "required": false,
             "in": "query",
-            "description": "The usertype is enabled or not",
+            "description": "The accounttype is enabled or not",
             "schema": {
               "type": "boolean"
             }
@@ -256,7 +258,7 @@
             "name": "isDeleted",
             "required": false,
             "in": "query",
-            "description": "The usertype is deleted or not",
+            "description": "The accounttype is deleted or not",
             "schema": {
               "type": "boolean"
             }
@@ -268,6 +270,7 @@
             "description": "Page number",
             "example": 1,
             "schema": {
+              "default": 1,
               "type": "number"
             }
           },
@@ -278,19 +281,20 @@
             "description": "No of records will be fetched in single request",
             "example": 25,
             "schema": {
+              "default": 25,
               "type": "number"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "returns list of usertypes",
+            "description": "returns list of accounttypes",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Usertype"
+                    "$ref": "#/components/schemas/Accounttype"
                   }
                 }
               }
@@ -304,11 +308,11 @@
           }
         },
         "tags": [
-          "Usertypes"
+          "Accounttypes"
         ]
       }
     },
-    "/api/v1/usertypes/{id}": {
+    "/api/v1/accounttypes/{id}": {
       "get": {
         "operationId": "findOneUsertype",
         "parameters": [
@@ -323,11 +327,11 @@
         ],
         "responses": {
           "200": {
-            "description": "return usertype as per the identifier",
+            "description": "return accounttype as per the identifier",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Usertype"
+                  "$ref": "#/components/schemas/Accounttype"
                 }
               }
             }
@@ -343,7 +347,7 @@
           }
         },
         "tags": [
-          "Usertypes"
+          "Accounttypes"
         ]
       }
     },
@@ -436,10 +440,10 @@
             }
           },
           {
-            "name": "usertype",
+            "name": "accounttype",
             "required": false,
             "in": "query",
-            "description": "usertype of the user",
+            "description": "accounttype of the user",
             "schema": {
               "type": "number"
             }
@@ -451,6 +455,7 @@
             "description": "Page number",
             "example": 1,
             "schema": {
+              "default": 1,
               "type": "number"
             }
           },
@@ -461,6 +466,7 @@
             "description": "No of records will be fetched in single request",
             "example": 25,
             "schema": {
+              "default": 25,
               "type": "number"
             }
           },
@@ -470,6 +476,7 @@
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
             "schema": {
+              "default": false,
               "type": "boolean"
             }
           }
@@ -518,6 +525,7 @@
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
             "schema": {
+              "default": false,
               "type": "boolean"
             }
           }
@@ -693,6 +701,7 @@
             "description": "Page number",
             "example": 1,
             "schema": {
+              "default": 1,
               "type": "number"
             }
           },
@@ -703,6 +712,7 @@
             "description": "No of records will be fetched in single request",
             "example": 25,
             "schema": {
+              "default": 25,
               "type": "number"
             }
           }
@@ -940,7 +950,7 @@
           "id"
         ]
       },
-      "Usertype": {
+      "Accounttype": {
         "type": "object",
         "properties": {
           "id": {
@@ -952,19 +962,19 @@
           },
           "name": {
             "type": "string",
-            "description": "name of the usertype"
+            "description": "name of the accounttype"
           },
           "isDefault": {
             "type": "boolean",
-            "description": "The usertype is default or not"
+            "description": "The accounttype is default or not"
           },
           "isEnabled": {
             "type": "boolean",
-            "description": "The usertype is enabled or not"
+            "description": "The accounttype is enabled or not"
           },
           "isDeleted": {
             "type": "boolean",
-            "description": "The usertype is deleted or not"
+            "description": "The accounttype is deleted or not"
           },
           "createdAt": {
             "format": "T",
@@ -1015,9 +1025,9 @@
             "type": "number",
             "description": "role of the user"
           },
-          "usertype": {
+          "accounttype": {
             "type": "number",
-            "description": "usertype of the user"
+            "description": "accounttype of the user"
           },
           "email": {
             "type": "string",
@@ -1121,9 +1131,9 @@
             "type": "number",
             "description": "role of the user"
           },
-          "usertype": {
+          "accounttype": {
             "type": "number",
-            "description": "usertype of the user"
+            "description": "accounttype of the user"
           }
         }
       },

@@ -10,18 +10,22 @@ import { getPagination } from '../../core/helpers/serializers';
 import { isMissing } from '../../core/helpers/validations';
 import { OrderEnum } from '../../core/shared/enums';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
-import { ListQueryUsertypesDto } from './dto/list-usertype.dto';
-import { Usertype } from './entities/usertype.entity';
+import { ListQueryAccounttypesDto } from './dto/list-accounttype.dto';
+import { Accounttype } from './entities/accounttype.entity';
 
 @Injectable()
-export class UsertypesService {
-  constructor(@InjectRepository(Usertype) private usertypesRepository: Repository<Usertype>) {}
+export class AccounttypesService {
+  constructor(
+    @InjectRepository(Accounttype) private accounttypesRepository: Repository<Accounttype>,
+  ) {}
 
-  async findAllUsertypes(query?: ListQueryUsertypesDto): Promise<ApiResponseModel<Usertype[]>> {
+  async findAllAccounttypes(
+    query?: ListQueryAccounttypesDto,
+  ): Promise<ApiResponseModel<Accounttype[]>> {
     try {
       const { skip, take } = getPagination(query);
 
-      const data = await this.usertypesRepository.find({
+      const data = await this.accounttypesRepository.find({
         where: query,
         skip,
         take,
@@ -30,20 +34,20 @@ export class UsertypesService {
 
       return { data, metadata: { query } };
     } catch (error) {
-      Logger.debug(`Error in list usertype: ${error?.message}`);
-      throw new InternalServerErrorException(`Error in list usertype: ${error?.message}`);
+      Logger.debug(`Error in list accounttype: ${error?.message}`);
+      throw new InternalServerErrorException(`Error in list accounttype: ${error?.message}`);
     }
   }
 
-  async findOneUsertype(id: number): Promise<ApiResponseModel<Usertype>> {
-    const data = await this.usertypesRepository.findOne({ where: { id } });
+  async findOneAccounttype(id: number): Promise<ApiResponseModel<Accounttype>> {
+    const data = await this.accounttypesRepository.findOne({ where: { id } });
     if (isMissing(data)) throw new NotFoundException(`Record not found by id: ${id}`);
     return { data, metadata: { params: { id } } };
   }
 
-  async findUsertypeByValue(query: Record<string, unknown>): Promise<boolean> {
+  async findAccounttypeByValue(query: Record<string, unknown>): Promise<boolean> {
     try {
-      const data = await this.usertypesRepository.findOne({
+      const data = await this.accounttypesRepository.findOne({
         where: { ...query, isDeleted: false },
       });
       if (isMissing(data)) {
@@ -51,7 +55,7 @@ export class UsertypesService {
       }
       return true;
     } catch (error) {
-      Logger.error(`Error in user operation: ${error.message}`);
+      Logger.error(`Error in accounttype operation: ${error.message}`);
       return false;
     }
   }

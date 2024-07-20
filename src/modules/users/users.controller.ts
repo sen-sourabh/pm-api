@@ -8,12 +8,14 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiXResponses } from '../../core/shared/decorators/apply-filters/apply-filters.decorator';
 import { ApiXResponsesEnum } from '../../core/shared/enums';
+import { JwtAuthGuard } from '../../core/shared/guards/jwt-auth.guard';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
 import { ApiQueryParamUnifiedModel } from '../../core/shared/models/api-query.model';
 import { PaginatePipe } from '../../core/shared/pipes/paginate.pipe';
@@ -27,6 +29,7 @@ import { BodyParserPipe } from './pipes/body-parser.pipe';
 import { ValidateUserPipe } from './pipes/validate-user.pipe';
 import { UsersService } from './users.service';
 
+@UseGuards(JwtAuthGuard)
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {

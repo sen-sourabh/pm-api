@@ -9,9 +9,9 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@ApiTags('Usertypes')
-@Entity('usertypes')
-export class Usertype {
+@ApiTags('Accounttypes')
+@Entity('accounttypes')
+export class Accounttype {
   @ApiProperty({
     description: 'Id is the unique number identifier',
     example: 1,
@@ -28,7 +28,7 @@ export class Usertype {
   id: number;
 
   @ApiPropertyOptional({
-    description: 'name of the usertype',
+    description: 'name of the accounttype',
     required: true,
   })
   @Column({ length: 255, type: 'varchar', unique: true })
@@ -37,7 +37,7 @@ export class Usertype {
   name?: string;
 
   @ApiPropertyOptional({
-    description: 'The usertype is default or not',
+    description: 'The accounttype is default or not',
     required: false,
   })
   @Column({ type: 'tinyint', default: '1' })
@@ -47,7 +47,7 @@ export class Usertype {
   isDefault?: boolean;
 
   @ApiPropertyOptional({
-    description: 'The usertype is enabled or not',
+    description: 'The accounttype is enabled or not',
     required: false,
   })
   @Column({ type: 'tinyint', default: '1' })
@@ -57,7 +57,7 @@ export class Usertype {
   isEnabled?: boolean;
 
   @ApiPropertyOptional({
-    description: 'The usertype is deleted or not',
+    description: 'The accounttype is deleted or not',
     required: true,
   })
   @Column({ type: 'tinyint', default: '0' })

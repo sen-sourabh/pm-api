@@ -24,7 +24,7 @@ export const getHttpStatusViaCode = (data: ApiResponseUnifiedModel, response: an
   return HttpStatusViaCodeEnum.ServerError;
 };
 
-export const getPagination = (query: any) => {
+export const getPagination = (query?: any) => {
   const { pageNumber: skip, pageSize: take, relation: relations } = query;
   delete query?.pageNumber;
   delete query?.pageSize;

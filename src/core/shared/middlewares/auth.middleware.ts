@@ -20,7 +20,7 @@ export class AuthMiddleware implements NestMiddleware {
         secret: jwtModuleOptions.secret,
       });
     } catch (error) {
-      Logger.error(`Token expired ${error?.message}`);
+      Logger.error(`Error in token: ${error?.message}`);
       throw new TokenExpiredExceptionFilter();
     }
 
