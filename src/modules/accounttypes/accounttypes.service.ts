@@ -40,7 +40,7 @@ export class AccounttypesService {
   }
 
   async findOneAccounttype(id: number): Promise<ApiResponseModel<Accounttype>> {
-    const data = await this.accounttypesRepository.findOne({ where: { id } });
+    const data = await this.accounttypesRepository.findOneBy({ id });
     if (isMissing(data)) throw new NotFoundException(`Record not found by id: ${id}`);
     return { data, metadata: { params: { id } } };
   }
