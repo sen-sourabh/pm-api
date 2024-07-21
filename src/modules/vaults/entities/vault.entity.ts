@@ -33,8 +33,8 @@ export class Vault {
     description: 'The name of the vault',
     required: true,
   })
-  @Column({ length: 100, type: 'varchar', nullable: true })
-  @IsString()
+  @Column({ length: 100, type: 'varchar', nullable: false })
+  @IsString({ message: 'name must be a string' })
   @IsOptional()
   name?: string;
 
@@ -43,7 +43,7 @@ export class Vault {
     required: false,
   })
   @Column({ length: 100, type: 'varchar', nullable: true })
-  @IsString()
+  @IsString({ message: 'caption must be a string' })
   @IsOptional()
   caption?: string;
 
@@ -52,7 +52,7 @@ export class Vault {
     required: false,
   })
   @Column({ length: 255, type: 'varchar', nullable: true })
-  @IsString()
+  @IsString({ message: 'description must be a string' })
   @IsOptional()
   description?: string;
 
@@ -61,8 +61,10 @@ export class Vault {
     required: true,
   })
   @ManyToOne(() => User)
-  @Column({ name: 'userId' })
-  user: string;
+  @Column({ name: 'userId', nullable: false })
+  @IsString({ message: 'user id must be a string' })
+  @IsOptional()
+  user?: string;
 
   @ApiPropertyOptional({
     description: "The date time of vault's last access",

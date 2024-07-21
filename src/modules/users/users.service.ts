@@ -62,7 +62,7 @@ export class UsersService {
     id: string,
     query?: ApiQueryParamUnifiedModel,
   ): Promise<ApiResponseModel<User>> {
-    const { relations } = query ? getPagination(query) : { relations: false };
+    const { relations } = getPagination(query);
 
     const data = await this.usersRepository.findOne({
       where: { id },
@@ -81,7 +81,7 @@ export class UsersService {
       throw new BadRequestException(`Not updated`);
     }
     //Get updated user
-    const { data } = await this.findOneUser(id);
+    const data = await this.usersRepository.findOneBy({ id });
     return {
       data,
       metadata: { params: { id }, body: updateUserDto },
@@ -90,12 +90,12 @@ export class UsersService {
   }
 
   async removeUser(id: string): Promise<ApiResponseModel<User>> {
-    const deleted = await this.usersRepository.update(id, { isDeleted: true });
+    const deleted = await this.usersRepository.update(id, { isDeleted: true, isEnabled: false });
     if (!deleted?.affected) {
       throw new BadRequestException(`Not deleted`);
     }
     //Get deleted user
-    const { data } = await this.findOneUser(id);
+    const data = await this.usersRepository.findOneBy({ id });
     return {
       data,
       metadata: { params: { id } },
