@@ -23,7 +23,8 @@ export class CreateVaults1721486255876 implements MigrationInterface {
               name: 'name',
               type: 'varchar',
               length: '100',
-              isNullable: true,
+              isUnique: true,
+              isNullable: false,
             },
             {
               name: 'caption',

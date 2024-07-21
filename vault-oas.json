@@ -476,7 +476,7 @@
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
             "schema": {
-              "default": false,
+              "default": true,
               "type": "boolean"
             }
           }
@@ -525,7 +525,7 @@
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
             "schema": {
-              "default": false,
+              "default": true,
               "type": "boolean"
             }
           }
@@ -849,7 +849,7 @@
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
             "schema": {
-              "default": false,
+              "default": true,
               "type": "boolean"
             }
           }
@@ -873,6 +873,142 @@
           },
           "401": {
             "description": "Unauthorized"
+          }
+        },
+        "tags": [
+          "Vaults"
+        ]
+      }
+    },
+    "/api/v1/vaults/{id}": {
+      "get": {
+        "operationId": "findOneVault",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "relation",
+            "required": false,
+            "in": "query",
+            "description": "To fetch the entities with their relation`s data",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "return vault as per the identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vault"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "tags": [
+          "Vaults"
+        ]
+      },
+      "patch": {
+        "operationId": "updateVault",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateVaultDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "return updated vault as per the identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vault"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        },
+        "tags": [
+          "Vaults"
+        ]
+      },
+      "delete": {
+        "operationId": "removeUser",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "return deleted vault as per the identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vault"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
           }
         },
         "tags": [
@@ -1394,10 +1530,6 @@
       "CreateVaultDto": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string",
-            "description": "The name of the vault"
-          },
           "caption": {
             "type": "string",
             "description": "The caption of the vault"
@@ -1406,11 +1538,19 @@
             "type": "string",
             "description": "The small description about the vault"
           },
+          "name": {
+            "type": "string",
+            "description": "The name of the vault"
+          },
           "user": {
             "type": "string",
             "description": "The owner of the vault"
           }
-        }
+        },
+        "required": [
+          "name",
+          "user"
+        ]
       },
       "Vault": {
         "type": "object",
@@ -1464,6 +1604,41 @@
             "type": "string",
             "description": "The datetime of record at updation",
             "nullable": true
+          }
+        }
+      },
+      "UpdateVaultDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the vault"
+          },
+          "caption": {
+            "type": "string",
+            "description": "The caption of the vault"
+          },
+          "description": {
+            "type": "string",
+            "description": "The small description about the vault"
+          },
+          "user": {
+            "type": "string",
+            "description": "The owner of the vault"
+          },
+          "lastAccess": {
+            "format": "T",
+            "type": "string",
+            "description": "The date time of vault's last access",
+            "nullable": true
+          },
+          "isEnabled": {
+            "type": "boolean",
+            "description": "whether vault is enabled or not"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "description": "whether vault is deleted or not"
           }
         }
       }
