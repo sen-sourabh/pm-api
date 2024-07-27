@@ -3,6 +3,7 @@
 /node_modules
 documentation/
 /build
+upload
 
 # Logs
 logs

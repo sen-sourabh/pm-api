@@ -1016,6 +1016,26 @@
         ]
       }
     },
+    "/api/v1/files/upload": {
+      "post": {
+        "operationId": "uploadFile",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "create a file"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [
+          "Files"
+        ]
+      }
+    },
     "/api/v1/vault": {
       "get": {
         "operationId": "isServerRunning",

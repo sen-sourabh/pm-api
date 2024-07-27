@@ -24,6 +24,7 @@ import { UsersController } from './modules/users/users.controller';
 import { UsersModule } from './modules/users/users.module';
 import { VaultsController } from './modules/vaults/vaults.controller';
 import { VaultsModule } from './modules/vaults/vaults.module';
+import { FilesModule } from './core/modules/files/files.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { VaultsModule } from './modules/vaults/vaults.module';
     UsersModule,
     ActivityLogsModule,
     VaultsModule,
+    FilesModule,
   ],
   controllers: [AppController],
   providers: [
