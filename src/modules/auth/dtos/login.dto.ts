@@ -15,7 +15,9 @@ export class LoginRequestDto extends PickType(User, ['email', 'password']) {
     description: 'password of the user',
     required: false,
   })
-  @IsString({ message: 'password must be a string' })
+  @IsString({
+    message: 'password must be a string',
+  })
   @IsStrongPassword({}, { message: 'password must be strong' })
   password: string;
 }

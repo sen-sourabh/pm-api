@@ -24,7 +24,8 @@ export class ActivityLogsController {
   @HttpCode(200)
   @Get()
   findAllActivityLogs(
-    @Query() listQueryActivityLogsDto?: ListQueryActivityLogsDto,
+    @Query()
+    listQueryActivityLogsDto?: ListQueryActivityLogsDto,
   ): Promise<ApiResponseModel<ActivityLog[]>> {
     return this.activityLogService.findAllActivityLogs(listQueryActivityLogsDto);
   }

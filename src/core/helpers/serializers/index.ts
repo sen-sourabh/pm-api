@@ -29,7 +29,11 @@ export const getPagination = (query?: any) => {
   delete query?.pageNumber;
   delete query?.pageSize;
   delete query?.relation;
-  return { skip, take, relations } as { skip: number; take: number; relations: boolean };
+  return { skip, take, relations } as {
+    skip: number;
+    take: number;
+    relations: boolean;
+  };
 };
 
 export const buildActivityLog = (handler: string | null, request: any, response: any) => {

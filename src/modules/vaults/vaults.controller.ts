@@ -57,7 +57,8 @@ export class VaultsController {
   @HttpCode(200)
   @Get()
   findAllVaults(
-    @Query() listQueryVaultsDto?: ListQueryVaultsDto,
+    @Query()
+    listQueryVaultsDto?: ListQueryVaultsDto,
   ): Promise<ApiResponseModel<Vault[]>> {
     return this.vaultsService.findAllVaults(listQueryVaultsDto);
   }

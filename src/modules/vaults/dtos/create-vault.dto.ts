@@ -9,7 +9,11 @@ export class CreateVaultDto extends PickType(Vault, ['caption', 'description']) 
     description: 'The name of the vault',
     required: true,
   })
-  @Column({ length: 100, type: 'varchar', nullable: false })
+  @Column({
+    length: 100,
+    type: 'varchar',
+    nullable: false,
+  })
   @IsString({ message: 'name must be a string' })
   name: string;
 
@@ -19,6 +23,8 @@ export class CreateVaultDto extends PickType(Vault, ['caption', 'description']) 
   })
   @ManyToOne(() => User)
   @Column({ name: 'userId', nullable: false })
-  @IsString({ message: 'user id must be a string' })
+  @IsString({
+    message: 'user id must be a string',
+  })
   user: string;
 }

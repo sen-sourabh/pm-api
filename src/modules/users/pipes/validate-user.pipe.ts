@@ -34,7 +34,9 @@ export class ValidateUserPipe implements PipeTransform {
   whenUpdateOrDelete = async (value: UpdateUserDto) => {
     //Record found during update
     if (!isMissing(value) && typeof value === 'string') {
-      const isRecrodFound = await this.usersService.findUserByValue({ id: value });
+      const isRecrodFound = await this.usersService.findUserByValue({
+        id: value,
+      });
       if (!isRecrodFound) throw new NotFoundException(`Record not found with id: ${value}`);
     }
 
@@ -43,7 +45,9 @@ export class ValidateUserPipe implements PipeTransform {
 
   whenCreate = async (value: CreateUserDto) => {
     //Validate user If it is unique by email or not
-    const isEmailUnique = await this.usersService.findUserByValue({ email: value?.email });
+    const isEmailUnique = await this.usersService.findUserByValue({
+      email: value?.email,
+    });
     if (isEmailUnique) {
       throw new ConflictException(`Email should be unique`);
     }

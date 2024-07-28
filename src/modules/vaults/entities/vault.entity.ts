@@ -25,7 +25,11 @@ export class Vault {
     uniqueItems: true,
   })
   @PrimaryGeneratedColumn('uuid')
-  @Column({ length: 150, primary: true, generated: 'uuid' })
+  @Column({
+    length: 150,
+    primary: true,
+    generated: 'uuid',
+  })
   @IsString()
   id?: string;
 
@@ -33,7 +37,11 @@ export class Vault {
     description: 'The name of the vault',
     required: true,
   })
-  @Column({ length: 100, type: 'varchar', nullable: false })
+  @Column({
+    length: 100,
+    type: 'varchar',
+    nullable: false,
+  })
   @IsString({ message: 'name must be a string' })
   @IsOptional()
   name?: string;
@@ -42,8 +50,14 @@ export class Vault {
     description: 'The caption of the vault',
     required: false,
   })
-  @Column({ length: 100, type: 'varchar', nullable: true })
-  @IsString({ message: 'caption must be a string' })
+  @Column({
+    length: 100,
+    type: 'varchar',
+    nullable: true,
+  })
+  @IsString({
+    message: 'caption must be a string',
+  })
   @IsOptional()
   caption?: string;
 
@@ -51,8 +65,14 @@ export class Vault {
     description: 'The small description about the vault',
     required: false,
   })
-  @Column({ length: 255, type: 'varchar', nullable: true })
-  @IsString({ message: 'description must be a string' })
+  @Column({
+    length: 255,
+    type: 'varchar',
+    nullable: true,
+  })
+  @IsString({
+    message: 'description must be a string',
+  })
   @IsOptional()
   description?: string;
 
@@ -62,7 +82,9 @@ export class Vault {
   })
   @ManyToOne(() => User)
   @Column({ name: 'userId', nullable: false })
-  @IsString({ message: 'user id must be a string' })
+  @IsString({
+    message: 'user id must be a string',
+  })
   @IsOptional()
   user?: string;
 
@@ -73,7 +95,10 @@ export class Vault {
     nullable: true,
     format: 'T',
   })
-  @IsDateString({ strict: true, strictSeparator: true })
+  @IsDateString({
+    strict: true,
+    strictSeparator: true,
+  })
   @Column({ type: 'datetime', nullable: true })
   @IsOptional()
   lastAccess?: Date;
@@ -105,7 +130,10 @@ export class Vault {
     nullable: false,
     format: 'T',
   })
-  @IsDateString({ strict: true, strictSeparator: true })
+  @IsDateString({
+    strict: true,
+    strictSeparator: true,
+  })
   @CreateDateColumn({ type: 'datetime' })
   @IsOptional()
   createdAt?: Date;
@@ -117,7 +145,10 @@ export class Vault {
     nullable: true,
     format: 'T',
   })
-  @IsDateString({ strict: true, strictSeparator: true })
+  @IsDateString({
+    strict: true,
+    strictSeparator: true,
+  })
   @UpdateDateColumn({ type: 'datetime' })
   @IsOptional()
   updatedAt?: Date;

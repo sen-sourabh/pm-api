@@ -20,7 +20,9 @@ export class VerificationEmailRequestDto {
     nullable: false,
     required: true,
   })
-  @IsArray({ message: 'Email is required & Should be seperated by comma' })
+  @IsArray({
+    message: 'Email is required & Should be seperated by comma',
+  })
   readonly email: string[];
 
   @ApiProperty({
@@ -50,7 +52,9 @@ export class VerificationEmailRequestDto {
     nullable: false,
     required: true,
   })
-  @IsBoolean({ message: 'Attachments is required' })
+  @IsBoolean({
+    message: 'Attachments is required',
+  })
   readonly attachments: boolean;
 
   @ApiProperty({
@@ -60,7 +64,11 @@ export class VerificationEmailRequestDto {
     required: true,
   })
   @Type(() => Number)
-  @IsNumber({ allowNaN: false, maxDecimalPlaces: 0, allowInfinity: false })
+  @IsNumber({
+    allowNaN: false,
+    maxDecimalPlaces: 0,
+    allowInfinity: false,
+  })
   readonly expiry_time: number;
 
   @ApiProperty({

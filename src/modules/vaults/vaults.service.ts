@@ -19,7 +19,10 @@ import { Vault } from './entities/vault.entity';
 
 @Injectable()
 export class VaultsService {
-  constructor(@InjectRepository(Vault) private readonly vaultsRepository: Repository<Vault>) {}
+  constructor(
+    @InjectRepository(Vault)
+    private readonly vaultsRepository: Repository<Vault>,
+  ) {}
 
   async createVault(createVaultData: CreateVaultDto): Promise<ApiResponseModel<Vault>> {
     try {
@@ -81,21 +84,31 @@ export class VaultsService {
       throw new BadRequestException(`Not updated`);
     }
     //Get updated user
-    const data = await this.vaultsRepository.findOneBy({ id });
+    const data = await this.vaultsRepository.findOneBy({
+      id,
+    });
     return {
       data,
-      metadata: { params: { id }, body: updateVaultDto },
+      metadata: {
+        params: { id },
+        body: updateVaultDto,
+      },
       message: 'Vault updated successfully',
     };
   }
 
   async removeVault(id: string): Promise<ApiResponseModel<Vault>> {
-    const deleted = await this.vaultsRepository.update(id, { isDeleted: true, isEnabled: false });
+    const deleted = await this.vaultsRepository.update(id, {
+      isDeleted: true,
+      isEnabled: false,
+    });
     if (!deleted?.affected) {
       throw new BadRequestException(`Not deleted`);
     }
     //Get deleted user
-    const data = await this.vaultsRepository.findOneBy({ id });
+    const data = await this.vaultsRepository.findOneBy({
+      id,
+    });
     return {
       data,
       metadata: { params: { id } },
@@ -105,7 +118,9 @@ export class VaultsService {
 
   async findVaultByValue(query: Record<string, unknown>): Promise<boolean> {
     try {
-      const data = await this.vaultsRepository.findOne({ where: { ...query } });
+      const data = await this.vaultsRepository.findOne({
+        where: { ...query },
+      });
       if (isMissing(data)) {
         return false;
       }

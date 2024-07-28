@@ -27,7 +27,10 @@ export class AuthService {
     if (!data) throw new NotFoundException(`User not found`);
     return {
       data: {
-        access_token: this.jwtService.sign({ email, secretKey: data?.secretKey }),
+        access_token: this.jwtService.sign({
+          email,
+          secretKey: data?.secretKey,
+        }),
       },
     };
   }

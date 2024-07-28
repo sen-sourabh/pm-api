@@ -27,7 +27,8 @@ export class AccounttypesController {
   @HttpCode(200)
   @Get()
   findAllAccounttypes(
-    @Query() listQueryAccounttypesDto?: ListQueryAccounttypesDto,
+    @Query()
+    listQueryAccounttypesDto?: ListQueryAccounttypesDto,
   ): Promise<ApiResponseModel<Accounttype[]>> {
     return this.accounttypesService.findAllAccounttypes(listQueryAccounttypesDto);
   }
