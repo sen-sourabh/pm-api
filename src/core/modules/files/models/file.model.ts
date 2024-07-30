@@ -1,8 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { Readable } from 'stream';
-import { CategoryEnum } from '../enums/category.enum';
-import { FileFormatEnum } from '../enums/file-format.enum';
+import { CategoryEnum, FileFormatEnum } from '../enums/category.enum';
 
 export class FileUploadModel {
   file: Express.Multer.File;
@@ -58,9 +57,29 @@ export class FilesModel {
 }
 
 export class FilesResponseModel {
+  @ApiPropertyOptional({
+    description: 'The url of uploaded file',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
   url?: string;
+
+  @ApiPropertyOptional({
+    description: 'The key of uploded file',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  key?: string;
 }
 
 export class EntityFileResponseModel extends FilesResponseModel {
+  @ApiPropertyOptional({
+    description: 'The record id where is file uploaded',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
   id?: string;
 }

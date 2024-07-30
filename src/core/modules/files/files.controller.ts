@@ -41,7 +41,7 @@ export class FilesController {
   @UseInterceptors(FileInterceptor('file'))
   @HttpCode(201)
   @Post('upload')
-  uploadUsersFile(
+  uploadFile(
     @UploadedFile(
       new ParseFilePipe({
         validators: [
@@ -56,34 +56,6 @@ export class FilesController {
     )
     file: Express.Multer.File,
   ): Promise<ApiResponseModel<FilesResponseModel>> {
-    return this.fileService.uplaodFileToS3(file, 'default');
+    return this.fileService.uplaodFileToS3(file);
   }
-
-  // uploadVaultsFile(
-  //   @UploadedFile(
-  //     new ParseFilePipe({
-  //       validators: [
-  //         new MaxFileSizeValidator({ maxSize: 10000000 }),
-  //         new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
-  //       ],
-  //     }),
-  //   )
-  //   file: Express.Multer.File,
-  // ) {
-  //   return this.fileService.uplaodFileToS3(file);
-  // }
-
-  // uploadProvidersFile(
-  //   @UploadedFile(
-  //     new ParseFilePipe({
-  //       validators: [
-  //         new MaxFileSizeValidator({ maxSize: 10000000 }),
-  //         new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
-  //       ],
-  //     }),
-  //   )
-  //   file: Express.Multer.File,
-  // ) {
-  //   return this.fileService.uplaodFileToS3(file);
-  // }
 }

@@ -3,6 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { getS3ObjectUrl, getUsersFileKey } from '../../helpers/transformers';
 import { ApiResponseModel } from '../../shared/interfaces/api-response.interface';
+import { UpoadFileS3PathEnum } from './enums/category.enum';
 import { CoreFileModel, FilesResponseModel } from './models/file.model';
 
 @Injectable()
@@ -23,7 +24,7 @@ export class FilesService {
 
   async uplaodFileToS3(
     file: CoreFileModel,
-    s3Path: string = 'default',
+    s3Path: string = UpoadFileS3PathEnum.DEFAULT,
   ): Promise<ApiResponseModel<FilesResponseModel>> {
     try {
       const key = getUsersFileKey(file, s3Path);
@@ -32,6 +33,7 @@ export class FilesService {
       return {
         data: {
           url: getS3ObjectUrl(this.bucket, key),
+          key,
         },
         metadata: {
           body: { file: file?.originalname },

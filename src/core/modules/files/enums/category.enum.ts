@@ -1,8 +1,20 @@
 export enum CategoryEnum {
-  USER_PROFILE = 'user_profile',
-  USER_ADDITIONAL = 'user_additional',
-  VAULT_PROFILE = 'vault_profile',
-  VAULT_ADDITIONAL = 'user_additional',
-  PROVIDER_PROFILE = 'provider_profile',
-  PROVIDER_ADDITIONAL = 'provider_additional',
+  PROFILE = 'PROFILE',
+  ADDITIONAL = 'ADDITIONAL',
+}
+
+export enum FileFormatEnum {
+  PNG = 'png',
+  JPEG = 'jpeg',
+  JPG = 'jpg',
+}
+
+export enum UpoadFileS3PathEnum {
+  DEFAULT = 'default',
+  USERS_PROFILES = 'users/profiles',
+  VAULTS_PROFILES = 'vaults/profiles',
+  PROVIDERS_PROFILES = 'providers/profiles',
+  USERS_ADDITIONALS = 'users/additionals',
+  VAULTS_ADDITIONALS = 'vaults/additionals',
+  PROVIDERS_ADDITIONALS = 'providers/additionals',
 }

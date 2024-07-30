@@ -1500,7 +1500,20 @@
       },
       "EntityFileResponseModel": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "The url of uploaded file"
+          },
+          "key": {
+            "type": "string",
+            "description": "The key of uploded file"
+          },
+          "id": {
+            "type": "string",
+            "description": "The record id where is file uploaded"
+          }
+        }
       },
       "UpdateUserDto": {
         "type": "object",
