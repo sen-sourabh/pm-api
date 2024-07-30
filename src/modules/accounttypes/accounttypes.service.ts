@@ -16,7 +16,8 @@ import { Accounttype } from './entities/accounttype.entity';
 @Injectable()
 export class AccounttypesService {
   constructor(
-    @InjectRepository(Accounttype) private accounttypesRepository: Repository<Accounttype>,
+    @InjectRepository(Accounttype)
+    private accounttypesRepository: Repository<Accounttype>,
   ) {}
 
   async findAllAccounttypes(

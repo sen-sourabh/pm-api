@@ -19,7 +19,11 @@ export class CreateUserDto extends PickType(User, [
     required: true,
     uniqueItems: true,
   })
-  @Column({ length: 150, type: 'varchar', unique: true })
+  @Column({
+    length: 150,
+    type: 'varchar',
+    unique: true,
+  })
   @IsString({ message: 'email must be a string' })
   @IsEmail({}, { message: 'Invalid email format' })
   email: string;

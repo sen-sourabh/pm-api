@@ -34,7 +34,11 @@ export class User {
     uniqueItems: true,
   })
   @PrimaryGeneratedColumn('uuid')
-  @Column({ length: 150, primary: true, generated: 'uuid' })
+  @Column({
+    length: 150,
+    primary: true,
+    generated: 'uuid',
+  })
   @IsString()
   id?: string;
 
@@ -42,7 +46,11 @@ export class User {
     description: 'first name of the user',
     required: true,
   })
-  @Column({ length: 100, type: 'varchar', nullable: true })
+  @Column({
+    length: 100,
+    type: 'varchar',
+    nullable: true,
+  })
   @IsString()
   @IsOptional()
   firstName?: string;
@@ -51,7 +59,11 @@ export class User {
     description: 'last name of the user',
     required: false,
   })
-  @Column({ length: 100, type: 'varchar', nullable: true })
+  @Column({
+    length: 100,
+    type: 'varchar',
+    nullable: true,
+  })
   @IsString()
   @IsOptional()
   lastName?: string;
@@ -60,7 +72,11 @@ export class User {
     description: 'organization name of the user',
     required: false,
   })
-  @Column({ length: 255, type: 'varchar', nullable: true })
+  @Column({
+    length: 255,
+    type: 'varchar',
+    nullable: true,
+  })
   @IsString()
   @IsOptional()
   organizationName?: string;
@@ -70,7 +86,11 @@ export class User {
     example: 'Sr. Manager',
     required: false,
   })
-  @Column({ length: 150, type: 'varchar', nullable: true })
+  @Column({
+    length: 150,
+    type: 'varchar',
+    nullable: true,
+  })
   @IsString()
   @IsOptional()
   organizationPosition?: string;
@@ -79,7 +99,11 @@ export class User {
     description: 'no of empoyees in organization of the user',
     required: false,
   })
-  @Column({ length: 15, type: 'varchar', nullable: true })
+  @Column({
+    length: 15,
+    type: 'varchar',
+    nullable: true,
+  })
   @IsString()
   @IsOptional()
   noOfEmployees?: string;
@@ -89,7 +113,11 @@ export class User {
     required: true,
     uniqueItems: true,
   })
-  @Column({ length: 150, type: 'varchar', unique: true })
+  @Column({
+    length: 150,
+    type: 'varchar',
+    unique: true,
+  })
   @IsString({ message: 'email must be a string' })
   @IsEmail({}, { message: 'Invalid email format' })
   @IsOptional()
@@ -100,7 +128,9 @@ export class User {
     required: false,
   })
   @Column({ type: 'varchar', nullable: true })
-  @IsString({ message: 'password must be a string' })
+  @IsString({
+    message: 'password must be a string',
+  })
   @IsStrongPassword({}, { message: 'password must be strong' })
   @IsOptional()
   password?: string;
@@ -119,7 +149,11 @@ export class User {
     description: 'secret key of the user',
     required: true,
   })
-  @Column({ length: 255, type: 'varchar', unique: true })
+  @Column({
+    length: 255,
+    type: 'varchar',
+    unique: true,
+  })
   @IsString()
   @IsOptional()
   secretKey?: string;
@@ -141,7 +175,10 @@ export class User {
     nullable: true,
     format: 'T',
   })
-  @IsDateString({ strict: true, strictSeparator: true })
+  @IsDateString({
+    strict: true,
+    strictSeparator: true,
+  })
   @Column({ type: 'datetime', nullable: true })
   @IsOptional()
   lastLogin?: Date;
@@ -183,7 +220,10 @@ export class User {
     nullable: false,
     format: 'T',
   })
-  @IsDateString({ strict: true, strictSeparator: true })
+  @IsDateString({
+    strict: true,
+    strictSeparator: true,
+  })
   @CreateDateColumn({ type: 'datetime' })
   @IsOptional()
   createdAt?: Date;
@@ -195,7 +235,10 @@ export class User {
     nullable: true,
     format: 'T',
   })
-  @IsDateString({ strict: true, strictSeparator: true })
+  @IsDateString({
+    strict: true,
+    strictSeparator: true,
+  })
   @UpdateDateColumn({ type: 'datetime' })
   @IsOptional()
   updatedAt?: Date;

@@ -2,20 +2,26 @@ import {
   Body,
   Controller,
   Delete,
+  FileTypeValidator,
   Get,
   HttpCode,
+  MaxFileSizeValidator,
   Param,
+  ParseFilePipe,
   Patch,
   Post,
   Query,
-  UseGuards,
+  UploadedFile,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiBody, ApiConsumes, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { CreateFilesDto } from '../../core/modules/files/dtos/create-file.dto';
+import { EntityFileResponseModel } from '../../core/modules/files/models/file.model';
 import { ApiXResponses } from '../../core/shared/decorators/apply-filters/apply-filters.decorator';
 import { ApiXResponsesEnum } from '../../core/shared/enums';
-import { JwtAuthGuard } from '../../core/shared/guards/jwt-auth.guard';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
 import { ApiQueryParamUnifiedModel } from '../../core/shared/models/api-query.model';
 import { PaginatePipe } from '../../core/shared/pipes/paginate.pipe';
@@ -26,10 +32,11 @@ import { ListQueryUsersDto } from './dto/list-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { BodyParserPipe } from './pipes/body-parser.pipe';
+import { FileValidationPipe } from './pipes/file-validation.pipe';
 import { ValidateUserPipe } from './pipes/validate-user.pipe';
 import { UsersService } from './users.service';
 
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
@@ -49,6 +56,54 @@ export class UsersController {
   }
 
   @ApiResponse({
+    status: 201,
+    type: EntityFileResponseModel,
+  })
+  @ApiXResponses(
+    ApiXResponsesEnum.Unauthorized,
+    ApiXResponsesEnum.BadRequest,
+    ApiXResponsesEnum.Conflict,
+  )
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        entityId: {
+          type: 'string',
+          required: ['true'],
+        },
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @UseInterceptors(FileInterceptor('file'))
+  @UsePipes(FileValidationPipe)
+  @HttpCode(201)
+  @Post('file')
+  createUsersFile(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({
+            maxSize: 10000000,
+          }),
+          new FileTypeValidator({
+            fileType: '.(png|jpeg|jpg)',
+          }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+    @Body() createFileDto: CreateFilesDto,
+  ): Promise<ApiResponseModel<EntityFileResponseModel>> {
+    return this.usersService.createUsersFile(file, createFileDto);
+  }
+
+  @ApiResponse({
     description: 'returns list of users',
     type: [User],
     status: 200,
@@ -57,7 +112,10 @@ export class UsersController {
   @UsePipes(new QueryParamsPipe(), new PaginatePipe())
   @HttpCode(200)
   @Get()
-  findAllUsers(@Query() listQueryUsersDto?: ListQueryUsersDto): Promise<ApiResponseModel<User[]>> {
+  findAllUsers(
+    @Query()
+    listQueryUsersDto?: ListQueryUsersDto,
+  ): Promise<ApiResponseModel<User[]>> {
     return this.usersService.findAllUsers(listQueryUsersDto);
   }
 

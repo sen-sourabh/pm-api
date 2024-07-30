@@ -7,16 +7,28 @@ export class QueryParamsPipe implements PipeTransform {
     let query = { ...value };
 
     if (!isMissing(value?.isDefault)) {
-      query = { ...query, isDefault: value?.isDefault === 'true' };
+      query = {
+        ...query,
+        isDefault: value?.isDefault === 'true',
+      };
     }
     if (!isMissing(value?.isEnabled)) {
-      query = { ...query, isEnabled: value?.isEnabled === 'true' };
+      query = {
+        ...query,
+        isEnabled: value?.isEnabled === 'true',
+      };
     }
     if (!isMissing(value?.isDeleted)) {
-      query = { ...query, isDeleted: value?.isDeleted === 'true' };
+      query = {
+        ...query,
+        isDeleted: value?.isDeleted === 'true',
+      };
     }
     if (!isMissing(value?.relation)) {
-      query = { ...query, relation: value?.relation === 'true' };
+      query = {
+        ...query,
+        relation: value?.relation === 'true',
+      };
     }
 
     return {

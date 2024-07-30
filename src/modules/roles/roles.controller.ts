@@ -26,7 +26,10 @@ export class RolesController {
   @UsePipes(new QueryParamsPipe(), new PaginatePipe())
   @HttpCode(200)
   @Get()
-  findAllRoles(@Query() listQueryRolesDto?: ListQueryRolesDto): Promise<ApiResponseModel<Role[]>> {
+  findAllRoles(
+    @Query()
+    listQueryRolesDto?: ListQueryRolesDto,
+  ): Promise<ApiResponseModel<Role[]>> {
     return this.rolesService.findAllRoles(listQueryRolesDto);
   }
 

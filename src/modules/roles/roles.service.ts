@@ -15,7 +15,10 @@ import { Role } from './entities/role.entity';
 
 @Injectable()
 export class RolesService {
-  constructor(@InjectRepository(Role) private rolesRepository: Repository<Role>) {}
+  constructor(
+    @InjectRepository(Role)
+    private rolesRepository: Repository<Role>,
+  ) {}
 
   async findAllRoles(query?: ListQueryRolesDto): Promise<ApiResponseModel<Role[]>> {
     try {
@@ -39,14 +42,18 @@ export class RolesService {
   }
 
   async findOneRole(id: number): Promise<ApiResponseModel<Role>> {
-    const data = await this.rolesRepository.findOne({ where: { id } });
+    const data = await this.rolesRepository.findOne({
+      where: { id },
+    });
     if (isMissing(data)) throw new NotFoundException(`Record not found by id: ${id}`);
     return { data, metadata: { params: { id } } };
   }
 
   async findRoleByValue(query: Record<string, unknown>): Promise<boolean> {
     try {
-      const data = await this.rolesRepository.findOne({ where: { ...query, isDeleted: false } });
+      const data = await this.rolesRepository.findOne({
+        where: { ...query, isDeleted: false },
+      });
       if (isMissing(data)) {
         return false;
       }

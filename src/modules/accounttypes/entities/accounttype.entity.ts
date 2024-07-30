@@ -22,7 +22,11 @@ export class Accounttype {
     uniqueItems: true,
   })
   @PrimaryGeneratedColumn()
-  @Column({ type: 'int', generated: 'increment', primary: true })
+  @Column({
+    type: 'int',
+    generated: 'increment',
+    primary: true,
+  })
   @Type(() => Number)
   @IsNumber()
   id: number;
@@ -31,7 +35,11 @@ export class Accounttype {
     description: 'name of the accounttype',
     required: true,
   })
-  @Column({ length: 255, type: 'varchar', unique: true })
+  @Column({
+    length: 255,
+    type: 'varchar',
+    unique: true,
+  })
   @IsString()
   @IsOptional()
   name?: string;
@@ -73,7 +81,10 @@ export class Accounttype {
     nullable: false,
     format: 'T',
   })
-  @IsDateString({ strict: true, strictSeparator: true })
+  @IsDateString({
+    strict: true,
+    strictSeparator: true,
+  })
   @CreateDateColumn({ type: 'datetime' })
   @IsOptional()
   createdAt?: Date;
@@ -85,7 +96,10 @@ export class Accounttype {
     nullable: true,
     format: 'T',
   })
-  @IsDateString({ strict: true, strictSeparator: true })
+  @IsDateString({
+    strict: true,
+    strictSeparator: true,
+  })
   @UpdateDateColumn({ type: 'datetime' })
   @IsOptional()
   updatedAt?: Date;

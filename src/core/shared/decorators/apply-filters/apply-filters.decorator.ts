@@ -9,11 +9,21 @@ import {
 
 // Define reusable response objects with clear descriptions
 const commonResponses = {
-  bad_request: ApiBadRequestResponse({ description: 'Bad request' }),
-  unauthorized: ApiUnauthorizedResponse({ description: 'Unauthorized' }),
-  not_implemented: ApiNotImplementedResponse({ description: 'Not Implemented' }),
-  not_found: ApiNotFoundResponse({ description: 'Not Found' }),
-  conflict: ApiConflictResponse({ description: 'Conflict' }),
+  bad_request: ApiBadRequestResponse({
+    description: 'Bad request',
+  }),
+  unauthorized: ApiUnauthorizedResponse({
+    description: 'Unauthorized',
+  }),
+  not_implemented: ApiNotImplementedResponse({
+    description: 'Not Implemented',
+  }),
+  not_found: ApiNotFoundResponse({
+    description: 'Not Found',
+  }),
+  conflict: ApiConflictResponse({
+    description: 'Conflict',
+  }),
 };
 
 // Create a decorator factory for applying common decorators

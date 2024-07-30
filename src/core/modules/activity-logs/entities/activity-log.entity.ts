@@ -21,7 +21,11 @@ export class ActivityLog {
     uniqueItems: true,
   })
   @PrimaryGeneratedColumn('uuid')
-  @Column({ length: 150, primary: true, generated: 'uuid' })
+  @Column({
+    length: 150,
+    primary: true,
+    generated: 'uuid',
+  })
   @IsString()
   id?: string;
 
@@ -104,7 +108,10 @@ export class ActivityLog {
     nullable: false,
     format: 'T',
   })
-  @IsDateString({ strict: true, strictSeparator: true })
+  @IsDateString({
+    strict: true,
+    strictSeparator: true,
+  })
   @CreateDateColumn({ type: 'datetime' })
   @IsOptional()
   createdAt?: Date;
@@ -116,7 +123,10 @@ export class ActivityLog {
     nullable: true,
     format: 'T',
   })
-  @IsDateString({ strict: true, strictSeparator: true })
+  @IsDateString({
+    strict: true,
+    strictSeparator: true,
+  })
   @UpdateDateColumn({ type: 'datetime' })
   @IsOptional()
   updatedAt?: Date;
