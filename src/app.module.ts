@@ -24,6 +24,7 @@ import { RolesModule } from './modules/roles/roles.module';
 import { UsersModule } from './modules/users/users.module';
 import { VaultsController } from './modules/vaults/vaults.controller';
 import { VaultsModule } from './modules/vaults/vaults.module';
+import { VaultsMetadataModule } from './modules/vaults_metadata/vaults_metadata.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { VaultsModule } from './modules/vaults/vaults.module';
     ActivityLogsModule,
     VaultsModule,
     FilesModule,
+    VaultsMetadataModule,
   ],
   controllers: [AppController],
   providers: [
