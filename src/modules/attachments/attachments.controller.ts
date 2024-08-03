@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   HttpCode,
+  Param,
   ParseFilePipe,
   Post,
   Query,
@@ -19,7 +20,9 @@ import { ApiXResponses } from '../../core/shared/decorators/apply-filters/apply-
 import { ApiXResponsesEnum } from '../../core/shared/enums';
 import { JwtAuthGuard } from '../../core/shared/guards/jwt-auth.guard';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
+import { ApiQueryParamUnifiedModel } from '../../core/shared/models/api-query.model';
 import { PaginatePipe } from '../../core/shared/pipes/paginate.pipe';
+import { PathParamsPipe } from '../../core/shared/pipes/path-params.pipe';
 import { QueryParamsPipe } from '../../core/shared/pipes/query-params.pipe';
 import { AttachmentsService } from './attachments.service';
 import { CreateUsersAttachmentDto, CreateVaultsAttachmentDto } from './dtos/create-attachment.dto';
@@ -90,5 +93,22 @@ export class AttachmentsController {
     listQueryAttachmentsDto?: ListQueryAttachmentsDto,
   ): Promise<ApiResponseModel<Attachment[]>> {
     return this.attachmentsService.findAllAttachments(listQueryAttachmentsDto);
+  }
+
+  @ApiResponse({
+    description: 'return attachment as per the identifier',
+    type: Attachment,
+    status: 200,
+  })
+  @ApiXResponses(
+    ApiXResponsesEnum.Unauthorized,
+    ApiXResponsesEnum.BadRequest,
+    ApiXResponsesEnum.NotFound,
+  )
+  @UsePipes(new PathParamsPipe())
+  @HttpCode(200)
+  @Get(':id')
+  findOneUser(@Param('id') id: string, @Query() query?: ApiQueryParamUnifiedModel) {
+    return this.attachmentsService.findOneAttachment(id, query);
   }
 }

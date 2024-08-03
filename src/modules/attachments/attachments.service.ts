@@ -1,4 +1,9 @@
-import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../core/helpers/serializers';
@@ -13,6 +18,7 @@ import { containsKey, isMissing } from '../../core/helpers/validations';
 import { FilesService } from '../../core/modules/files/files.service';
 import { OrderEnum } from '../../core/shared/enums';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
+import { ApiQueryParamUnifiedModel } from '../../core/shared/models/api-query.model';
 import {
   CreateUsersAttachmentDto,
   CreateVaultsAttachmentDto,
@@ -71,6 +77,22 @@ export class AttachmentsService {
       Logger.error(`Error in list attachment: ${error.message}`);
       throw new InternalServerErrorException(`Error in list attachment: ${error.message}`);
     }
+  }
+
+  async findOneAttachment(
+    id: string,
+    query?: ApiQueryParamUnifiedModel,
+  ): Promise<ApiResponseModel<Attachment>> {
+    const { relations } = getPagination(query);
+
+    const data = await this.attachmentsRepository.findOne({
+      where: { id },
+      relations: relations && ['user', 'vault'],
+    });
+    if (isMissing(data)) {
+      throw new NotFoundException(`Record not found with id: ${id}`);
+    }
+    return { data, metadata: { params: { id } } };
   }
 
   async #getAttachmentPayload(
