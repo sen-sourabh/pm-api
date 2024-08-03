@@ -9,10 +9,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../core/helpers/serializers';
 import { isMissing } from '../../core/helpers/validations';
-import { CreateFilesDto } from '../../core/modules/files/dtos/create-file.dto';
-import { UpoadFileS3PathEnum } from '../../core/modules/files/enums/category.enum';
-import { FilesService } from '../../core/modules/files/files.service';
-import { EntityFileResponseModel } from '../../core/modules/files/models/file.model';
 import { OrderEnum } from '../../core/shared/enums';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
 import { ApiQueryParamUnifiedModel } from '../../core/shared/models/api-query.model';
@@ -26,7 +22,6 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
-    private readonly filesService: FilesService,
   ) {}
 
   async createUser(createUserData: CreateUserDto): Promise<ApiResponseModel<User>> {
@@ -42,25 +37,6 @@ export class UsersService {
       Logger.error(`Error in create user: ${error.message}`);
       throw new InternalServerErrorException(`Error in create user: ${error.message}`);
     }
-  }
-
-  async createUsersFile(
-    file: Express.Multer.File,
-    createFileDto: CreateFilesDto,
-  ): Promise<ApiResponseModel<EntityFileResponseModel>> {
-    const response = (
-      await this.filesService.uplaodFileToS3(file, UpoadFileS3PathEnum.USERS_PROFILES)
-    )?.data?.url;
-
-    return {
-      data: {
-        id: '123',
-        url: response,
-      },
-      metadata: {
-        body: { createFileDto, file: file?.originalname },
-      },
-    };
   }
 
   async findAllUsers(query?: ListQueryUsersDto): Promise<ApiResponseModel<User[]>> {

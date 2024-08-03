@@ -1,7 +1,7 @@
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { getS3ObjectUrl, getUsersFileKey } from '../../helpers/transformers';
+import { getS3FileKey, getS3ObjectUrl } from '../../helpers/transformers';
 import { ApiResponseModel } from '../../shared/interfaces/api-response.interface';
 import { UpoadFileS3PathEnum } from './enums/category.enum';
 import { CoreFileModel, FilesResponseModel } from './models/file.model';
@@ -25,15 +25,16 @@ export class FilesService {
   async uplaodFileToS3(
     file: CoreFileModel,
     s3Path: string = UpoadFileS3PathEnum.DEFAULT,
+    identifier: string = UpoadFileS3PathEnum.DEFAULT,
   ): Promise<ApiResponseModel<FilesResponseModel>> {
     try {
-      const key = getUsersFileKey(file, s3Path);
-      const uploadCommand = this.getPutObjectCommand(key, file);
+      const key = getS3FileKey(identifier, file, s3Path);
+      const uploadCommand = this.#getPutObjectCommand(key, file);
       await this.s3Client.send(uploadCommand);
+
       return {
         data: {
           url: getS3ObjectUrl(this.bucket, key),
-          key,
         },
         metadata: {
           body: { file: file?.originalname },
@@ -45,7 +46,7 @@ export class FilesService {
     }
   }
 
-  getPutObjectCommand(key: string, file: CoreFileModel) {
+  #getPutObjectCommand(key: string, file: CoreFileModel) {
     return new PutObjectCommand({
       BucketKeyEnabled: true,
       Bucket: this.bucket,

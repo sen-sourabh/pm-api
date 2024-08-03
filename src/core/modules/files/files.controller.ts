@@ -1,8 +1,6 @@
 import {
   Controller,
-  FileTypeValidator,
   HttpCode,
-  MaxFileSizeValidator,
   ParseFilePipe,
   Post,
   UploadedFile,
@@ -13,6 +11,7 @@ import { ApiBody, ApiConsumes, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiXResponses } from '../../shared/decorators/apply-filters/apply-filters.decorator';
 import { ApiXResponsesEnum } from '../../shared/enums';
 import { ApiResponseModel } from '../../shared/interfaces/api-response.interface';
+import { FILE_VALIDATORS } from './constants';
 import { FilesService } from './files.service';
 import { FilesResponseModel } from './models/file.model';
 
@@ -42,18 +41,7 @@ export class FilesController {
   @HttpCode(201)
   @Post('upload')
   uploadFile(
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [
-          new MaxFileSizeValidator({
-            maxSize: 10000000,
-          }),
-          new FileTypeValidator({
-            fileType: '.(png|jpeg|jpg)',
-          }),
-        ],
-      }),
-    )
+    @UploadedFile(new ParseFilePipe(FILE_VALIDATORS))
     file: Express.Multer.File,
   ): Promise<ApiResponseModel<FilesResponseModel>> {
     return this.fileService.uplaodFileToS3(file);
