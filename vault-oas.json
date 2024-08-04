@@ -979,7 +979,7 @@
         ]
       },
       "delete": {
-        "operationId": "removeUser",
+        "operationId": "removeVault",
         "parameters": [
           {
             "name": "id",
@@ -1237,7 +1237,7 @@
     },
     "/api/v1/attachments/{id}": {
       "get": {
-        "operationId": "findOneUser",
+        "operationId": "findOneAttachment",
         "parameters": [
           {
             "name": "id",

@@ -111,7 +111,7 @@ export class AttachmentsController {
   @UsePipes(new PathParamsPipe())
   @HttpCode(200)
   @Get(':id')
-  findOneUser(@Param('id') id: string, @Query() query?: ApiQueryParamUnifiedModel) {
+  findOneAttachment(@Param('id') id: string, @Query() query?: ApiQueryParamUnifiedModel) {
     return this.attachmentsService.findOneAttachment(id, query);
   }
 }
