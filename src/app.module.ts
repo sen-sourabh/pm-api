@@ -18,9 +18,12 @@ import { LoggingInterceptor } from './core/shared/interceptors/logging.intercept
 import { AuthMiddleware } from './core/shared/middlewares/auth.middleware';
 import { AccounttypesController } from './modules/accounttypes/accounttypes.controller';
 import { AccounttypesModule } from './modules/accounttypes/accounttypes.module';
+import { AttachmentsController } from './modules/attachments/attachments.controller';
+import { AttachmentsModule } from './modules/attachments/attachments.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { RolesController } from './modules/roles/roles.controller';
 import { RolesModule } from './modules/roles/roles.module';
+import { UsersController } from './modules/users/users.controller';
 import { UsersModule } from './modules/users/users.module';
 import { VaultsController } from './modules/vaults/vaults.controller';
 import { VaultsModule } from './modules/vaults/vaults.module';
@@ -46,6 +49,7 @@ import { VaultsMetadataModule } from './modules/vaults_metadata/vaults_metadata.
     VaultsModule,
     FilesModule,
     VaultsMetadataModule,
+    AttachmentsModule,
   ],
   controllers: [AppController],
   providers: [
@@ -67,12 +71,15 @@ import { VaultsMetadataModule } from './modules/vaults_metadata/vaults_metadata.
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes(
-      ActivityLogsController,
-      AccounttypesController,
-      RolesController,
-      // UsersController,
-      VaultsController,
-    );
+    consumer
+      .apply(AuthMiddleware)
+      .forRoutes(
+        ActivityLogsController,
+        AccounttypesController,
+        RolesController,
+        UsersController,
+        VaultsController,
+        AttachmentsController,
+      );
   }
 }

@@ -24,6 +24,12 @@ export class QueryParamsPipe implements PipeTransform {
         isDeleted: value?.isDeleted === 'true',
       };
     }
+    if (!isMissing(value?.isArchived)) {
+      query = {
+        ...query,
+        isArchived: value?.isArchived === 'true',
+      };
+    }
     if (!isMissing(value?.relation)) {
       query = {
         ...query,
