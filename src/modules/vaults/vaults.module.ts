@@ -9,5 +9,6 @@ import { VaultsService } from './vaults.service';
   imports: [TypeOrmModule.forFeature([Vault]), ActivityLogsModule],
   controllers: [VaultsController],
   providers: [VaultsService, Logger],
+  exports: [VaultsService],
 })
 export class VaultsModule {}

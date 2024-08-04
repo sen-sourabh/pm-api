@@ -507,58 +507,6 @@
         ]
       }
     },
-    "/api/v1/users/file": {
-      "post": {
-        "operationId": "createUsersFile",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "entityId": {
-                    "type": "string",
-                    "required": [
-                      "true"
-                    ]
-                  },
-                  "file": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityFileResponseModel"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "409": {
-            "description": "Conflict"
-          }
-        },
-        "tags": [
-          "Users"
-        ]
-      }
-    },
     "/api/v1/users/{id}": {
       "get": {
         "operationId": "findOneUser",
@@ -1070,7 +1018,7 @@
     },
     "/api/v1/files/upload": {
       "post": {
-        "operationId": "uploadUsersFile",
+        "operationId": "uploadFile",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -1101,6 +1049,238 @@
         },
         "tags": [
           "Files"
+        ]
+      }
+    },
+    "/api/v1/attachments/users": {
+      "post": {
+        "operationId": "createUsersAttachment",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUsersAttachmentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Attachment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        },
+        "tags": [
+          "Attachments"
+        ]
+      }
+    },
+    "/api/v1/attachments/vaults": {
+      "post": {
+        "operationId": "createVaultsAttachment",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateVaultsAttachmentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Attachment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        },
+        "tags": [
+          "Attachments"
+        ]
+      }
+    },
+    "/api/v1/attachments": {
+      "get": {
+        "operationId": "findAllAttachments",
+        "parameters": [
+          {
+            "name": "category",
+            "required": false,
+            "in": "query",
+            "description": "The attachment category",
+            "schema": {
+              "enum": [
+                "PROFILE",
+                "ADDITIONAL"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "user",
+            "required": false,
+            "in": "query",
+            "description": "The user of the attachment",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "vault",
+            "required": false,
+            "in": "query",
+            "description": "The vault of the attachment",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "isArchived",
+            "required": false,
+            "in": "query",
+            "description": "The attachment is archived or not",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "pageNumber",
+            "required": false,
+            "in": "query",
+            "description": "Page number",
+            "example": 1,
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "description": "No of records will be fetched in single request",
+            "example": 25,
+            "schema": {
+              "default": 25,
+              "type": "number"
+            }
+          },
+          {
+            "name": "relation",
+            "required": false,
+            "in": "query",
+            "description": "To fetch the entities with their relation`s data",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "returns list of attachments",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Attachment"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [
+          "Attachments"
+        ]
+      }
+    },
+    "/api/v1/attachments/{id}": {
+      "get": {
+        "operationId": "findOneUser",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "relation",
+            "required": false,
+            "in": "query",
+            "description": "To fetch the entities with their relation`s data",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "return attachment as per the identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Attachment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "tags": [
+          "Attachments"
         ]
       }
     },
@@ -1498,23 +1678,6 @@
           }
         }
       },
-      "EntityFileResponseModel": {
-        "type": "object",
-        "properties": {
-          "url": {
-            "type": "string",
-            "description": "The url of uploaded file"
-          },
-          "key": {
-            "type": "string",
-            "description": "The key of uploded file"
-          },
-          "id": {
-            "type": "string",
-            "description": "The record id where is file uploaded"
-          }
-        }
-      },
       "UpdateUserDto": {
         "type": "object",
         "properties": {
@@ -1746,6 +1909,130 @@
             "description": "whether vault is deleted or not"
           }
         }
+      },
+      "CreateUsersAttachmentDto": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary"
+          },
+          "category": {
+            "type": "string",
+            "description": "The attachment category",
+            "enum": [
+              "PROFILE",
+              "ADDITIONAL"
+            ]
+          },
+          "user": {
+            "type": "string",
+            "description": "The user of the attachment"
+          }
+        },
+        "required": [
+          "file",
+          "category",
+          "user"
+        ]
+      },
+      "Attachment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id is the unique uuid identifier",
+            "example": "e762634c-3e41-11eb-b897-0862660ccbd4",
+            "default": "uuid",
+            "nullable": false,
+            "uniqueItems": true
+          },
+          "name": {
+            "type": "string",
+            "description": "The attachment name"
+          },
+          "fileFormat": {
+            "type": "string",
+            "description": "The attachment file format",
+            "enum": [
+              "png",
+              "jpeg",
+              "jpg"
+            ]
+          },
+          "category": {
+            "type": "string",
+            "description": "The attachment category",
+            "enum": [
+              "PROFILE",
+              "ADDITIONAL"
+            ]
+          },
+          "key": {
+            "type": "string",
+            "description": "The attachment key"
+          },
+          "url": {
+            "type": "string",
+            "description": "The attachment url"
+          },
+          "user": {
+            "type": "string",
+            "description": "The user of the attachment"
+          },
+          "vault": {
+            "type": "string",
+            "description": "The vault of the attachment"
+          },
+          "isArchived": {
+            "type": "boolean",
+            "description": "The attachment is archived or not"
+          },
+          "lastAccessed": {
+            "format": "T",
+            "type": "string",
+            "description": "The date time of attachment's last accessed",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "T",
+            "type": "string",
+            "description": "With record create it`ll be auto generated",
+            "nullable": false
+          },
+          "updatedAt": {
+            "format": "T",
+            "type": "string",
+            "description": "With record update it`ll be auto generated",
+            "nullable": true
+          }
+        }
+      },
+      "CreateVaultsAttachmentDto": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary"
+          },
+          "category": {
+            "type": "string",
+            "description": "The attachment category",
+            "enum": [
+              "PROFILE",
+              "ADDITIONAL"
+            ]
+          },
+          "vault": {
+            "type": "string",
+            "description": "The vault of the attachment"
+          }
+        },
+        "required": [
+          "file",
+          "category",
+          "vault"
+        ]
       }
     }
   }
