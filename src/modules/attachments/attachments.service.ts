@@ -100,17 +100,8 @@ export class AttachmentsService {
     file: Express.Multer.File,
     createAttachmentData: CreateUsersAttachmentDto | CreateVaultsAttachmentDto,
   ): Promise<CreateVaultsAttachmentInternalDto | CreateVaultsAttachmentInternalDto> {
-    let s3Path: string;
-    let identifier: string;
-
-    identifier =
-      containsKey({ ...request?.['user'] }, 'secretKey') && request?.['user']?.['secretKey'];
-    if (isMissing(identifier))
-      throw new InternalServerErrorException(`Something went wrong. Please login with valid user.`);
-
-    s3Path = containsKey({ ...createAttachmentData }, 'vault')
-      ? getVaultsS3Path(createAttachmentData)
-      : getUsersS3Path(createAttachmentData);
+    const identifier: string = this.#getIdentifier(request);
+    const s3Path: string = this.#getS3Path(createAttachmentData);
 
     return {
       name: getFileName(file?.originalname),
@@ -120,4 +111,17 @@ export class AttachmentsService {
       ...createAttachmentData,
     } as CreateVaultsAttachmentInternalDto | CreateVaultsAttachmentInternalDto;
   }
+
+  #getIdentifier = (request: Request) => {
+    const identifier = containsKey({ ...request?.['user'] }, 'id') && request?.['user']?.['id'];
+    if (isMissing(identifier))
+      throw new InternalServerErrorException(`Something went wrong. Please login with valid user.`);
+    return identifier;
+  };
+
+  #getS3Path = (createAttachmentData: CreateUsersAttachmentDto | CreateVaultsAttachmentDto) => {
+    return containsKey({ ...createAttachmentData }, 'vault')
+      ? getVaultsS3Path(createAttachmentData)
+      : getUsersS3Path(createAttachmentData);
+  };
 }

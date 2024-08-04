@@ -29,7 +29,7 @@ export class AuthService {
       data: {
         access_token: this.jwtService.sign({
           email,
-          secretKey: data?.secretKey,
+          id: data?.id,
         }),
       },
     };

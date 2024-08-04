@@ -29,7 +29,7 @@ export const getS3FileKey = (
 ): string => {
   const filename = getFileName(originalname);
   const extension = getFileExtension(originalname);
-  return `${s3Path}/${identifier?.replaceAll('/', '')}/${Date.now()}-${filename}.${extension}`;
+  return `${s3Path}/${identifier?.replaceAll('-', '')}/${Date.now()}-${filename}.${extension}`;
 };
 
 export const getS3ObjectUrl = (bucket: string, fileKey: string): string => {

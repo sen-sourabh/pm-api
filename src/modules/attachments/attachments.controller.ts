@@ -28,6 +28,7 @@ import { AttachmentsService } from './attachments.service';
 import { CreateUsersAttachmentDto, CreateVaultsAttachmentDto } from './dtos/create-attachment.dto';
 import { ListQueryAttachmentsDto } from './dtos/list-attachment.dto';
 import { Attachment } from './entities/attachment.entity';
+import { AttachmentBodyParserPipe } from './pipes/body-parser.pipe';
 
 @UseGuards(JwtAuthGuard)
 @ApiTags('Attachments')
@@ -46,6 +47,7 @@ export class AttachmentsController {
     type: CreateUsersAttachmentDto,
   })
   @UseInterceptors(FileInterceptor('file'))
+  @UsePipes(AttachmentBodyParserPipe)
   @HttpCode(201)
   @Post('users')
   createUsersAttachment(
@@ -68,6 +70,7 @@ export class AttachmentsController {
     type: CreateVaultsAttachmentDto,
   })
   @UseInterceptors(FileInterceptor('file'))
+  @UsePipes(AttachmentBodyParserPipe)
   @HttpCode(201)
   @Post('vaults')
   createVaultsAttachment(
