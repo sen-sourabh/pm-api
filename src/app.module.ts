@@ -27,7 +27,7 @@ import { UsersController } from './modules/users/users.controller';
 import { UsersModule } from './modules/users/users.module';
 import { VaultsController } from './modules/vaults/vaults.controller';
 import { VaultsModule } from './modules/vaults/vaults.module';
-import { VaultsMetadataModule } from './modules/vaults_metadata/vaults_metadata.module';
+import { VaultsCollaboratorsModule } from './modules/vaults_collaborators/vaults_collaborators.module';
 
 @Module({
   imports: [
@@ -48,7 +48,7 @@ import { VaultsMetadataModule } from './modules/vaults_metadata/vaults_metadata.
     ActivityLogsModule,
     VaultsModule,
     FilesModule,
-    VaultsMetadataModule,
+    VaultsCollaboratorsModule,
     AttachmentsModule,
   ],
   controllers: [AppController],
