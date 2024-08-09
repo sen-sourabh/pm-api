@@ -4,7 +4,7 @@ import { ApiQueryParamUnifiedModel } from '../../../core/shared/models/api-query
 import { VaultsCollaborator } from '../entities/vaults_collaborator.entity';
 
 export class ListQueryVaultsCollaboratorDto extends IntersectionType(
-  PickType(VaultsCollaborator, ['user', 'vault', 'access', 'addedBy', 'isEnabled']),
+  PickType(VaultsCollaborator, ['user', 'vault', 'role', 'addedBy', 'isEnabled']),
   ApiPaginateUnifiedModel,
   ApiQueryParamUnifiedModel,
 ) {}

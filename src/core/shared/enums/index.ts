@@ -24,3 +24,8 @@ export enum RolesEnum {
   Admin = 'admin',
   Collaborator = 'collaborator',
 }
+
+export enum VaultAccessEnum {
+  Admin = 'admin',
+  Collaborator = 'collaborator',
+}

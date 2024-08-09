@@ -1,6 +1,6 @@
 import { ApiPropertyOptional, ApiTags } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsBoolean, IsDateString, IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsDateString, IsOptional, IsString } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { RolesEnum } from '../../../core/shared/enums';
+import { Role } from '../../roles/entities/role.entity';
 import { User } from '../../users/entities/user.entity';
 import { Vault } from '../../vaults/entities/vault.entity';
 
@@ -41,9 +41,10 @@ export class VaultsCollaborator {
     nullable: false,
   })
   @ManyToOne(() => User)
+  @Column({ name: 'userId', nullable: false })
   @IsString()
   @IsOptional()
-  user?: User;
+  user?: string;
 
   @ApiPropertyOptional({
     description: 'The shared vault',
@@ -51,23 +52,20 @@ export class VaultsCollaborator {
     nullable: false,
   })
   @ManyToOne(() => Vault)
+  @Column({ name: 'vaultId', nullable: false })
   @IsString()
   @IsOptional()
-  vault?: Vault;
+  vault?: string;
 
   @ApiPropertyOptional({
     description: 'The access of the vault',
     required: false,
-    enum: RolesEnum,
   })
-  @Column({
-    type: 'enum',
-    enum: RolesEnum,
-    nullable: false,
-  })
-  @IsEnum(RolesEnum)
+  @ManyToOne(() => Role)
+  @Column({ name: 'roleId', type: 'int', default: 3, nullable: false }) // Default: admin
+  @Type(() => Number)
   @IsOptional()
-  access?: RolesEnum;
+  role: number;
 
   @ApiPropertyOptional({
     description: 'The user who given the access',
@@ -75,9 +73,10 @@ export class VaultsCollaborator {
     nullable: false,
   })
   @ManyToOne(() => User)
+  @Column({ name: 'addedById', nullable: false })
   @IsString()
   @IsOptional()
-  addedBy?: User;
+  addedBy?: string;
 
   @ApiPropertyOptional({
     description: 'whether collaborator is enabled or not',

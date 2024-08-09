@@ -101,7 +101,7 @@ export class Vault {
   })
   @Column({ type: 'datetime', nullable: true })
   @IsOptional()
-  lastAccess?: Date;
+  lastAccessed?: Date;
 
   @ApiPropertyOptional({
     description: 'whether vault is enabled or not',

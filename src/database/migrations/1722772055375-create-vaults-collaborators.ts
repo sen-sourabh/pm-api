@@ -1,7 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 import { printMigrationErrorLogs } from '../../core/helpers/file-operations';
-import { RolesEnum } from '../../core/shared/enums';
 
 export class CreateVaultsCollaborators1722772055375 implements MigrationInterface {
   private readonly logger = new Logger(CreateVaultsCollaborators1722772055375.name);
@@ -33,13 +32,13 @@ export class CreateVaultsCollaborators1722772055375 implements MigrationInterfac
               isNullable: false,
             },
             {
-              name: 'access',
-              type: 'enum',
-              enum: [RolesEnum.Admin, RolesEnum.Collaborator],
+              name: 'roleId',
+              type: 'int',
               isNullable: false,
+              default: 3,
             },
             {
-              name: 'addedBy',
+              name: 'addedById',
               type: 'varchar',
               length: '255',
               isNullable: false,
@@ -47,21 +46,21 @@ export class CreateVaultsCollaborators1722772055375 implements MigrationInterfac
             {
               name: 'isEnabled',
               type: 'tinyint',
-              default: 1,
               isNullable: false,
+              default: 1,
             },
             {
               name: 'createdAt',
               type: 'datetime',
-              default: 'CURRENT_TIMESTAMP',
               isNullable: false,
+              default: 'CURRENT_TIMESTAMP',
             },
             {
               name: 'updatedAt',
               type: 'datetime',
-              default: 'CURRENT_TIMESTAMP',
               onUpdate: 'CURRENT_TIMESTAMP',
               isNullable: false,
+              default: 'CURRENT_TIMESTAMP',
             },
           ],
           foreignKeys: [
@@ -84,8 +83,16 @@ export class CreateVaultsCollaborators1722772055375 implements MigrationInterfac
             // Foreign key for addedBy association
             {
               name: 'FK_vaults_collaborators_addedby',
-              columnNames: ['addedBy'],
+              columnNames: ['addedById'],
               referencedTableName: 'users',
+              referencedColumnNames: ['id'],
+              onDelete: 'CASCADE', // Optional: Set deletion behavior (e.g., CASCADE, SET NULL)
+            },
+            // Foreign key for role association
+            {
+              name: 'FK_vaults_collaborators_roleId',
+              columnNames: ['roleId'],
+              referencedTableName: 'roles',
               referencedColumnNames: ['id'],
               onDelete: 'CASCADE', // Optional: Set deletion behavior (e.g., CASCADE, SET NULL)
             },

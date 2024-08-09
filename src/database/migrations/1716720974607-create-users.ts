@@ -24,30 +24,35 @@ export class CreateUsers1716720974607 implements MigrationInterface {
               type: 'varchar',
               length: '100',
               isNullable: true,
+              default: null,
             },
             {
               name: 'lastName',
               type: 'varchar',
               length: '100',
               isNullable: true,
+              default: null,
             },
             {
               name: 'organizationName',
               type: 'varchar',
               length: '255',
               isNullable: true,
+              default: null,
             },
             {
               name: 'organizationPosition',
               type: 'varchar',
               length: '150',
               isNullable: true,
+              default: null,
             },
             {
               name: 'noOfEmployees',
               type: 'varchar',
               length: '15',
               isNullable: true,
+              default: null,
             },
             {
               name: 'email',
@@ -60,11 +65,13 @@ export class CreateUsers1716720974607 implements MigrationInterface {
               name: 'password',
               type: 'varchar',
               isNullable: true,
+              default: null,
             },
             {
               name: 'otp',
               type: 'int',
               isNullable: true,
+              default: null,
             },
             {
               name: 'secretKey',
@@ -75,32 +82,38 @@ export class CreateUsers1716720974607 implements MigrationInterface {
             {
               name: 'phoneNumber',
               type: 'bigint',
+              isNullable: true,
+              default: null,
             },
             {
               name: 'lastLogin',
               type: 'datetime',
               isNullable: true,
+              default: null,
             },
             {
               name: 'isLogin',
               type: 'tinyint',
+              isNullable: false,
               default: 0,
             },
             {
               name: 'isEnabled',
               type: 'tinyint',
+              isNullable: false,
               default: 1,
             },
             {
               name: 'isDeleted',
               type: 'tinyint',
+              isNullable: false,
               default: 0,
             },
             {
               name: 'createdAt',
               type: 'datetime',
-              default: 'CURRENT_TIMESTAMP',
               isNullable: false,
+              default: 'CURRENT_TIMESTAMP',
             },
             {
               name: 'updatedAt',
@@ -113,11 +126,13 @@ export class CreateUsers1716720974607 implements MigrationInterface {
               name: 'roleId',
               type: 'int',
               isNullable: false,
+              default: 2,
             },
             {
               name: 'accounttypeId',
               type: 'int',
               isNullable: false,
+              default: 2,
             },
           ],
           foreignKeys: [

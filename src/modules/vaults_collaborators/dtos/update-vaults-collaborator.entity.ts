@@ -1,9 +1,12 @@
-import { ApiProperty, ApiTags } from '@nestjs/swagger';
-import { IsEnum, IsString } from 'class-validator';
-import { RolesEnum } from '../../../core/shared/enums';
+import { ApiProperty, ApiTags, PickType } from '@nestjs/swagger';
+import { IsString } from 'class-validator';
+import { VaultsCollaborator } from '../entities/vaults_collaborator.entity';
 
 @ApiTags('UpdateVaultsCollaborator')
-export class UpdateVaultsCollaboratorDto {
+export class UpdateVaultsCollaboratorDto extends PickType(VaultsCollaborator, [
+  'role',
+  'isEnabled',
+]) {
   @ApiProperty({
     description: 'The collaborator of the vault',
     required: true,
@@ -19,15 +22,6 @@ export class UpdateVaultsCollaboratorDto {
   })
   @IsString()
   vault: string;
-
-  @ApiProperty({
-    description: 'The access of the vault',
-    required: true,
-    nullable: false,
-    enum: RolesEnum,
-  })
-  @IsEnum(RolesEnum)
-  access: RolesEnum;
 
   @ApiProperty({
     description: 'The user who given the access',

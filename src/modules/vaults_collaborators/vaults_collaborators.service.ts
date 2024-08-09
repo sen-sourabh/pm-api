@@ -12,6 +12,7 @@ import { isMissing } from '../../core/helpers/validations';
 import { OrderEnum } from '../../core/shared/enums';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
 import { ApiQueryParamUnifiedModel } from '../../core/shared/models/api-query.model';
+import { UsersService } from '../users/users.service';
 import { CreateVaultsCollaboratorDto } from './dtos/create-vaults-collaborator.entity';
 import { ListQueryVaultsCollaboratorDto } from './dtos/list-vaults-collaborator.entity';
 import { UpdateVaultsCollaboratorDto } from './dtos/update-vaults-collaborator.entity';
@@ -22,13 +23,21 @@ export class VaultsCollaboratorsService {
   constructor(
     @InjectRepository(VaultsCollaborator)
     private readonly vaultsCollaboratorsRepository: Repository<VaultsCollaborator>,
+    private readonly usersService: UsersService,
   ) {}
 
   async createVaultsCollaborator(
     createVaultData: CreateVaultsCollaboratorDto,
   ): Promise<ApiResponseModel<VaultsCollaborator>> {
     try {
-      const newVault = this.vaultsCollaboratorsRepository.create(createVaultData);
+      const userId = await this.usersService.findOrCreateUserByEmail({
+        email: createVaultData?.user,
+      });
+
+      const newVault = this.vaultsCollaboratorsRepository.create({
+        ...createVaultData,
+        user: userId,
+      });
       const data = await this.vaultsCollaboratorsRepository.save(newVault);
       return {
         data,
@@ -51,7 +60,7 @@ export class VaultsCollaboratorsService {
 
       const data = await this.vaultsCollaboratorsRepository.find({
         where: query,
-        relations: relations && ['user', 'vault'],
+        relations: relations && ['user', 'vault', 'role'],
         skip,
         take,
         order: { updatedAt: OrderEnum.DESC },
@@ -75,7 +84,7 @@ export class VaultsCollaboratorsService {
 
     const data = await this.vaultsCollaboratorsRepository.findOne({
       where: { id },
-      relations: relations && ['user', 'vault'],
+      relations: relations && ['user', 'vault', 'role'],
     });
     if (isMissing(data)) {
       throw new NotFoundException(`Record not found with id: ${id}`);
@@ -87,6 +96,16 @@ export class VaultsCollaboratorsService {
     id: string,
     updateVaultDto: UpdateVaultsCollaboratorDto,
   ): Promise<ApiResponseModel<VaultsCollaborator>> {
+    if (!isMissing(updateVaultDto?.user)) {
+      const userId = await this.usersService.findOrCreateUserByEmail({
+        email: updateVaultDto?.user,
+      });
+      updateVaultDto = {
+        ...updateVaultDto,
+        user: userId,
+      };
+    }
+
     //Actual user update
     const updated = await this.vaultsCollaboratorsRepository.update(id, updateVaultDto);
     if (!updated?.affected) {
@@ -107,20 +126,10 @@ export class VaultsCollaboratorsService {
   }
 
   async removeVaultsCollaborator(id: string): Promise<ApiResponseModel<VaultsCollaborator>> {
-    const deleted = await this.vaultsCollaboratorsRepository.update(id, {
-      isDeleted: true,
-      isEnabled: false,
-    });
-    if (!deleted?.affected) {
-      throw new BadRequestException(`Not deleted`);
-    }
-    //Get deleted user
-    const data = await this.vaultsCollaboratorsRepository.findOneBy({
-      id,
-    });
+    const deleted = await this.vaultsCollaboratorsRepository.delete(id);
+
+    if (!deleted?.affected) throw new BadRequestException(`Not deleted`);
     return {
-      data,
-      metadata: { params: { id } },
       message: 'Vaults Collaborator deleted successfully',
     };
   }

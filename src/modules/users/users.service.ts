@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { generateSecretKey } from '../../core/helpers/security';
 import { getPagination } from '../../core/helpers/serializers';
 import { isMissing } from '../../core/helpers/validations';
 import { OrderEnum } from '../../core/shared/enums';
@@ -144,5 +145,13 @@ export class UsersService {
       Logger.error(`Error in user operation: ${error.message}`);
       return null;
     }
+  }
+
+  async findOrCreateUserByEmail(createUserData: Partial<CreateUserDto>): Promise<string> {
+    let user = await this.usersRepository.findOneBy(createUserData);
+    if (!user) {
+      user = await this.usersRepository.save({ ...createUserData, secretKey: generateSecretKey() });
+    }
+    return user?.id;
   }
 }

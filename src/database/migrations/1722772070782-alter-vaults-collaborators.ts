@@ -15,5 +15,5 @@ export class AlterVaultsCollaborators1722772070782 implements MigrationInterface
     }
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {}
+  public async down(): Promise<void> {}
 }

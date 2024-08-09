@@ -1095,483 +1095,42 @@
         "operationId": "findAllVaultsCollaborators",
         "parameters": [
           {
-            "description": "Id is the unique uuid identifier",
-            "example": "e762634c-3e41-11eb-b897-0862660ccbd4",
-            "required": false,
-            "name": "id",
-            "in": "query",
-            "schema": {
-              "uniqueItems": true,
-              "nullable": false,
-              "default": "uuid",
-              "type": "string"
-            }
-          },
-          {
-            "description": "first name of the user",
-            "required": false,
-            "name": "firstName",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "last name of the user",
-            "required": false,
-            "name": "lastName",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "organization name of the user",
-            "required": false,
-            "name": "organizationName",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "position in organization of the user",
-            "example": "Sr. Manager",
-            "required": false,
-            "name": "organizationPosition",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "no of empoyees in organization of the user",
-            "required": false,
-            "name": "noOfEmployees",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Unique email of the user",
-            "required": false,
-            "name": "email",
-            "in": "query",
-            "schema": {
-              "uniqueItems": true,
-              "type": "string"
-            }
-          },
-          {
-            "description": "password of the user",
-            "required": false,
-            "name": "password",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "otp of the user",
-            "required": false,
-            "name": "otp",
-            "in": "query",
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "description": "secret key of the user",
-            "required": false,
-            "name": "secretKey",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "phone number of the user",
-            "required": false,
-            "name": "phoneNumber",
-            "in": "query",
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "description": "The date time of user's last login",
-            "required": false,
-            "name": "lastLogin",
-            "in": "query",
-            "schema": {
-              "format": "T",
-              "nullable": true,
-              "type": "string"
-            }
-          },
-          {
-            "description": "whether user logged in or not",
-            "required": false,
-            "name": "isLogin",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "description": "whether user is enabled or not",
-            "required": false,
-            "name": "isEnabled",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "description": "whether user is deleted or not",
-            "required": false,
-            "name": "isDeleted",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "description": "With record create it`ll be auto generated",
-            "required": false,
-            "name": "createdAt",
-            "in": "query",
-            "schema": {
-              "format": "T",
-              "nullable": false,
-              "type": "string"
-            }
-          },
-          {
-            "description": "With record update it`ll be auto generated",
-            "required": false,
-            "name": "updatedAt",
-            "in": "query",
-            "schema": {
-              "format": "T",
-              "nullable": true,
-              "type": "string"
-            }
-          },
-          {
-            "description": "role of the user",
-            "required": false,
-            "name": "role",
-            "in": "query",
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "description": "accounttype of the user",
-            "required": false,
-            "name": "accounttype",
-            "in": "query",
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "description": "Id is the unique uuid identifier",
-            "example": "e762634c-3e41-11eb-b897-0862660ccbd4",
-            "required": false,
-            "name": "id",
-            "in": "query",
-            "schema": {
-              "uniqueItems": true,
-              "nullable": false,
-              "default": "uuid",
-              "type": "string"
-            }
-          },
-          {
-            "description": "The name of the vault",
-            "required": false,
-            "name": "name",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "The caption of the vault",
-            "required": false,
-            "name": "caption",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "The small description about the vault",
-            "required": false,
-            "name": "description",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "The owner of the vault",
-            "required": false,
             "name": "user",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "The date time of vault's last access",
             "required": false,
-            "name": "lastAccess",
             "in": "query",
+            "description": "The collaborator of the vault",
             "schema": {
-              "format": "T",
-              "nullable": true,
-              "type": "string"
-            }
-          },
-          {
-            "description": "whether vault is enabled or not",
-            "required": false,
-            "name": "isEnabled",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "description": "whether vault is deleted or not",
-            "required": false,
-            "name": "isDeleted",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "description": "The datetime of record at creation",
-            "required": false,
-            "name": "createdAt",
-            "in": "query",
-            "schema": {
-              "format": "T",
               "nullable": false,
               "type": "string"
             }
           },
           {
-            "description": "The datetime of record at updation",
+            "name": "vault",
             "required": false,
-            "name": "updatedAt",
             "in": "query",
+            "description": "The shared vault",
             "schema": {
-              "format": "T",
-              "nullable": true,
+              "nullable": false,
               "type": "string"
             }
           },
           {
-            "name": "access",
+            "name": "role",
             "required": false,
             "in": "query",
             "description": "The access of the vault",
             "schema": {
-              "enum": [
-                "super_admin",
-                "admin",
-                "collaborator"
-              ],
-              "type": "string"
-            }
-          },
-          {
-            "description": "Id is the unique uuid identifier",
-            "example": "e762634c-3e41-11eb-b897-0862660ccbd4",
-            "required": false,
-            "name": "id",
-            "in": "query",
-            "schema": {
-              "uniqueItems": true,
-              "nullable": false,
-              "default": "uuid",
-              "type": "string"
-            }
-          },
-          {
-            "description": "first name of the user",
-            "required": false,
-            "name": "firstName",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "last name of the user",
-            "required": false,
-            "name": "lastName",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "organization name of the user",
-            "required": false,
-            "name": "organizationName",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "position in organization of the user",
-            "example": "Sr. Manager",
-            "required": false,
-            "name": "organizationPosition",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "no of empoyees in organization of the user",
-            "required": false,
-            "name": "noOfEmployees",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Unique email of the user",
-            "required": false,
-            "name": "email",
-            "in": "query",
-            "schema": {
-              "uniqueItems": true,
-              "type": "string"
-            }
-          },
-          {
-            "description": "password of the user",
-            "required": false,
-            "name": "password",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "otp of the user",
-            "required": false,
-            "name": "otp",
-            "in": "query",
-            "schema": {
               "type": "number"
             }
           },
           {
-            "description": "secret key of the user",
+            "name": "addedBy",
             "required": false,
-            "name": "secretKey",
             "in": "query",
+            "description": "The user who given the access",
             "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "phone number of the user",
-            "required": false,
-            "name": "phoneNumber",
-            "in": "query",
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "description": "The date time of user's last login",
-            "required": false,
-            "name": "lastLogin",
-            "in": "query",
-            "schema": {
-              "format": "T",
-              "nullable": true,
-              "type": "string"
-            }
-          },
-          {
-            "description": "whether user logged in or not",
-            "required": false,
-            "name": "isLogin",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "description": "whether user is enabled or not",
-            "required": false,
-            "name": "isEnabled",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "description": "whether user is deleted or not",
-            "required": false,
-            "name": "isDeleted",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "description": "With record create it`ll be auto generated",
-            "required": false,
-            "name": "createdAt",
-            "in": "query",
-            "schema": {
-              "format": "T",
               "nullable": false,
               "type": "string"
-            }
-          },
-          {
-            "description": "With record update it`ll be auto generated",
-            "required": false,
-            "name": "updatedAt",
-            "in": "query",
-            "schema": {
-              "format": "T",
-              "nullable": true,
-              "type": "string"
-            }
-          },
-          {
-            "description": "role of the user",
-            "required": false,
-            "name": "role",
-            "in": "query",
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "description": "accounttype of the user",
-            "required": false,
-            "name": "accounttype",
-            "in": "query",
-            "schema": {
-              "type": "number"
             }
           },
           {
@@ -2288,6 +1847,10 @@
             "type": "string",
             "description": "password of the user"
           },
+          "phoneNumber": {
+            "type": "number",
+            "description": "phone number of the user"
+          },
           "role": {
             "type": "number",
             "description": "role of the user"
@@ -2300,15 +1863,10 @@
             "type": "string",
             "description": "Unique email of the user",
             "uniqueItems": true
-          },
-          "phoneNumber": {
-            "type": "number",
-            "description": "phone number of the user"
           }
         },
         "required": [
-          "email",
-          "phoneNumber"
+          "email"
         ]
       },
       "User": {
@@ -2639,25 +2197,19 @@
       "CreateVaultsCollaboratorDto": {
         "type": "object",
         "properties": {
+          "role": {
+            "type": "number",
+            "description": "The access of the vault"
+          },
           "user": {
             "type": "string",
-            "description": "The collaborator of the vault",
+            "description": "The collaborator`s email id of the vault",
             "nullable": false
           },
           "vault": {
             "type": "string",
             "description": "The shared vault",
             "nullable": false
-          },
-          "access": {
-            "type": "string",
-            "description": "The access of the vault",
-            "nullable": false,
-            "enum": [
-              "super_admin",
-              "admin",
-              "collaborator"
-            ]
           },
           "addedBy": {
             "type": "string",
@@ -2668,7 +2220,6 @@
         "required": [
           "user",
           "vault",
-          "access",
           "addedBy"
         ]
       },
@@ -2684,40 +2235,23 @@
             "uniqueItems": true
           },
           "user": {
+            "type": "string",
             "description": "The collaborator of the vault",
-            "nullable": false,
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/User"
-              }
-            ]
+            "nullable": false
           },
           "vault": {
-            "description": "The shared vault",
-            "nullable": false,
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Vault"
-              }
-            ]
-          },
-          "access": {
             "type": "string",
-            "description": "The access of the vault",
-            "enum": [
-              "super_admin",
-              "admin",
-              "collaborator"
-            ]
+            "description": "The shared vault",
+            "nullable": false
+          },
+          "role": {
+            "type": "number",
+            "description": "The access of the vault"
           },
           "addedBy": {
+            "type": "string",
             "description": "The user who given the access",
-            "nullable": false,
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/User"
-              }
-            ]
+            "nullable": false
           },
           "isEnabled": {
             "type": "boolean",
@@ -2740,6 +2274,14 @@
       "UpdateVaultsCollaboratorDto": {
         "type": "object",
         "properties": {
+          "role": {
+            "type": "number",
+            "description": "The access of the vault"
+          },
+          "isEnabled": {
+            "type": "boolean",
+            "description": "whether collaborator is enabled or not"
+          },
           "user": {
             "type": "string",
             "description": "The collaborator of the vault",
@@ -2750,16 +2292,6 @@
             "description": "The shared vault",
             "nullable": false
           },
-          "access": {
-            "type": "string",
-            "description": "The access of the vault",
-            "nullable": false,
-            "enum": [
-              "super_admin",
-              "admin",
-              "collaborator"
-            ]
-          },
           "addedBy": {
             "type": "string",
             "description": "The user who given the access",
@@ -2769,7 +2301,6 @@
         "required": [
           "user",
           "vault",
-          "access",
           "addedBy"
         ]
       },

@@ -44,7 +44,7 @@ export class CreateVaults1721486255876 implements MigrationInterface {
               isNullable: false,
             },
             {
-              name: 'lastAccess',
+              name: 'lastAccessed',
               type: 'datetime',
               isNullable: true,
             },

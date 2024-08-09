@@ -11,6 +11,8 @@ export class BodyParserPipe implements PipeTransform {
       secretKey: generateSecretKey(),
     };
 
+    // if(!validateEmail(value?.email)) throw new BadRequestException(`Email should be valid`)
+
     return updateValue;
   }
 }
