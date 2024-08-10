@@ -1,4 +1,4 @@
-import { ApiPropertyOptional, ApiTags } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional, ApiTags } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsBoolean, IsDateString, IsOptional, IsString } from 'class-validator';
 import {
@@ -10,10 +10,11 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
+import { Vault } from '../../vaults/entities/vault.entity';
 
-@ApiTags('Vault')
-@Entity('vaults')
-export class Vault {
+@ApiTags('Provider')
+@Entity('providers')
+export class Provider {
   @ApiPropertyOptional({
     description: 'Id is the unique uuid identifier',
     example: 'e762634c-3e41-11eb-b897-0862660ccbd4',
@@ -34,8 +35,19 @@ export class Vault {
   id?: string;
 
   @ApiPropertyOptional({
-    description: 'The name of the vault',
-    required: true,
+    description: 'The vault where provider belongs to.',
+    required: false,
+    nullable: false,
+  })
+  @ManyToOne(() => Vault)
+  @Column({ name: 'vaultId', nullable: false })
+  @IsString()
+  @IsOptional()
+  vault?: string;
+
+  @ApiPropertyOptional({
+    description: 'The name of the provider',
+    required: false,
   })
   @Column({
     length: 100,
@@ -46,29 +58,15 @@ export class Vault {
   @IsOptional()
   name?: string;
 
-  @ApiPropertyOptional({
-    description: 'The caption of the vault',
-    required: false,
-  })
-  @Column({
-    length: 100,
-    type: 'varchar',
-    nullable: true,
-  })
-  @IsString({
-    message: 'caption must be a string',
-  })
-  @IsOptional()
-  caption?: string;
-
-  @ApiPropertyOptional({
-    description: 'The small description about the vault',
+  @ApiProperty({
+    description: 'The description of the provider',
     required: false,
   })
   @Column({
     length: 255,
     type: 'varchar',
     nullable: true,
+    default: null,
   })
   @IsString({
     message: 'description must be a string',
@@ -77,19 +75,7 @@ export class Vault {
   description?: string;
 
   @ApiPropertyOptional({
-    description: 'The owner of the vault',
-    required: true,
-  })
-  @ManyToOne(() => User)
-  @Column({ name: 'userId', nullable: false })
-  @IsString({
-    message: 'user id must be a string',
-  })
-  @IsOptional()
-  user?: string;
-
-  @ApiPropertyOptional({
-    description: "The date time of vault's last access",
+    description: "The date time of provider's last access",
     required: false,
     name: 'lastAccess',
     nullable: true,
@@ -99,25 +85,36 @@ export class Vault {
     strict: true,
     strictSeparator: true,
   })
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'datetime', default: null, nullable: true })
   @IsOptional()
   lastAccessed?: Date;
 
   @ApiPropertyOptional({
-    description: 'whether vault is enabled or not',
-    required: true,
+    description: 'The user who added the provider',
+    required: false,
+    nullable: false,
   })
-  @Column({ type: 'tinyint', default: '1' })
+  @ManyToOne(() => User)
+  @Column({ name: 'addedById', nullable: false })
+  @IsString()
+  @IsOptional()
+  addedBy?: string;
+
+  @ApiPropertyOptional({
+    description: 'whether provider is enabled or not',
+    required: false,
+  })
+  @Column({ type: 'tinyint', default: '1', nullable: false })
   @Type(() => Boolean)
   @IsBoolean()
   @IsOptional()
   isEnabled?: boolean;
 
   @ApiPropertyOptional({
-    description: 'whether vault is deleted or not',
+    description: 'whether provider is deleted or not',
     required: true,
   })
-  @Column({ type: 'tinyint', default: '0' })
+  @Column({ type: 'tinyint', default: '0', nullable: false })
   @Type(() => Boolean)
   @IsBoolean()
   @IsOptional()
