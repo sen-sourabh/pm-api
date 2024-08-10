@@ -1,5 +1,5 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
-import { IsEmail, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 import { User } from '../entities/user.entity';
 
 export class CreateUserDto extends PickType(User, [
@@ -19,6 +19,7 @@ export class CreateUserDto extends PickType(User, [
     uniqueItems: true,
   })
   @IsString({ message: 'email must be a string' })
+  @IsNotEmpty()
   @IsEmail({}, { message: 'Invalid email format' })
   email: string;
 }

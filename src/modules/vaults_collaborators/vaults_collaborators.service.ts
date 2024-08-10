@@ -30,6 +30,7 @@ export class VaultsCollaboratorsService {
     createVaultData: CreateVaultsCollaboratorDto,
   ): Promise<ApiResponseModel<VaultsCollaborator>> {
     try {
+      //Email exist or not
       const userId = await this.usersService.findOrCreateUserByEmail({
         email: createVaultData?.user,
       });
@@ -45,6 +46,10 @@ export class VaultsCollaboratorsService {
         message: 'Vaults Collaborator created successfully',
       };
     } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+
       Logger.error(`Error in create vaults collaborator: ${error.message}`);
       throw new InternalServerErrorException(
         `Error in create vaults collaborator: ${error.message}`,
@@ -96,6 +101,7 @@ export class VaultsCollaboratorsService {
     id: string,
     updateVaultDto: UpdateVaultsCollaboratorDto,
   ): Promise<ApiResponseModel<VaultsCollaborator>> {
+    //Email exist or not
     if (!isMissing(updateVaultDto?.user)) {
       const userId = await this.usersService.findOrCreateUserByEmail({
         email: updateVaultDto?.user,
@@ -132,5 +138,20 @@ export class VaultsCollaboratorsService {
     return {
       message: 'Vaults Collaborator deleted successfully',
     };
+  }
+
+  async findCollaboratorByValue(query: Record<string, unknown>): Promise<boolean> {
+    try {
+      const data = await this.vaultsCollaboratorsRepository.findOne({
+        where: { ...query },
+      });
+      if (isMissing(data)) {
+        return false;
+      }
+      return true;
+    } catch (error) {
+      Logger.error(`Error in vaults collaborator operation: ${error.message}`);
+      return false;
+    }
   }
 }

@@ -4,6 +4,7 @@ import {
   IsBoolean,
   IsDateString,
   IsEmail,
+  IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
@@ -125,6 +126,7 @@ export class User {
   })
   @IsString({ message: 'email must be a string' })
   @IsEmail({}, { message: 'Invalid email format' })
+  @IsNotEmpty()
   @IsOptional()
   email?: string;
 

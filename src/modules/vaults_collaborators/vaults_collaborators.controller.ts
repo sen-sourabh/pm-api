@@ -23,6 +23,7 @@ import { CreateVaultsCollaboratorDto } from './dtos/create-vaults-collaborator.e
 import { ListQueryVaultsCollaboratorDto } from './dtos/list-vaults-collaborator.entity';
 import { UpdateVaultsCollaboratorDto } from './dtos/update-vaults-collaborator.entity';
 import { VaultsCollaborator } from './entities/vaults_collaborator.entity';
+import { ValidateVaultsCollaboratorPipe } from './pipes/validate-collaborator.pipe';
 import { VaultsCollaboratorsService } from './vaults_collaborators.service';
 
 @ApiTags('Vaults Collaborators')
@@ -90,7 +91,11 @@ export class VaultsCollaboratorsController {
     ApiXResponsesEnum.Conflict,
     ApiXResponsesEnum.NotFound,
   )
-  @UsePipes(new ValidationPipe({ whitelist: true }), new PathParamsPipe())
+  @UsePipes(
+    new ValidationPipe({ whitelist: true }),
+    new PathParamsPipe(),
+    ValidateVaultsCollaboratorPipe,
+  )
   @HttpCode(200)
   @Patch(':id')
   updateVaultsCollaborator(
@@ -113,7 +118,7 @@ export class VaultsCollaboratorsController {
     ApiXResponsesEnum.BadRequest,
     ApiXResponsesEnum.NotFound,
   )
-  @UsePipes(new PathParamsPipe())
+  @UsePipes(new PathParamsPipe(), ValidateVaultsCollaboratorPipe)
   @HttpCode(200)
   @Delete(':id')
   removeVaultsCollaborator(@Param('id') id: string) {
