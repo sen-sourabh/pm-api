@@ -1,7 +1,5 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsEmail, IsNumber, IsString } from 'class-validator';
-import { Column } from 'typeorm';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 import { User } from '../entities/user.entity';
 
 export class CreateUserDto extends PickType(User, [
@@ -10,6 +8,7 @@ export class CreateUserDto extends PickType(User, [
   'organizationName',
   'organizationPosition',
   'noOfEmployees',
+  'phoneNumber',
   'password',
   'role',
   'accounttype',
@@ -19,21 +18,8 @@ export class CreateUserDto extends PickType(User, [
     required: true,
     uniqueItems: true,
   })
-  @Column({
-    length: 150,
-    type: 'varchar',
-    unique: true,
-  })
   @IsString({ message: 'email must be a string' })
+  @IsNotEmpty()
   @IsEmail({}, { message: 'Invalid email format' })
   email: string;
-
-  @ApiProperty({
-    description: 'phone number of the user',
-    required: true,
-  })
-  @Column({ type: 'bigint' })
-  @Type(() => Number)
-  @IsNumber()
-  phoneNumber: number;
 }

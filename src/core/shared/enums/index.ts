@@ -18,3 +18,14 @@ export enum ApiXResponsesEnum {
   NotFound = 'not_found',
   Conflict = 'conflict',
 }
+
+export enum RolesEnum {
+  SuperAdmin = 'super_admin',
+  Admin = 'admin',
+  Collaborator = 'collaborator',
+}
+
+export enum VaultAccessEnum {
+  Admin = 'admin',
+  Collaborator = 'collaborator',
+}

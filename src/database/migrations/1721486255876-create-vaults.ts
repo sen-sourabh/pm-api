@@ -44,7 +44,7 @@ export class CreateVaults1721486255876 implements MigrationInterface {
               isNullable: false,
             },
             {
-              name: 'lastAccess',
+              name: 'lastAccessed',
               type: 'datetime',
               isNullable: true,
             },
@@ -70,6 +70,16 @@ export class CreateVaults1721486255876 implements MigrationInterface {
               default: 'CURRENT_TIMESTAMP',
               onUpdate: 'CURRENT_TIMESTAMP',
               isNullable: false,
+            },
+          ],
+          foreignKeys: [
+            // Foreign key for role association
+            {
+              name: 'FK_vaults_users',
+              columnNames: ['userId'],
+              referencedTableName: 'users',
+              referencedColumnNames: ['id'],
+              onDelete: 'CASCADE', // Optional: Set deletion behavior (e.g., CASCADE, SET NULL)
             },
           ],
         }),

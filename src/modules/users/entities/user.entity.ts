@@ -4,6 +4,7 @@ import {
   IsBoolean,
   IsDateString,
   IsEmail,
+  IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
@@ -50,6 +51,7 @@ export class User {
     length: 100,
     type: 'varchar',
     nullable: true,
+    default: null,
   })
   @IsString()
   @IsOptional()
@@ -63,6 +65,7 @@ export class User {
     length: 100,
     type: 'varchar',
     nullable: true,
+    default: null,
   })
   @IsString()
   @IsOptional()
@@ -76,6 +79,7 @@ export class User {
     length: 255,
     type: 'varchar',
     nullable: true,
+    default: null,
   })
   @IsString()
   @IsOptional()
@@ -90,6 +94,7 @@ export class User {
     length: 150,
     type: 'varchar',
     nullable: true,
+    default: null,
   })
   @IsString()
   @IsOptional()
@@ -103,6 +108,7 @@ export class User {
     length: 15,
     type: 'varchar',
     nullable: true,
+    default: null,
   })
   @IsString()
   @IsOptional()
@@ -120,6 +126,7 @@ export class User {
   })
   @IsString({ message: 'email must be a string' })
   @IsEmail({}, { message: 'Invalid email format' })
+  @IsNotEmpty()
   @IsOptional()
   email?: string;
 
@@ -127,7 +134,7 @@ export class User {
     description: 'password of the user',
     required: false,
   })
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ type: 'varchar', nullable: true, default: null })
   @IsString({
     message: 'password must be a string',
   })
@@ -139,7 +146,7 @@ export class User {
     description: 'otp of the user',
     required: false,
   })
-  @Column({ type: 'int', nullable: true })
+  @Column({ type: 'int', nullable: true, default: null })
   @Type(() => Number)
   @IsNumber()
   @IsOptional()
@@ -162,7 +169,7 @@ export class User {
     description: 'phone number of the user',
     required: true,
   })
-  @Column({ type: 'bigint' })
+  @Column({ type: 'bigint', nullable: true, default: null })
   @Type(() => Number)
   @IsNumber()
   @IsOptional()
@@ -179,7 +186,7 @@ export class User {
     strict: true,
     strictSeparator: true,
   })
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'datetime', nullable: true, default: null })
   @IsOptional()
   lastLogin?: Date;
 
@@ -187,7 +194,7 @@ export class User {
     description: 'whether user logged in or not',
     required: true,
   })
-  @Column({ type: 'tinyint', default: '0' })
+  @Column({ type: 'tinyint', default: '0', nullable: false })
   @Type(() => Boolean)
   @IsBoolean()
   @IsOptional()
@@ -197,7 +204,7 @@ export class User {
     description: 'whether user is enabled or not',
     required: true,
   })
-  @Column({ type: 'tinyint', default: '1' })
+  @Column({ type: 'tinyint', default: '1', nullable: false })
   @Type(() => Boolean)
   @IsBoolean()
   @IsOptional()
@@ -207,7 +214,7 @@ export class User {
     description: 'whether user is deleted or not',
     required: true,
   })
-  @Column({ type: 'tinyint', default: '0' })
+  @Column({ type: 'tinyint', default: '0', nullable: false })
   @Type(() => Boolean)
   @IsBoolean()
   @IsOptional()
@@ -248,7 +255,7 @@ export class User {
     required: true,
   })
   @ManyToOne(() => Role)
-  @Column({ name: 'roleId', type: 'int' })
+  @Column({ name: 'roleId', type: 'int', default: 2, nullable: false }) // Default: admin
   @Type(() => Number)
   role: number;
 
@@ -257,7 +264,7 @@ export class User {
     required: true,
   })
   @ManyToOne(() => Accounttype)
-  @Column({ name: 'accounttypeId', type: 'int' })
+  @Column({ name: 'accounttypeId', type: 'int', default: 2, nullable: false }) // Default: individual
   @Type(() => Number)
   accounttype: number;
 }

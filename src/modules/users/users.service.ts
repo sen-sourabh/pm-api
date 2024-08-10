@@ -7,8 +7,9 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { generateSecretKey } from '../../core/helpers/security';
 import { getPagination } from '../../core/helpers/serializers';
-import { isMissing } from '../../core/helpers/validations';
+import { isMissing, validateEmail } from '../../core/helpers/validations';
 import { OrderEnum } from '../../core/shared/enums';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
 import { ApiQueryParamUnifiedModel } from '../../core/shared/models/api-query.model';
@@ -144,5 +145,17 @@ export class UsersService {
       Logger.error(`Error in user operation: ${error.message}`);
       return null;
     }
+  }
+
+  async findOrCreateUserByEmail(createUserData: Partial<CreateUserDto>): Promise<string> {
+    //Validate Email
+    if (!validateEmail(createUserData?.email)) throw new BadRequestException(`Email is invalid`);
+
+    //Find/Create one user
+    let user = await this.usersRepository.findOneBy(createUserData);
+    if (!user) {
+      user = await this.usersRepository.save({ ...createUserData, secretKey: generateSecretKey() });
+    }
+    return user?.id;
   }
 }

@@ -27,6 +27,8 @@ import { UsersController } from './modules/users/users.controller';
 import { UsersModule } from './modules/users/users.module';
 import { VaultsController } from './modules/vaults/vaults.controller';
 import { VaultsModule } from './modules/vaults/vaults.module';
+import { VaultsCollaboratorsController } from './modules/vaults_collaborators/vaults_collaborators.controller';
+import { VaultsCollaboratorsModule } from './modules/vaults_collaborators/vaults_collaborators.module';
 
 @Module({
   imports: [
@@ -47,6 +49,7 @@ import { VaultsModule } from './modules/vaults/vaults.module';
     ActivityLogsModule,
     VaultsModule,
     FilesModule,
+    VaultsCollaboratorsModule,
     AttachmentsModule,
   ],
   controllers: [AppController],
@@ -77,6 +80,7 @@ export class AppModule {
         RolesController,
         UsersController,
         VaultsController,
+        VaultsCollaboratorsController,
         AttachmentsController,
       );
   }
