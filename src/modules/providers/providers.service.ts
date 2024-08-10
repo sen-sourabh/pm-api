@@ -81,12 +81,12 @@ export class ProvidersService {
     id: string,
     updateProviderDto: UpdateProviderDto,
   ): Promise<ApiResponseModel<Provider>> {
-    //Actual user update
+    //Actual provider update
     const updated = await this.providersRepository.update(id, updateProviderDto);
     if (!updated?.affected) {
       throw new BadRequestException(`Not updated`);
     }
-    //Get updated user
+    //Get updated provider
     const data = await this.providersRepository.findOneBy({
       id,
     });
@@ -108,7 +108,7 @@ export class ProvidersService {
     if (!deleted?.affected) {
       throw new BadRequestException(`Not deleted`);
     }
-    //Get deleted user
+    //Get deleted provider
     const data = await this.providersRepository.findOneBy({
       id,
     });

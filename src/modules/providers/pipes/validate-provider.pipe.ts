@@ -6,7 +6,7 @@ export class ValidateProviderPipe implements PipeTransform {
   constructor(private readonly providersService: ProvidersService) {}
 
   async transform(value: any, metadata: ArgumentMetadata) {
-    //Collaborator record exist or not
+    //Provider record exist or not
     if (metadata?.type === 'param') {
       const isExist = await this.providersService.findProviderByValue({ id: value });
       if (!isExist) throw new NotFoundException(`Record not found with id: ${value}`);
