@@ -12,6 +12,6 @@ export class ValidateVaultsCollaboratorPipe implements PipeTransform {
       if (!isExist) throw new NotFoundException(`Record not found with id: ${value}`);
     }
 
-    return true;
+    return value;
   }
 }

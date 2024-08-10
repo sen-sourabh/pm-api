@@ -45,7 +45,7 @@ export class ProvidersService {
 
       const data = await this.providersRepository.find({
         where: query,
-        relations: relations && ['vault', 'user'],
+        relations: relations && ['vault', 'addedBy'],
         skip,
         take,
         order: { updatedAt: OrderEnum.DESC },
@@ -69,7 +69,7 @@ export class ProvidersService {
 
     const data = await this.providersRepository.findOne({
       where: { id },
-      relations: relations && ['vault', 'user'],
+      relations: relations && ['vault', 'addedBy'],
     });
     if (isMissing(data)) {
       throw new NotFoundException(`Record not found with id: ${id}`);
@@ -105,6 +105,7 @@ export class ProvidersService {
       isDeleted: true,
       isEnabled: false,
     });
+
     if (!deleted?.affected) {
       throw new BadRequestException(`Not deleted`);
     }
@@ -112,6 +113,7 @@ export class ProvidersService {
     const data = await this.providersRepository.findOneBy({
       id,
     });
+
     return {
       data,
       metadata: { params: { id } },

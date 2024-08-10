@@ -40,6 +40,7 @@ export class ProvidersController {
     ApiXResponsesEnum.BadRequest,
     ApiXResponsesEnum.Conflict,
   )
+  @UsePipes(ValidateProviderPipe)
   @HttpCode(201)
   @Post()
   createProvider(
