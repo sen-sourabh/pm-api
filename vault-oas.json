@@ -1569,6 +1569,280 @@
         ]
       }
     },
+    "/api/v1/providers": {
+      "post": {
+        "operationId": "createProvider",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProviderDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Provider"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        },
+        "tags": [
+          "Providers"
+        ]
+      },
+      "get": {
+        "operationId": "findAllProviders",
+        "parameters": [
+          {
+            "name": "vault",
+            "required": false,
+            "in": "query",
+            "description": "The vault where provider belongs to.",
+            "schema": {
+              "nullable": false,
+              "type": "string"
+            }
+          },
+          {
+            "name": "name",
+            "required": false,
+            "in": "query",
+            "description": "The name of the provider",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "isEnabled",
+            "required": false,
+            "in": "query",
+            "description": "whether provider is enabled or not",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "isDeleted",
+            "required": false,
+            "in": "query",
+            "description": "whether provider is deleted or not",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "pageNumber",
+            "required": false,
+            "in": "query",
+            "description": "Page number",
+            "example": 1,
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "description": "No of records will be fetched in single request",
+            "example": 25,
+            "schema": {
+              "default": 25,
+              "type": "number"
+            }
+          },
+          {
+            "name": "relation",
+            "required": false,
+            "in": "query",
+            "description": "To fetch the entities with their relation`s data",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "returns list of providers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Provider"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [
+          "Providers"
+        ]
+      }
+    },
+    "/api/v1/providers/{id}": {
+      "get": {
+        "operationId": "findOneProvider",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "relation",
+            "required": false,
+            "in": "query",
+            "description": "To fetch the entities with their relation`s data",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "return provider as per the identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Provider"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "tags": [
+          "Providers"
+        ]
+      },
+      "patch": {
+        "operationId": "updateProvider",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProviderDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "return update provider as per the identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Provider"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        },
+        "tags": [
+          "Providers"
+        ]
+      },
+      "delete": {
+        "operationId": "removeProvider",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "return deleted provider as per the identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Provider"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "tags": [
+          "Providers"
+        ]
+      }
+    },
     "/api/v1/vault": {
       "get": {
         "operationId": "isServerRunning",
@@ -2427,6 +2701,128 @@
           "category",
           "vault"
         ]
+      },
+      "CreateProviderDto": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "The description of the provider"
+          },
+          "vault": {
+            "type": "string",
+            "description": "The vault where provider belongs to.",
+            "nullable": false
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the provider"
+          },
+          "addedBy": {
+            "type": "string",
+            "description": "The user who added the provider",
+            "nullable": false
+          }
+        },
+        "required": [
+          "vault",
+          "name",
+          "addedBy"
+        ]
+      },
+      "Provider": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id is the unique uuid identifier",
+            "example": "e762634c-3e41-11eb-b897-0862660ccbd4",
+            "default": "uuid",
+            "nullable": false,
+            "uniqueItems": true
+          },
+          "vault": {
+            "type": "string",
+            "description": "The vault where provider belongs to.",
+            "nullable": false
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the provider"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the provider"
+          },
+          "lastAccess": {
+            "format": "T",
+            "type": "string",
+            "description": "The date time of provider's last access",
+            "nullable": true
+          },
+          "addedBy": {
+            "type": "string",
+            "description": "The user who added the provider",
+            "nullable": false
+          },
+          "isEnabled": {
+            "type": "boolean",
+            "description": "whether provider is enabled or not"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "description": "whether provider is deleted or not"
+          },
+          "createdAt": {
+            "format": "T",
+            "type": "string",
+            "description": "The datetime of record at creation",
+            "nullable": false
+          },
+          "updatedAt": {
+            "format": "T",
+            "type": "string",
+            "description": "The datetime of record at updation",
+            "nullable": true
+          }
+        }
+      },
+      "UpdateProviderDto": {
+        "type": "object",
+        "properties": {
+          "vault": {
+            "type": "string",
+            "description": "The vault where provider belongs to.",
+            "nullable": false
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the provider"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the provider"
+          },
+          "lastAccess": {
+            "format": "T",
+            "type": "string",
+            "description": "The date time of provider's last access",
+            "nullable": true
+          },
+          "addedBy": {
+            "type": "string",
+            "description": "The user who added the provider",
+            "nullable": false
+          },
+          "isEnabled": {
+            "type": "boolean",
+            "description": "whether provider is enabled or not"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "description": "whether provider is deleted or not"
+          }
+        }
       }
     }
   }

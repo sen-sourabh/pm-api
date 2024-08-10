@@ -21,6 +21,8 @@ import { AccounttypesModule } from './modules/accounttypes/accounttypes.module';
 import { AttachmentsController } from './modules/attachments/attachments.controller';
 import { AttachmentsModule } from './modules/attachments/attachments.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { ProvidersController } from './modules/providers/providers.controller';
+import { ProvidersModule } from './modules/providers/providers.module';
 import { RolesController } from './modules/roles/roles.controller';
 import { RolesModule } from './modules/roles/roles.module';
 import { UsersController } from './modules/users/users.controller';
@@ -51,6 +53,7 @@ import { VaultsCollaboratorsModule } from './modules/vaults_collaborators/vaults
     FilesModule,
     VaultsCollaboratorsModule,
     AttachmentsModule,
+    ProvidersModule,
   ],
   controllers: [AppController],
   providers: [
@@ -81,6 +84,7 @@ export class AppModule {
         UsersController,
         VaultsController,
         VaultsCollaboratorsController,
+        ProvidersController,
         AttachmentsController,
       );
   }
