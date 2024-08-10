@@ -45,7 +45,7 @@ export class ProvidersService {
 
       const data = await this.providersRepository.find({
         where: query,
-        relations: relations && ['user'],
+        relations: relations && ['vault', 'user'],
         skip,
         take,
         order: { updatedAt: OrderEnum.DESC },
@@ -69,7 +69,7 @@ export class ProvidersService {
 
     const data = await this.providersRepository.findOne({
       where: { id },
-      relations: relations && ['user'],
+      relations: relations && ['vault', 'user'],
     });
     if (isMissing(data)) {
       throw new NotFoundException(`Record not found with id: ${id}`);
