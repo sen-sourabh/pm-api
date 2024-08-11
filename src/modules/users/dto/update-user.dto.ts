@@ -10,7 +10,6 @@ export class UpdateUserDto extends PickType(User, [
   'otp',
   'password',
   'phoneNumber',
-  'role',
   'lastLogin',
   'isLogin',
   'isEnabled',

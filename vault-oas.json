@@ -2289,10 +2289,6 @@
           "isDeleted": {
             "type": "boolean",
             "description": "whether user is deleted or not"
-          },
-          "role": {
-            "type": "number",
-            "description": "role of the user"
           }
         }
       },

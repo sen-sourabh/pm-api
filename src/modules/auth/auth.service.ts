@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { getLocalDateTime } from '../../core/helpers/transformers';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
@@ -25,6 +26,13 @@ export class AuthService {
     const data = await this.usersService.findUser({ email, password });
 
     if (!data) throw new NotFoundException(`User not found`);
+
+    //Update login datetime
+    await this.usersService.updateUser(data?.id, {
+      lastLogin: getLocalDateTime(),
+      isLogin: true,
+    });
+
     return {
       data: {
         access_token: this.jwtService.sign({

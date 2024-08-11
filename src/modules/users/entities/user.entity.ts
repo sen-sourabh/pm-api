@@ -257,7 +257,8 @@ export class User {
   @ManyToOne(() => Role)
   @Column({ name: 'roleId', type: 'int', default: 2, nullable: false }) // Default: admin
   @Type(() => Number)
-  role: number;
+  @IsOptional()
+  role?: number;
 
   @ApiPropertyOptional({
     description: 'accounttype of the user',
@@ -266,5 +267,6 @@ export class User {
   @ManyToOne(() => Accounttype)
   @Column({ name: 'accounttypeId', type: 'int', default: 2, nullable: false }) // Default: individual
   @Type(() => Number)
-  accounttype: number;
+  @IsOptional()
+  accounttype?: number;
 }

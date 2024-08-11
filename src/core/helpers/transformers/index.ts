@@ -57,3 +57,9 @@ export const fetchHeaders = (request: any) => {
     password: userdata?.[1],
   } as LoginRequestDto;
 };
+
+export const getLocalDateTime = (): Date => {
+  const localDateTime = new Date(); // Get current local datetime
+  const utcDateTime = new Date(localDateTime.getTime() - localDateTime.getTimezoneOffset() * 60000); // Convert to UTC
+  return new Date(utcDateTime.toISOString());
+};
