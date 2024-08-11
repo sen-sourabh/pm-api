@@ -23,7 +23,6 @@ export class AuthMiddleware implements NestMiddleware {
       const isVerified = await this.jwtService.verifyAsync(token, {
         secret: jwtModuleOptions.secret,
       });
-      console.log('isVerified: ', isVerified);
     } catch (error) {
       //Logout user in DB
       await this.#userLogoutIfJwtExpired(token);

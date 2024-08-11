@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { getLocalDateTime } from '../../core/helpers/transformers';
-import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
-import { User } from '../users/entities/user.entity';
-import { UsersService } from '../users/users.service';
+import { User } from '../../../modules/users/entities/user.entity';
+import { UsersService } from '../../../modules/users/users.service';
+import { getLocalDateTime } from '../../helpers/transformers';
+import { ApiResponseModel } from '../../shared/interfaces/api-response.interface';
 import { LoginRequestDto } from './dtos/login.dto';
 import { LoginResponseModel } from './models';
 

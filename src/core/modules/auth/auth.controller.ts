@@ -1,8 +1,8 @@
 import { Body, Controller, HttpCode, Post } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ApiXResponses } from '../../core/shared/decorators/apply-filters/apply-filters.decorator';
-import { ApiXResponsesEnum } from '../../core/shared/enums';
-import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
+import { ApiXResponses } from '../../shared/decorators/apply-filters/apply-filters.decorator';
+import { ApiXResponsesEnum } from '../../shared/enums';
+import { ApiResponseModel } from '../../shared/interfaces/api-response.interface';
 import { AuthService } from './auth.service';
 import { LoginRequestDto } from './dtos/login.dto';
 import { LoginResponseModel } from './models';
