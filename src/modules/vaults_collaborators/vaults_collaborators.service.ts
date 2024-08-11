@@ -46,11 +46,10 @@ export class VaultsCollaboratorsService {
         message: 'Vaults Collaborator created successfully',
       };
     } catch (error) {
+      Logger.error(`Error in create vaults collaborator: ${error.message}`);
       if (error instanceof BadRequestException) {
         throw error;
       }
-
-      Logger.error(`Error in create vaults collaborator: ${error.message}`);
       throw new InternalServerErrorException(
         `Error in create vaults collaborator: ${error.message}`,
       );
