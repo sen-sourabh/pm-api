@@ -36,6 +36,12 @@ export class QueryParamsPipe implements PipeTransform {
         relation: value?.relation === 'true',
       };
     }
+    if (!isMissing(value?.isPrivate)) {
+      query = {
+        ...query,
+        isPrivate: value?.isPrivate === 'true',
+      };
+    }
 
     return {
       ...query,

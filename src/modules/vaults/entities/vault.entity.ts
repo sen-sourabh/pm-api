@@ -77,8 +77,18 @@ export class Vault {
   description?: string;
 
   @ApiPropertyOptional({
+    description: 'whether vault is private or not, Default vault will be private',
+    required: false,
+  })
+  @Column({ type: 'tinyint', default: '1' })
+  @Type(() => Boolean)
+  @IsBoolean()
+  @IsOptional()
+  isPrivate?: boolean;
+
+  @ApiPropertyOptional({
     description: 'The owner of the vault',
-    required: true,
+    required: false,
   })
   @ManyToOne(() => User)
   @Column({ name: 'userId', nullable: false })
@@ -105,7 +115,7 @@ export class Vault {
 
   @ApiPropertyOptional({
     description: 'whether vault is enabled or not',
-    required: true,
+    required: false,
   })
   @Column({ type: 'tinyint', default: '1' })
   @Type(() => Boolean)
@@ -115,7 +125,7 @@ export class Vault {
 
   @ApiPropertyOptional({
     description: 'whether vault is deleted or not',
-    required: true,
+    required: false,
   })
   @Column({ type: 'tinyint', default: '0' })
   @Type(() => Boolean)

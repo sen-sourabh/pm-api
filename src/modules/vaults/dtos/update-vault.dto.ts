@@ -5,6 +5,7 @@ export class UpdateVaultDto extends PickType(Vault, [
   'name',
   'caption',
   'description',
+  'isPrivate',
   'user',
   'lastAccessed',
   'isEnabled',

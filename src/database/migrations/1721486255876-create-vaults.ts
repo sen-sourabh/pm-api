@@ -39,6 +39,11 @@ export class CreateVaults1721486255876 implements MigrationInterface {
               isNullable: true,
             },
             {
+              name: 'isPrivate',
+              type: 'tinyint',
+              default: 1,
+            },
+            {
               name: 'userId',
               type: 'varchar',
               isNullable: false,
