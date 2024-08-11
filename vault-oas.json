@@ -795,6 +795,15 @@
             }
           },
           {
+            "name": "isPrivate",
+            "required": false,
+            "in": "query",
+            "description": "whether vault is private or not",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
             "name": "user",
             "required": false,
             "in": "query",
@@ -2360,6 +2369,10 @@
             "type": "string",
             "description": "The small description about the vault"
           },
+          "isPrivate": {
+            "type": "boolean",
+            "description": "whether vault is private or not"
+          },
           "name": {
             "type": "string",
             "description": "The name of the vault"
@@ -2396,6 +2409,10 @@
           "description": {
             "type": "string",
             "description": "The small description about the vault"
+          },
+          "isPrivate": {
+            "type": "boolean",
+            "description": "whether vault is private or not"
           },
           "user": {
             "type": "string",
@@ -2443,6 +2460,10 @@
           "description": {
             "type": "string",
             "description": "The small description about the vault"
+          },
+          "isPrivate": {
+            "type": "boolean",
+            "description": "whether vault is private or not"
           },
           "user": {
             "type": "string",

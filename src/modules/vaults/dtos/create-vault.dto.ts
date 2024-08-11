@@ -4,7 +4,7 @@ import { Column, ManyToOne } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Vault } from '../entities/vault.entity';
 
-export class CreateVaultDto extends PickType(Vault, ['caption', 'description']) {
+export class CreateVaultDto extends PickType(Vault, ['caption', 'description', 'isPrivate']) {
   @ApiProperty({
     description: 'The name of the vault',
     required: true,
