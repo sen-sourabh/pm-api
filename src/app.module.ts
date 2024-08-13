@@ -21,6 +21,7 @@ import { AccounttypesController } from './modules/accounttypes/accounttypes.cont
 import { AccounttypesModule } from './modules/accounttypes/accounttypes.module';
 import { AttachmentsController } from './modules/attachments/attachments.controller';
 import { AttachmentsModule } from './modules/attachments/attachments.module';
+import { CustomFieldsModule } from './modules/custom-fields/custom-fields.module';
 import { ProvidersController } from './modules/providers/providers.controller';
 import { ProvidersModule } from './modules/providers/providers.module';
 import { RolesController } from './modules/roles/roles.controller';
@@ -54,6 +55,7 @@ import { VaultsCollaboratorsModule } from './modules/vaults_collaborators/vaults
     VaultsCollaboratorsModule,
     AttachmentsModule,
     ProvidersModule,
+    CustomFieldsModule,
   ],
   controllers: [AppController],
   providers: [
