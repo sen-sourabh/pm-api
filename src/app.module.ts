@@ -10,6 +10,8 @@ import { DataSourcesOptions } from './configs/typeorm';
 import { ActivityLogsController } from './core/modules/activity-logs/activity-logs.controller';
 import { ActivityLogsModule } from './core/modules/activity-logs/activity-logs.module';
 import { AuthModule } from './core/modules/auth/auth.module';
+import { CustomFieldsController } from './core/modules/custom-fields/custom-fields.controller';
+import { CustomFieldsModule } from './core/modules/custom-fields/custom-fields.module';
 import { FilesModule } from './core/modules/files/files.module';
 import { MessengerModule } from './core/modules/messenger/messenger.module';
 import { WebhooksModule } from './core/modules/webhooks/webhooks.module';
@@ -21,7 +23,6 @@ import { AccounttypesController } from './modules/accounttypes/accounttypes.cont
 import { AccounttypesModule } from './modules/accounttypes/accounttypes.module';
 import { AttachmentsController } from './modules/attachments/attachments.controller';
 import { AttachmentsModule } from './modules/attachments/attachments.module';
-import { CustomFieldsModule } from './modules/custom-fields/custom-fields.module';
 import { ProvidersController } from './modules/providers/providers.controller';
 import { ProvidersModule } from './modules/providers/providers.module';
 import { RolesController } from './modules/roles/roles.controller';
@@ -88,6 +89,7 @@ export class AppModule {
         VaultsCollaboratorsController,
         ProvidersController,
         AttachmentsController,
+        CustomFieldsController,
       );
   }
 }

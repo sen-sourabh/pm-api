@@ -1,6 +1,6 @@
 import { ApiPropertyOptional, ApiTags } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsBoolean, IsDateString, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsDateString, IsEnum, IsOptional, IsString } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
@@ -9,7 +9,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from '../../users/entities/user.entity';
+import { User } from '../../../../modules/users/entities/user.entity';
+import { FieldTypeEnum } from '../enums';
 
 @ApiTags('Custom Fieds')
 @Entity('custom_fields')
@@ -34,24 +35,22 @@ export class CustomField {
   id?: string;
 
   @ApiPropertyOptional({
-    description: 'The name of the vault',
-    required: true,
+    description: 'The key of the field',
+    required: false,
   })
   @Column({
-    length: 100,
     type: 'varchar',
     nullable: false,
   })
-  @IsString({ message: 'name must be a string' })
+  @IsString({ message: 'key must be a string' })
   @IsOptional()
   key?: string;
 
   @ApiPropertyOptional({
-    description: 'The name of the vault',
-    required: true,
+    description: 'The name of the field',
+    required: false,
   })
   @Column({
-    length: 100,
     type: 'varchar',
     nullable: false,
   })
@@ -60,78 +59,83 @@ export class CustomField {
   name?: string;
 
   @ApiPropertyOptional({
-    description: 'The name of the vault',
-    required: true,
+    description: 'The type of the field',
+    required: false,
+    enum: FieldTypeEnum,
   })
   @Column({
-    length: 100,
-    type: 'varchar',
+    type: 'enum',
+    enum: FieldTypeEnum,
     nullable: false,
+    default: FieldTypeEnum.Text,
   })
-  @IsString({ message: 'name must be a string' })
+  @IsEnum(FieldTypeEnum)
   @IsOptional()
-  type?: string;
+  type?: FieldTypeEnum;
 
   @ApiPropertyOptional({
-    description: 'The name of the vault',
-    required: true,
+    description: 'The placeholder of the field',
+    required: false,
   })
   @Column({
     length: 100,
     type: 'varchar',
-    nullable: false,
+    nullable: true,
+    default: null,
   })
-  @IsString({ message: 'name must be a string' })
+  @IsString({ message: 'placeholder must be a string' })
   @IsOptional()
   placeholder?: string;
 
   @ApiPropertyOptional({
-    description: 'The name of the vault',
+    description: 'The helptext of the field',
     required: true,
   })
   @Column({
     length: 100,
     type: 'varchar',
-    nullable: false,
+    nullable: true,
+    default: null,
   })
-  @IsString({ message: 'name must be a string' })
+  @IsString({ message: 'helptext must be a string' })
   @IsOptional()
   helptext?: string;
 
   @ApiPropertyOptional({
-    description: 'The name of the vault',
-    required: true,
+    description: 'The example value of the field',
+    required: false,
   })
   @Column({
-    length: 100,
+    length: 255,
     type: 'varchar',
-    nullable: false,
+    nullable: true,
+    default: null,
   })
-  @IsString({ message: 'name must be a string' })
+  @IsString({ message: 'example must be a string' })
   @IsOptional()
   example?: string;
 
   @ApiPropertyOptional({
-    description: 'The name of the vault',
-    required: true,
+    description: 'The description of the field',
+    required: false,
   })
   @Column({
-    length: 100,
-    type: 'varchar',
-    nullable: false,
+    type: 'mediumtext',
+    nullable: true,
+    default: null,
   })
-  @IsString({ message: 'name must be a string' })
+  @IsString({ message: 'description must be a string' })
   @IsOptional()
   description?: string;
 
   @ApiPropertyOptional({
-    description: 'The owner of the vault',
+    description: 'The user who updated the field at last',
     required: false,
   })
   @ManyToOne(() => User)
   @Column({ name: 'updatedById', nullable: false })
   @IsString({
-    message: 'user id must be a string',
+    message: 'updatedBy must be a string and valid user id',
   })
   @IsOptional()
   updatedBy?: string;

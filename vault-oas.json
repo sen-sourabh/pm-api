@@ -1868,7 +1868,23 @@
         },
         "responses": {
           "201": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomField"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
           }
         },
         "tags": [
@@ -1877,10 +1893,113 @@
       },
       "get": {
         "operationId": "findAllCustomFields",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "key",
+            "required": false,
+            "in": "query",
+            "description": "The key of the field",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "name",
+            "required": false,
+            "in": "query",
+            "description": "The name of the field",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "required": false,
+            "in": "query",
+            "description": "The type of the field",
+            "schema": {
+              "enum": [
+                "text",
+                "email",
+                "number",
+                "date",
+                "boolean",
+                "file",
+                "textarea"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "isEnabled",
+            "required": false,
+            "in": "query",
+            "description": "whether custom field is enabled or not",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "isDeleted",
+            "required": false,
+            "in": "query",
+            "description": "whether custom field is deleted or not",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "pageNumber",
+            "required": false,
+            "in": "query",
+            "description": "Page number",
+            "example": 1,
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "description": "No of records will be fetched in single request",
+            "example": 25,
+            "schema": {
+              "default": 25,
+              "type": "number"
+            }
+          },
+          {
+            "name": "relation",
+            "required": false,
+            "in": "query",
+            "description": "To fetch the entities with their relation`s data",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "returns list of custom fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomField"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         },
         "tags": [
@@ -1899,11 +2018,37 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "relation",
+            "required": false,
+            "in": "query",
+            "description": "To fetch the entities with their relation`s data",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "return custom field as per the identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomField"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
           }
         },
         "tags": [
@@ -1934,7 +2079,26 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "return updated custom field as per the identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomField"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
           }
         },
         "tags": [
@@ -1955,7 +2119,23 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "return deleted custom field as per the identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomField"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
           }
         },
         "tags": [
@@ -2954,11 +3134,172 @@
       },
       "CreateCustomFieldDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "The type of the field",
+            "enum": [
+              "text",
+              "email",
+              "number",
+              "date",
+              "boolean",
+              "file",
+              "textarea"
+            ]
+          },
+          "placeholder": {
+            "type": "string",
+            "description": "The placeholder of the field"
+          },
+          "helptext": {
+            "type": "string",
+            "description": "The helptext of the field"
+          },
+          "example": {
+            "type": "string",
+            "description": "The example value of the field"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the field"
+          },
+          "updatedBy": {
+            "type": "string",
+            "description": "The user who updated the field at last"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the field"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "CustomField": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id is the unique uuid identifier",
+            "example": "e762634c-3e41-11eb-b897-0862660ccbd4",
+            "default": "uuid",
+            "nullable": false,
+            "uniqueItems": true
+          },
+          "key": {
+            "type": "string",
+            "description": "The key of the field"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the field"
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of the field",
+            "enum": [
+              "text",
+              "email",
+              "number",
+              "date",
+              "boolean",
+              "file",
+              "textarea"
+            ]
+          },
+          "placeholder": {
+            "type": "string",
+            "description": "The placeholder of the field"
+          },
+          "helptext": {
+            "type": "string",
+            "description": "The helptext of the field"
+          },
+          "example": {
+            "type": "string",
+            "description": "The example value of the field"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the field"
+          },
+          "updatedBy": {
+            "type": "string",
+            "description": "The user who updated the field at last"
+          },
+          "isEnabled": {
+            "type": "boolean",
+            "description": "whether custom field is enabled or not"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "description": "whether custom field is deleted or not"
+          },
+          "createdAt": {
+            "format": "T",
+            "type": "string",
+            "description": "The datetime of record at creation",
+            "nullable": false
+          },
+          "updatedAt": {
+            "format": "T",
+            "type": "string",
+            "description": "The datetime of record at updation",
+            "nullable": true
+          }
+        }
       },
       "UpdateCustomFieldDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the field"
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of the field",
+            "enum": [
+              "text",
+              "email",
+              "number",
+              "date",
+              "boolean",
+              "file",
+              "textarea"
+            ]
+          },
+          "placeholder": {
+            "type": "string",
+            "description": "The placeholder of the field"
+          },
+          "helptext": {
+            "type": "string",
+            "description": "The helptext of the field"
+          },
+          "example": {
+            "type": "string",
+            "description": "The example value of the field"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the field"
+          },
+          "updatedBy": {
+            "type": "string",
+            "description": "The user who updated the field at last"
+          },
+          "isEnabled": {
+            "type": "boolean",
+            "description": "whether custom field is enabled or not"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "description": "whether custom field is deleted or not"
+          }
+        }
       }
     }
   }
