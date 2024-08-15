@@ -115,7 +115,6 @@ export class CustomField {
     required: false,
   })
   @Column({
-    length: 255,
     type: 'varchar',
     nullable: true,
     default: null,
