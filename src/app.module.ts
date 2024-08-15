@@ -41,6 +41,8 @@ import { VaultsCollaboratorsModule } from './modules/vaults_collaborators/vaults
     ConfigModule.forRoot({
       envFilePath: ['.env'],
       isGlobal: true,
+      cache: true,
+      expandVariables: true,
       load: [configurations],
     }),
     TypeOrmModule.forRootAsync({
