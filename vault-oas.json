@@ -2196,6 +2196,15 @@
             }
           },
           {
+            "name": "addedBy",
+            "required": false,
+            "in": "query",
+            "description": "The user who added",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "pageNumber",
             "required": false,
             "in": "query",
@@ -3565,6 +3574,10 @@
           "value": {
             "type": "string",
             "description": "The value of the field"
+          },
+          "addedBy": {
+            "type": "string",
+            "description": "The user who added"
           }
         }
       },
@@ -3590,6 +3603,10 @@
           "value": {
             "type": "string",
             "description": "The value of the field"
+          },
+          "addedBy": {
+            "type": "string",
+            "description": "The user who added"
           },
           "createdAt": {
             "format": "T",
@@ -3619,6 +3636,10 @@
           "value": {
             "type": "string",
             "description": "The value of the field"
+          },
+          "addedBy": {
+            "type": "string",
+            "description": "The user who added"
           }
         }
       }

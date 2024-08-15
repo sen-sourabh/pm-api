@@ -5,4 +5,5 @@ export class CreateProviderFieldAssociationDto extends PickType(ProviderFieldAss
   'provider',
   'customField',
   'value',
+  'addedBy',
 ]) {}

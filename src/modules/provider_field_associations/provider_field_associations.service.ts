@@ -53,7 +53,7 @@ export class ProviderFieldAssociationsService {
 
       const data = await this.providerFieldAssociationsRepository.find({
         where: query,
-        relations: relations && ['provider', 'customField'],
+        relations: relations && ['provider', 'customField', 'addedBy'],
         skip,
         take,
         order: { updatedAt: OrderEnum.DESC },
@@ -79,7 +79,7 @@ export class ProviderFieldAssociationsService {
 
     const data = await this.providerFieldAssociationsRepository.findOne({
       where: { id },
-      relations: relations && ['provider', 'customField'],
+      relations: relations && ['provider', 'customField', 'addedBy'],
     });
     if (isMissing(data)) {
       throw new NotFoundException(`Record not found with id: ${id}`);

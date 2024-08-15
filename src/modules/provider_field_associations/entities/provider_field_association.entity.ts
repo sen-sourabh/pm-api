@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { CustomField } from '../../../core/modules/custom-fields/entities/custom-field.entity';
 import { Provider } from '../../providers/entities/provider.entity';
+import { User } from '../../users/entities/user.entity';
 
 @ApiTags('ProviderFieldAssociations')
 @Entity('provider_field_associations')
@@ -66,6 +67,16 @@ export class ProviderFieldAssociation {
   @IsString({ message: 'value must be a string' })
   @IsOptional()
   value?: string;
+
+  @ApiPropertyOptional({
+    description: 'The user who added',
+    required: false,
+  })
+  @ManyToOne(() => User)
+  @Column({ name: 'addedById', nullable: false })
+  @IsString()
+  @IsOptional()
+  addedBy?: string;
 
   @ApiPropertyOptional({
     description: 'The datetime of record at creation',

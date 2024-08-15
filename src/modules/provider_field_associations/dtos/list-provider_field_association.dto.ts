@@ -4,7 +4,7 @@ import { ApiQueryParamUnifiedModel } from '../../../core/shared/models/api-query
 import { ProviderFieldAssociation } from '../entities/provider_field_association.entity';
 
 export class ListQueryProviderFieldAssociationsDto extends IntersectionType(
-  PickType(ProviderFieldAssociation, ['provider']),
+  PickType(ProviderFieldAssociation, ['provider', 'addedBy']),
   ApiPaginateUnifiedModel,
   ApiQueryParamUnifiedModel,
 ) {}
