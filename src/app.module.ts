@@ -10,6 +10,8 @@ import { DataSourcesOptions } from './configs/typeorm';
 import { ActivityLogsController } from './core/modules/activity-logs/activity-logs.controller';
 import { ActivityLogsModule } from './core/modules/activity-logs/activity-logs.module';
 import { AuthModule } from './core/modules/auth/auth.module';
+import { CustomFieldsController } from './core/modules/custom-fields/custom-fields.controller';
+import { CustomFieldsModule } from './core/modules/custom-fields/custom-fields.module';
 import { FilesModule } from './core/modules/files/files.module';
 import { MessengerModule } from './core/modules/messenger/messenger.module';
 import { WebhooksModule } from './core/modules/webhooks/webhooks.module';
@@ -54,6 +56,7 @@ import { VaultsCollaboratorsModule } from './modules/vaults_collaborators/vaults
     VaultsCollaboratorsModule,
     AttachmentsModule,
     ProvidersModule,
+    CustomFieldsModule,
   ],
   controllers: [AppController],
   providers: [
@@ -86,6 +89,7 @@ export class AppModule {
         VaultsCollaboratorsController,
         ProvidersController,
         AttachmentsController,
+        CustomFieldsController,
       );
   }
 }
