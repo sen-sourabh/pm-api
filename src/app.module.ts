@@ -23,6 +23,8 @@ import { AccounttypesController } from './modules/accounttypes/accounttypes.cont
 import { AccounttypesModule } from './modules/accounttypes/accounttypes.module';
 import { AttachmentsController } from './modules/attachments/attachments.controller';
 import { AttachmentsModule } from './modules/attachments/attachments.module';
+import { ProviderFieldAssociationsController } from './modules/provider_field_associations/provider_field_associations.controller';
+import { ProviderFieldAssociationsModule } from './modules/provider_field_associations/provider_field_associations.module';
 import { ProvidersController } from './modules/providers/providers.controller';
 import { ProvidersModule } from './modules/providers/providers.module';
 import { RolesController } from './modules/roles/roles.controller';
@@ -57,6 +59,7 @@ import { VaultsCollaboratorsModule } from './modules/vaults_collaborators/vaults
     AttachmentsModule,
     ProvidersModule,
     CustomFieldsModule,
+    ProviderFieldAssociationsModule,
   ],
   controllers: [AppController],
   providers: [
@@ -90,6 +93,7 @@ export class AppModule {
         ProvidersController,
         AttachmentsController,
         CustomFieldsController,
+        ProviderFieldAssociationsController,
       );
   }
 }

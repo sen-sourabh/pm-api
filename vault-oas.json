@@ -2144,6 +2144,261 @@
         ]
       }
     },
+    "/api/v1/provider-field-associations": {
+      "post": {
+        "operationId": "createProviderFieldAssociation",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProviderFieldAssociationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProviderFieldAssociation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        },
+        "tags": [
+          "ProviderFieldAssociations"
+        ]
+      },
+      "get": {
+        "operationId": "findAllProviderFieldAssociations",
+        "parameters": [
+          {
+            "name": "provider",
+            "required": false,
+            "in": "query",
+            "description": "The field of the provider",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "addedBy",
+            "required": false,
+            "in": "query",
+            "description": "The user who added",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageNumber",
+            "required": false,
+            "in": "query",
+            "description": "Page number",
+            "example": 1,
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "description": "No of records will be fetched in single request",
+            "example": 25,
+            "schema": {
+              "default": 25,
+              "type": "number"
+            }
+          },
+          {
+            "name": "relation",
+            "required": false,
+            "in": "query",
+            "description": "To fetch the entities with their relation`s data",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "returns list of provider field associations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProviderFieldAssociation"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [
+          "ProviderFieldAssociations"
+        ]
+      }
+    },
+    "/api/v1/provider-field-associations/{id}": {
+      "get": {
+        "operationId": "findOneProviderFieldAssociation",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "relation",
+            "required": false,
+            "in": "query",
+            "description": "To fetch the entities with their relation`s data",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "return provider field association as per the identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProviderFieldAssociation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "tags": [
+          "ProviderFieldAssociations"
+        ]
+      },
+      "patch": {
+        "operationId": "updateProviderFieldAssociation",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProviderFieldAssociationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "return updated provider field association as per the identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProviderFieldAssociation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        },
+        "tags": [
+          "ProviderFieldAssociations"
+        ]
+      },
+      "delete": {
+        "operationId": "removeProviderFieldAssociation",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "return deleted provider field association as per the identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProviderFieldAssociation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "tags": [
+          "ProviderFieldAssociations"
+        ]
+      }
+    },
     "/api/v1/vault": {
       "get": {
         "operationId": "isServerRunning",
@@ -3302,6 +3557,89 @@
           "isDeleted": {
             "type": "boolean",
             "description": "whether custom field is deleted or not"
+          }
+        }
+      },
+      "CreateProviderFieldAssociationDto": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "description": "The field of the provider"
+          },
+          "customField": {
+            "type": "string",
+            "description": "The custom field id"
+          },
+          "value": {
+            "type": "string",
+            "description": "The value of the field"
+          },
+          "addedBy": {
+            "type": "string",
+            "description": "The user who added"
+          }
+        }
+      },
+      "ProviderFieldAssociation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id is the unique uuid identifier",
+            "example": "e762634c-3e41-11eb-b897-0862660ccbd4",
+            "default": "uuid",
+            "nullable": false,
+            "uniqueItems": true
+          },
+          "provider": {
+            "type": "string",
+            "description": "The field of the provider"
+          },
+          "customField": {
+            "type": "string",
+            "description": "The custom field id"
+          },
+          "value": {
+            "type": "string",
+            "description": "The value of the field"
+          },
+          "addedBy": {
+            "type": "string",
+            "description": "The user who added"
+          },
+          "createdAt": {
+            "format": "T",
+            "type": "string",
+            "description": "The datetime of record at creation",
+            "nullable": false
+          },
+          "updatedAt": {
+            "format": "T",
+            "type": "string",
+            "description": "The datetime of record at updation",
+            "nullable": true
+          }
+        }
+      },
+      "UpdateProviderFieldAssociationDto": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "description": "The field of the provider"
+          },
+          "customField": {
+            "type": "string",
+            "description": "The custom field id"
+          },
+          "value": {
+            "type": "string",
+            "description": "The value of the field"
+          },
+          "addedBy": {
+            "type": "string",
+            "description": "The user who added"
           }
         }
       }
