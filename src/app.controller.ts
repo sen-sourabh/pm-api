@@ -12,10 +12,4 @@ export class AppController {
   isServerRunning(): ApiResponseModel<string> {
     return this.appService.isServerRunning();
   }
-
-  // @Get('/yt-manipulator')
-  // getGoogle() {
-  //   console.log('hello: yt-manipulator')
-  //   return true;
-  // }
 }

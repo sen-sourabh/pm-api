@@ -17,13 +17,13 @@ export class FileValidationPipe implements PipeTransform {
     if (metadata.metatype === CreateFilesDto) {
       if (isMissing(value?.entityId) || value?.entityId?.trim() === '')
         throw new BadRequestException(`valid entityId is required`);
-      else await this.userExist(value?.entityId);
+      else await this.#userExist(value?.entityId);
     }
 
     return value;
   }
 
-  async userExist(id: string) {
+  async #userExist(id: string) {
     const result = await this.usersService.findUserByValue({ id });
     if (!result) throw new NotFoundException(`entity record not found with id: ${id}`);
     return result;

@@ -23,15 +23,15 @@ export class ValidateUserPipe implements PipeTransform {
       if (Object.keys(value).length === 0) {
         throw new BadRequestException('At least a field is required to update');
       }
-      await this.whenUpdateOrDelete(value as UpdateUserDto);
+      await this.#whenUpdateOrDelete(value as UpdateUserDto);
     } else {
-      await this.whenCreate(value as CreateUserDto);
+      await this.#whenCreate(value as CreateUserDto);
     }
 
     return value;
   }
 
-  whenUpdateOrDelete = async (value: UpdateUserDto) => {
+  #whenUpdateOrDelete = async (value: UpdateUserDto) => {
     //Record found during update
     if (!isMissing(value) && typeof value === 'string') {
       const isRecrodFound = await this.usersService.findUserByValue({
@@ -43,7 +43,7 @@ export class ValidateUserPipe implements PipeTransform {
     return true;
   };
 
-  whenCreate = async (value: CreateUserDto) => {
+  #whenCreate = async (value: CreateUserDto) => {
     //Validate user If it is unique by email or not
     const isEmailUnique = await this.usersService.findUserByValue({
       email: value?.email,
