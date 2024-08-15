@@ -12,7 +12,7 @@ import {
 import { User } from '../../users/entities/user.entity';
 import { Vault } from '../../vaults/entities/vault.entity';
 
-@ApiTags('Provider')
+@ApiTags('Providers')
 @Entity('providers')
 export class Provider {
   @ApiPropertyOptional({
