@@ -23,35 +23,35 @@ export class ValidateVaultPipe implements PipeTransform {
       if (Object.keys(value).length === 0) {
         throw new BadRequestException('At least a field is required to update');
       }
-      await this.whenUpdateOrDelete(value as UpdateVaultDto);
+      await this.#whenUpdateOrDelete(value as UpdateVaultDto);
     } else {
-      await this.whenCreate(value as CreateVaultDto);
+      await this.#whenCreate(value as CreateVaultDto);
     }
 
     return value;
   }
 
-  whenUpdateOrDelete = async (value: UpdateVaultDto) => {
+  #whenUpdateOrDelete = async (value: UpdateVaultDto) => {
     //Record found during update
     if (!isMissing(value) && typeof value === 'string') {
       const isRecrodFound = await this.vaultsService.findVaultByValue({ id: value });
       if (!isRecrodFound) throw new NotFoundException(`Record not found with id: ${value}`);
     } else {
       if (isMissing(value?.user)) throw new BadRequestException('User id is required');
-      if (!isMissing(value?.name)) await this.checkVaultNameIsUnique(value);
+      if (!isMissing(value?.name)) await this.#checkVaultNameIsUnique(value);
     }
 
     return true;
   };
 
-  whenCreate = async (value: CreateVaultDto) => {
+  #whenCreate = async (value: CreateVaultDto) => {
     //Validate vault If it is unique by name or not
-    await this.checkVaultNameIsUnique(value);
+    await this.#checkVaultNameIsUnique(value);
 
     return true;
   };
 
-  checkVaultNameIsUnique = async (value?: { name?: string; user?: string }) => {
+  #checkVaultNameIsUnique = async (value?: { name?: string; user?: string }) => {
     const isNameUnique = await this.vaultsService.findVaultByValue({
       name: value?.name,
       user: value?.user,

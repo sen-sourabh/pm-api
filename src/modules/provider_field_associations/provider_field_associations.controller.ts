@@ -41,7 +41,6 @@ export class ProviderFieldAssociationsController {
     ApiXResponsesEnum.BadRequest,
     ApiXResponsesEnum.Conflict,
   )
-  @UsePipes(new ValidationPipe({ whitelist: true }))
   @HttpCode(201)
   @Post()
   createProviderFieldAssociation(

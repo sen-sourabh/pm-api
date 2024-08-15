@@ -22,6 +22,7 @@ export class FilesService {
     });
   }
 
+  // INFO:To upload files on AWS S3
   async uplaodFileToS3(
     file: CoreFileModel,
     s3Path: string = UpoadFileS3PathEnum.DEFAULT,
@@ -46,6 +47,7 @@ export class FilesService {
     }
   }
 
+  // INFO: Build putObjectCommand
   #getPutObjectCommand(key: string, file: CoreFileModel) {
     return new PutObjectCommand({
       BucketKeyEnabled: true,

@@ -7,15 +7,15 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../core/helpers/serializers';
+import { containsKey, isMissing } from '../../core/helpers/validations';
+import { FilesService } from '../../core/modules/files/files.service';
 import {
   getFileExtension,
   getFileName,
   getS3FileKey,
   getUsersS3Path,
   getVaultsS3Path,
-} from '../../core/helpers/transformers';
-import { containsKey, isMissing } from '../../core/helpers/validations';
-import { FilesService } from '../../core/modules/files/files.service';
+} from '../../core/modules/files/utils';
 import { OrderEnum } from '../../core/shared/enums';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
 import { ApiQueryParamUnifiedModel } from '../../core/shared/models/api-query.model';

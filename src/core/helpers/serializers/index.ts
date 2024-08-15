@@ -92,7 +92,7 @@ export const logErrorOnTerminal = (data: any) => {
   }
 };
 
-// Function Not In-Use
+// INFO: Function Not In-Use
 export const catchLogExceptions = (error: any) => {
   if (error instanceof BadRequestException) {
     return error;

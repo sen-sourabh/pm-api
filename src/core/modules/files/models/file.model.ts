@@ -1,9 +1,10 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { Readable } from 'stream';
 import { CategoryEnum, FileFormatEnum } from '../enums/category.enum';
 
 export class FileUploadModel {
+  @ApiProperty({ type: 'string', format: 'binary' })
   file: Express.Multer.File;
 }
 
@@ -20,7 +21,7 @@ export class CoreFileModel implements Express.Multer.File {
   buffer: Buffer;
 }
 
-export class FilesModel {
+export class FilesModel extends FileUploadModel {
   @ApiPropertyOptional({
     description: 'The name of file',
     required: false,
