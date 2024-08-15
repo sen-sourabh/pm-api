@@ -37,7 +37,7 @@ export class ValidateCustomFieldPipe implements PipeTransform {
       const isRecrodFound = await this.customFieldsService.findCustomFieldByValue({ id: value });
       if (!isRecrodFound) throw new NotFoundException(`Record not found with id: ${value}`);
     } else {
-      if (isMissing(value?.updatedBy)) throw new BadRequestException('User id is required');
+      if (isMissing(value?.addedBy)) throw new BadRequestException('User id is required');
       if (!isMissing(value?.name)) await this.checkCustomFieldNameIsUnique(value);
     }
 
@@ -51,10 +51,10 @@ export class ValidateCustomFieldPipe implements PipeTransform {
     return true;
   };
 
-  checkCustomFieldNameIsUnique = async (value?: { name?: string; updatedBy?: string }) => {
+  checkCustomFieldNameIsUnique = async (value?: { key?: string; addedBy?: string }) => {
     const isNameUnique = await this.customFieldsService.findCustomFieldByValue({
-      name: value?.name,
-      user: value?.updatedBy,
+      key: value?.key,
+      addedBy: value?.addedBy,
     });
     if (isNameUnique) {
       throw new ConflictException(`Name should be unique`);

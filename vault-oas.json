@@ -1921,6 +1921,7 @@
               "enum": [
                 "text",
                 "email",
+                "password",
                 "number",
                 "date",
                 "boolean",
@@ -3141,6 +3142,7 @@
             "enum": [
               "text",
               "email",
+              "password",
               "number",
               "date",
               "boolean",
@@ -3164,7 +3166,7 @@
             "type": "string",
             "description": "The description of the field"
           },
-          "updatedBy": {
+          "addedBy": {
             "type": "string",
             "description": "The user who updated the field at last"
           },
@@ -3202,6 +3204,7 @@
             "enum": [
               "text",
               "email",
+              "password",
               "number",
               "date",
               "boolean",
@@ -3225,7 +3228,7 @@
             "type": "string",
             "description": "The description of the field"
           },
-          "updatedBy": {
+          "addedBy": {
             "type": "string",
             "description": "The user who updated the field at last"
           },
@@ -3264,6 +3267,7 @@
             "enum": [
               "text",
               "email",
+              "password",
               "number",
               "date",
               "boolean",
@@ -3287,7 +3291,7 @@
             "type": "string",
             "description": "The description of the field"
           },
-          "updatedBy": {
+          "addedBy": {
             "type": "string",
             "description": "The user who updated the field at last"
           },

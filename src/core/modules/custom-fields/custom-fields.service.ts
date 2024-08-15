@@ -49,7 +49,7 @@ export class CustomFieldsService {
 
       const data = await this.customFieldsRepository.find({
         where: query,
-        relations: relations && ['updatedBy'],
+        relations: relations && ['addedBy'],
         skip,
         take,
         order: { updatedAt: OrderEnum.DESC },
@@ -73,7 +73,7 @@ export class CustomFieldsService {
 
     const data = await this.customFieldsRepository.findOne({
       where: { id },
-      relations: relations && ['updatedBy'],
+      relations: relations && ['addedBy'],
     });
     if (isMissing(data)) {
       throw new NotFoundException(`Record not found with id: ${id}`);

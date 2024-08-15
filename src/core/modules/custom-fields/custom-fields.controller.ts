@@ -41,7 +41,7 @@ export class CustomFieldsController {
     ApiXResponsesEnum.BadRequest,
     ApiXResponsesEnum.Conflict,
   )
-  @UsePipes(new BodyParserPipe(), ValidateCustomFieldPipe)
+  @UsePipes(new ValidationPipe({ whitelist: true }), new BodyParserPipe(), ValidateCustomFieldPipe)
   @HttpCode(201)
   @Post()
   createCustomField(

@@ -1,6 +1,14 @@
 import { ApiPropertyOptional, ApiTags } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsBoolean, IsDateString, IsEnum, IsOptional, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsDateString,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Validate,
+} from 'class-validator';
 import {
   Column,
   CreateDateColumn,
@@ -70,6 +78,7 @@ export class CustomField {
     default: FieldTypeEnum.Text,
   })
   @IsEnum(FieldTypeEnum)
+  @Validate(() => FieldTypeEnum)
   @IsOptional()
   type?: FieldTypeEnum;
 
@@ -133,12 +142,13 @@ export class CustomField {
     required: false,
   })
   @ManyToOne(() => User)
-  @Column({ name: 'updatedById', nullable: false })
+  @Column({ name: 'addedById', nullable: false })
   @IsString({
-    message: 'updatedBy must be a string and valid user id',
+    message: 'addedBy must be a string and valid user id',
   })
+  @IsNotEmpty()
   @IsOptional()
-  updatedBy?: string;
+  addedBy?: string;
 
   @ApiPropertyOptional({
     description: 'whether custom field is enabled or not',

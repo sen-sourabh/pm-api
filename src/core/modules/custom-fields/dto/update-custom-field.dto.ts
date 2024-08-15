@@ -8,7 +8,7 @@ export class UpdateCustomFieldDto extends PickType(CustomField, [
   'helptext',
   'description',
   'example',
-  'updatedBy',
+  'addedBy',
   'isEnabled',
   'isDeleted',
 ]) {}
