@@ -88,7 +88,7 @@ export class CreateAttachments1722755668991 implements MigrationInterface {
             },
           ],
           foreignKeys: [
-            // Foreign key for role association
+            // Foreign key for user association
             {
               name: 'FK_attachments_users',
               columnNames: ['userId'],
@@ -96,7 +96,7 @@ export class CreateAttachments1722755668991 implements MigrationInterface {
               referencedColumnNames: ['id'],
               onDelete: 'CASCADE', // Optional: Set deletion behavior (e.g., CASCADE, SET NULL)
             },
-            // Foreign key for accounttype association
+            // Foreign key for vault association
             {
               name: 'FK_attachments_vaults',
               columnNames: ['vaultId'],

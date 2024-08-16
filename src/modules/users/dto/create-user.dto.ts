@@ -11,7 +11,7 @@ export class CreateUserDto extends PickType(User, [
   'phoneNumber',
   'password',
   'role',
-  'accounttype',
+  'accountType',
 ]) {
   @ApiProperty({
     description: 'Unique email of the user',

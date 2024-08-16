@@ -1,3 +1,19 @@
+export enum AccountTypesEnum {
+  Organization = 'organization',
+  Individual = 'individual',
+}
+
+export enum RolesEnum {
+  SuperAdmin = 'super_admin',
+  Admin = 'admin',
+  Collaborator = 'collaborator',
+}
+
+export enum VaultAccessEnum {
+  Admin = 'admin',
+  Collaborator = 'collaborator',
+}
+
 export enum OrderEnum {
   ASC = 'ASC',
   DESC = 'DESC',
@@ -17,15 +33,4 @@ export enum ApiXResponsesEnum {
   NotImplemented = 'not_implemented',
   NotFound = 'not_found',
   Conflict = 'conflict',
-}
-
-export enum RolesEnum {
-  SuperAdmin = 'super_admin',
-  Admin = 'admin',
-  Collaborator = 'collaborator',
-}
-
-export enum VaultAccessEnum {
-  Admin = 'admin',
-  Collaborator = 'collaborator',
 }

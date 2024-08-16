@@ -10,23 +10,23 @@ import { getPagination } from '../../core/helpers/serializers';
 import { isMissing } from '../../core/helpers/validations';
 import { OrderEnum } from '../../core/shared/enums';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
-import { ListQueryAccounttypesDto } from './dto/list-accounttype.dto';
-import { Accounttype } from './entities/accounttype.entity';
+import { ListQueryAccountTypesDto } from './dto/list-account_type.dto';
+import { AccountType } from './entities/account_type.entity';
 
 @Injectable()
-export class AccounttypesService {
+export class AccountTypesService {
   constructor(
-    @InjectRepository(Accounttype)
-    private accounttypesRepository: Repository<Accounttype>,
+    @InjectRepository(AccountType)
+    private accountTypesRepository: Repository<AccountType>,
   ) {}
 
-  async findAllAccounttypes(
-    query?: ListQueryAccounttypesDto,
-  ): Promise<ApiResponseModel<Accounttype[]>> {
+  async findAllAccountTypes(
+    query?: ListQueryAccountTypesDto,
+  ): Promise<ApiResponseModel<AccountType[]>> {
     try {
       const { skip, take } = getPagination(query);
 
-      const data = await this.accounttypesRepository.find({
+      const data = await this.accountTypesRepository.find({
         where: query,
         skip,
         take,
@@ -35,20 +35,20 @@ export class AccounttypesService {
 
       return { data, metadata: { query } };
     } catch (error) {
-      Logger.debug(`Error in list accounttype: ${error?.message}`);
-      throw new InternalServerErrorException(`Error in list accounttype: ${error?.message}`);
+      Logger.debug(`Error in list account type: ${error?.message}`);
+      throw new InternalServerErrorException(`Error in list account type: ${error?.message}`);
     }
   }
 
-  async findOneAccounttype(id: number): Promise<ApiResponseModel<Accounttype>> {
-    const data = await this.accounttypesRepository.findOneBy({ id });
+  async findOneAccountType(id: number): Promise<ApiResponseModel<AccountType>> {
+    const data = await this.accountTypesRepository.findOneBy({ id });
     if (isMissing(data)) throw new NotFoundException(`Record not found by id: ${id}`);
     return { data, metadata: { params: { id } } };
   }
 
-  async findAccounttypeByValue(query: Record<string, unknown>): Promise<boolean> {
+  async findAccountTypeByValue(query: Record<string, unknown>): Promise<boolean> {
     try {
-      const data = await this.accounttypesRepository.findOne({
+      const data = await this.accountTypesRepository.findOne({
         where: { ...query, isDeleted: false },
       });
       if (isMissing(data)) {
@@ -56,7 +56,7 @@ export class AccounttypesService {
       }
       return true;
     } catch (error) {
-      Logger.error(`Error in accounttype operation: ${error.message}`);
+      Logger.error(`Error in account type operation: ${error.message}`);
       return false;
     }
   }

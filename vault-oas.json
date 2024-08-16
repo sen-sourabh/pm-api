@@ -223,15 +223,15 @@
         ]
       }
     },
-    "/api/v1/accounttypes": {
+    "/api/v1/account-types": {
       "get": {
-        "operationId": "findAllAccounttypes",
+        "operationId": "findAllAccountTypes",
         "parameters": [
           {
             "name": "name",
             "required": false,
             "in": "query",
-            "description": "name of the accounttype",
+            "description": "name of the account type",
             "schema": {
               "type": "string"
             }
@@ -240,7 +240,7 @@
             "name": "isDefault",
             "required": false,
             "in": "query",
-            "description": "The accounttype is default or not",
+            "description": "The account type is default or not",
             "schema": {
               "type": "boolean"
             }
@@ -249,7 +249,7 @@
             "name": "isEnabled",
             "required": false,
             "in": "query",
-            "description": "The accounttype is enabled or not",
+            "description": "The account type is enabled or not",
             "schema": {
               "type": "boolean"
             }
@@ -258,7 +258,7 @@
             "name": "isDeleted",
             "required": false,
             "in": "query",
-            "description": "The accounttype is deleted or not",
+            "description": "The account type is deleted or not",
             "schema": {
               "type": "boolean"
             }
@@ -288,13 +288,13 @@
         ],
         "responses": {
           "200": {
-            "description": "returns list of accounttypes",
+            "description": "returns list of account types",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Accounttype"
+                    "$ref": "#/components/schemas/AccountType"
                   }
                 }
               }
@@ -308,11 +308,11 @@
           }
         },
         "tags": [
-          "Accounttypes"
+          "AccountTypes"
         ]
       }
     },
-    "/api/v1/accounttypes/{id}": {
+    "/api/v1/account-types/{id}": {
       "get": {
         "operationId": "findOneUsertype",
         "parameters": [
@@ -327,11 +327,11 @@
         ],
         "responses": {
           "200": {
-            "description": "return accounttype as per the identifier",
+            "description": "return account type as per the identifier",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Accounttype"
+                  "$ref": "#/components/schemas/AccountType"
                 }
               }
             }
@@ -347,7 +347,7 @@
           }
         },
         "tags": [
-          "Accounttypes"
+          "AccountTypes"
         ]
       }
     },
@@ -440,10 +440,10 @@
             }
           },
           {
-            "name": "accounttype",
+            "name": "accountType",
             "required": false,
             "in": "query",
-            "description": "accounttype of the user",
+            "description": "account type of the user",
             "schema": {
               "type": "number"
             }
@@ -2597,7 +2597,7 @@
           "id"
         ]
       },
-      "Accounttype": {
+      "AccountType": {
         "type": "object",
         "properties": {
           "id": {
@@ -2609,19 +2609,19 @@
           },
           "name": {
             "type": "string",
-            "description": "name of the accounttype"
+            "description": "name of the account type"
           },
           "isDefault": {
             "type": "boolean",
-            "description": "The accounttype is default or not"
+            "description": "The account type is default or not"
           },
           "isEnabled": {
             "type": "boolean",
-            "description": "The accounttype is enabled or not"
+            "description": "The account type is enabled or not"
           },
           "isDeleted": {
             "type": "boolean",
-            "description": "The accounttype is deleted or not"
+            "description": "The account type is deleted or not"
           },
           "createdAt": {
             "format": "T",
@@ -2676,9 +2676,9 @@
             "type": "number",
             "description": "role of the user"
           },
-          "accounttype": {
+          "accountType": {
             "type": "number",
-            "description": "accounttype of the user"
+            "description": "account type of the user"
           },
           "email": {
             "type": "string",
@@ -2777,9 +2777,9 @@
             "type": "number",
             "description": "role of the user"
           },
-          "accounttype": {
+          "accountType": {
             "type": "number",
-            "description": "accounttype of the user"
+            "description": "account type of the user"
           }
         }
       },

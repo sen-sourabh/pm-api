@@ -9,9 +9,9 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@ApiTags('Accounttypes')
-@Entity('accounttypes')
-export class Accounttype {
+@ApiTags('AccountTypes')
+@Entity('account_types')
+export class AccountType {
   @ApiProperty({
     description: 'Id is the unique number identifier',
     example: 1,
@@ -32,7 +32,7 @@ export class Accounttype {
   id: number;
 
   @ApiPropertyOptional({
-    description: 'name of the accounttype',
+    description: 'name of the account type',
     required: true,
   })
   @Column({
@@ -45,7 +45,7 @@ export class Accounttype {
   name?: string;
 
   @ApiPropertyOptional({
-    description: 'The accounttype is default or not',
+    description: 'The account type is default or not',
     required: false,
   })
   @Column({ type: 'tinyint', default: '1' })
@@ -55,7 +55,7 @@ export class Accounttype {
   isDefault?: boolean;
 
   @ApiPropertyOptional({
-    description: 'The accounttype is enabled or not',
+    description: 'The account type is enabled or not',
     required: false,
   })
   @Column({ type: 'tinyint', default: '1' })
@@ -65,7 +65,7 @@ export class Accounttype {
   isEnabled?: boolean;
 
   @ApiPropertyOptional({
-    description: 'The accounttype is deleted or not',
+    description: 'The account type is deleted or not',
     required: true,
   })
   @Column({ type: 'tinyint', default: '0' })
