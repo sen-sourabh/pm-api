@@ -1,7 +1,7 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
-  InternalServerErrorException,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
@@ -24,18 +24,30 @@ export class VaultsService {
     private readonly vaultsRepository: Repository<Vault>,
   ) {}
 
-  async createVault(createVaultData: CreateVaultDto): Promise<ApiResponseModel<Vault>> {
+  async createVault({
+    request,
+    CreateVaultData,
+  }: {
+    request: Request;
+    CreateVaultData: CreateVaultDto;
+  }): Promise<ApiResponseModel<Vault>> {
     try {
-      const newVault = this.vaultsRepository.create(createVaultData);
+      //Verified Uniquness of vault within the user
+      await this.#isVaultNameIsUnique({ name: CreateVaultData?.name, user: request?.['user']?.id });
+
+      const newVault = this.vaultsRepository.create({
+        ...CreateVaultData,
+        user: request?.['user']?.id,
+      });
       const data = await this.vaultsRepository.save(newVault);
       return {
         data,
-        metadata: { body: createVaultData },
+        metadata: { body: CreateVaultData },
         message: 'Vault created successfully',
       };
     } catch (error) {
       Logger.error(`Error in create vault: ${error.message}`);
-      throw new InternalServerErrorException(`Error in create vault: ${error.message}`);
+      throw error;
     }
   }
 
@@ -57,7 +69,7 @@ export class VaultsService {
       };
     } catch (error) {
       Logger.error(`Error in list vault: ${error.message}`);
-      throw new InternalServerErrorException(`Error in list vault: ${error.message}`);
+      throw error;
     }
   }
 
@@ -77,9 +89,25 @@ export class VaultsService {
     return { data, metadata: { params: { id } } };
   }
 
-  async updateVault(id: string, updateVaultDto: UpdateVaultDto): Promise<ApiResponseModel<Vault>> {
+  async updateVault({
+    request,
+    id,
+    updateVaultData,
+  }: {
+    request: Request;
+    id: string;
+    updateVaultData: UpdateVaultDto;
+  }): Promise<ApiResponseModel<Vault>> {
+    //Verified Uniquness of vault within the user
+    if (!isMissing(updateVaultData?.name)) {
+      await this.#isVaultNameIsUnique({ name: updateVaultData?.name, user: request?.['user']?.id });
+    }
+
     //Actual user update
-    const updated = await this.vaultsRepository.update(id, updateVaultDto);
+    const updated = await this.vaultsRepository.update(id, {
+      ...updateVaultData,
+      user: request?.['user']?.id,
+    });
     if (!updated?.affected) {
       throw new BadRequestException(`Not updated`);
     }
@@ -91,7 +119,7 @@ export class VaultsService {
       data,
       metadata: {
         params: { id },
-        body: updateVaultDto,
+        body: updateVaultData,
       },
       message: 'Vault updated successfully',
     };
@@ -127,7 +155,18 @@ export class VaultsService {
       return true;
     } catch (error) {
       Logger.error(`Error in vault operation: ${error.message}`);
-      return false;
+      throw error;
     }
   }
+
+  #isVaultNameIsUnique = async ({ name, user }: { name?: string; user: string }) => {
+    const isNameUnique = await this.findVaultByValue({
+      name,
+      user,
+    });
+    if (isNameUnique) {
+      throw new ConflictException(`Name should be unique`);
+    }
+    return true;
+  };
 }
