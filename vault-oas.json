@@ -1034,13 +1034,7 @@
           "content": {
             "multipart/form-data": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "file": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                }
+                "$ref": "#/components/schemas/CreateFilesDto"
               }
             }
           }
@@ -1055,10 +1049,7 @@
           "401": {
             "description": "Unauthorized"
           }
-        },
-        "tags": [
-          "Files"
-        ]
+        }
       }
     },
     "/api/v1/vaults-collaborators": {
@@ -1133,10 +1124,10 @@
             }
           },
           {
-            "name": "addedBy",
+            "name": "updatedBy",
             "required": false,
             "in": "query",
-            "description": "The user who given the access",
+            "description": "The user who given/updated the access",
             "schema": {
               "nullable": false,
               "type": "string"
@@ -3032,6 +3023,35 @@
           }
         }
       },
+      "CreateFilesDto": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of file"
+          },
+          "file_format": {
+            "type": "string",
+            "description": "The file_format of file"
+          },
+          "category": {
+            "type": "string",
+            "description": "The category of file"
+          },
+          "entityId": {
+            "type": "string",
+            "description": "The entity of file where need to link"
+          }
+        },
+        "required": [
+          "file",
+          "entityId"
+        ]
+      },
       "CreateVaultsCollaboratorDto": {
         "type": "object",
         "properties": {
@@ -3049,16 +3069,16 @@
             "description": "The shared vault",
             "nullable": false
           },
-          "addedBy": {
+          "updatedBy": {
             "type": "string",
-            "description": "The user who given the access",
+            "description": "The user who given/updated the access",
             "nullable": false
           }
         },
         "required": [
           "user",
           "vault",
-          "addedBy"
+          "updatedBy"
         ]
       },
       "VaultsCollaborator": {
@@ -3086,9 +3106,9 @@
             "type": "number",
             "description": "The access of the vault"
           },
-          "addedBy": {
+          "updatedBy": {
             "type": "string",
-            "description": "The user who given the access",
+            "description": "The user who given/updated the access",
             "nullable": false
           },
           "isEnabled": {
@@ -3130,16 +3150,16 @@
             "description": "The shared vault",
             "nullable": false
           },
-          "addedBy": {
+          "updatedBy": {
             "type": "string",
-            "description": "The user who given the access",
+            "description": "The user who given/updated the access",
             "nullable": false
           }
         },
         "required": [
           "user",
           "vault",
-          "addedBy"
+          "updatedBy"
         ]
       },
       "CreateUsersAttachmentDto": {

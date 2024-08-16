@@ -24,10 +24,10 @@ export class UpdateVaultsCollaboratorDto extends PickType(VaultsCollaborator, [
   vault: string;
 
   @ApiProperty({
-    description: 'The user who given the access',
+    description: 'The user who given/updated the access',
     required: true,
     nullable: false,
   })
   @IsString()
-  addedBy: string;
+  updatedBy: string;
 }
