@@ -1,10 +1,10 @@
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { getS3FileKey, getS3ObjectUrl } from '../../helpers/transformers';
 import { ApiResponseModel } from '../../shared/interfaces/api-response.interface';
 import { UpoadFileS3PathEnum } from './enums/category.enum';
 import { CoreFileModel, FilesResponseModel } from './models/file.model';
+import { getS3FileKey, getS3ObjectUrl } from './utils';
 
 @Injectable()
 export class FilesService {

@@ -1,9 +1,9 @@
-import { ApiProperty, ApiTags } from '@nestjs/swagger';
-import { IsEnum, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { CategoryEnum, FileFormatEnum } from '../../../core/modules/files/enums/category.enum';
 
-export class CreateAttachmentDto {
-  @ApiProperty({ type: 'string', format: 'binary' })
+export class CreateAttachmentInternalDto {
+  @ApiProperty({ type: 'string', format: 'binary', required: true })
   file: Express.Multer.File;
 
   @ApiProperty({
@@ -15,71 +15,53 @@ export class CreateAttachmentDto {
   category: CategoryEnum;
 }
 
-export class CreateAttachmentInternalDto extends CreateAttachmentDto {
+export class CreateAttachmentDto extends CreateAttachmentInternalDto {
   @ApiProperty({
     description: 'The attachment name',
-    required: true,
+    required: false,
   })
   @IsString()
-  name: string;
+  @IsOptional()
+  name?: string;
 
   @ApiProperty({
     description: 'The attachment file format',
-    required: true,
+    required: false,
     enum: FileFormatEnum,
   })
   @IsEnum(FileFormatEnum)
-  fileFormat: FileFormatEnum;
+  @IsOptional()
+  fileFormat?: FileFormatEnum;
 
   @ApiProperty({
     description: 'The attachment key',
-    required: true,
+    required: false,
   })
   @IsString()
-  key: string;
+  @IsOptional()
+  key?: string;
 
   @ApiProperty({
     description: 'The attachment url',
-    required: true,
+    required: false,
   })
   @IsString()
-  url: string;
-}
+  @IsOptional()
+  url?: string;
 
-@ApiTags('CreateUsersAttachment')
-export class CreateUsersAttachmentDto extends CreateAttachmentDto {
-  @ApiProperty({
-    description: 'The user of the attachment',
-    required: true,
-  })
-  @IsString()
-  user: string;
-}
-
-export class CreateUsersAttachmentInternalDto extends CreateAttachmentInternalDto {
-  @ApiProperty({
-    description: 'The user of the attachment',
-    required: true,
-  })
-  @IsString()
-  user: string;
-}
-
-@ApiTags('CreateVaultsAttachment')
-export class CreateVaultsAttachmentDto extends CreateAttachmentDto {
   @ApiProperty({
     description: 'The vault of the attachment',
-    required: true,
+    required: false,
   })
   @IsString()
-  vault: string;
-}
+  @IsOptional()
+  vault?: string;
 
-export class CreateVaultsAttachmentInternalDto extends CreateAttachmentInternalDto {
   @ApiProperty({
-    description: 'The vault of the attachment',
-    required: true,
+    description: 'The user of the attachment',
+    required: false,
   })
   @IsString()
-  vault: string;
+  @IsOptional()
+  user?: string;
 }
