@@ -1,10 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../core/helpers/serializers';
@@ -44,7 +38,7 @@ export class ProvidersService {
       };
     } catch (error) {
       Logger.error(`Error in create provider: ${error.message}`);
-      throw new InternalServerErrorException(`Error in create provider: ${error.message}`);
+      throw error;
     }
   }
 
@@ -66,7 +60,7 @@ export class ProvidersService {
       };
     } catch (error) {
       Logger.error(`Error in list provider: ${error.message}`);
-      throw new InternalServerErrorException(`Error in list provider: ${error.message}`);
+      throw error;
     }
   }
 
