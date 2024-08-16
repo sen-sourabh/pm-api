@@ -1,19 +1,4 @@
-import { S3ServiceException } from '@aws-sdk/client-s3';
-import {
-  BadRequestException,
-  ConflictException,
-  ForbiddenException,
-  GatewayTimeoutException,
-  Logger,
-  MethodNotAllowedException,
-  NotAcceptableException,
-  NotFoundException,
-  NotImplementedException,
-  RequestTimeoutException,
-  UnauthorizedException,
-  UnprocessableEntityException,
-  UnsupportedMediaTypeException,
-} from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { HttpStatusViaCodeEnum } from '../../shared/enums';
 import { ApiResponseUnifiedModel } from '../../shared/models/api-response.model';
 import { isMissing } from '../validations';
@@ -90,48 +75,4 @@ export const logErrorOnTerminal = (data: any) => {
     default:
       Logger.log(`${JSON.stringify(data).toString()}`);
   }
-};
-
-// INFO: Function Not In-Use
-export const catchLogExceptions = (error: any) => {
-  if (error instanceof BadRequestException) {
-    return error;
-  }
-  if (error instanceof NotFoundException) {
-    return error;
-  }
-  if (error instanceof ConflictException) {
-    return error;
-  }
-  if (error instanceof UnauthorizedException) {
-    return error;
-  }
-  if (error instanceof ForbiddenException) {
-    return error;
-  }
-  if (error instanceof S3ServiceException) {
-    return error;
-  }
-  if (error instanceof NotAcceptableException) {
-    return error;
-  }
-  if (error instanceof GatewayTimeoutException) {
-    return error;
-  }
-  if (error instanceof NotImplementedException) {
-    return error;
-  }
-  if (error instanceof UnprocessableEntityException) {
-    return error;
-  }
-  if (error instanceof UnsupportedMediaTypeException) {
-    return error;
-  }
-  if (error instanceof RequestTimeoutException) {
-    return error;
-  }
-  if (error instanceof MethodNotAllowedException) {
-    return error;
-  }
-  return error;
 };

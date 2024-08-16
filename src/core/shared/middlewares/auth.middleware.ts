@@ -20,7 +20,7 @@ export class AuthMiddleware implements NestMiddleware {
 
     const token = this.#extractTokenFromHeader(request);
     try {
-      const isVerified = await this.jwtService.verifyAsync(token, {
+      await this.jwtService.verifyAsync(token, {
         secret: jwtModuleOptions.secret,
       });
     } catch (error) {

@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -43,8 +44,11 @@ export class VaultsController {
   @UsePipes(ValidateVaultPipe)
   @HttpCode(201)
   @Post()
-  createVault(@Body() createVaultDto: CreateVaultDto): Promise<ApiResponseModel<Vault>> {
-    return this.vaultsService.createVault(createVaultDto);
+  createVault(
+    @Req() request: Request,
+    @Body() CreateVaultData: CreateVaultDto,
+  ): Promise<ApiResponseModel<Vault>> {
+    return this.vaultsService.createVault({ request, CreateVaultData });
   }
 
   @ApiResponse({
@@ -94,8 +98,12 @@ export class VaultsController {
   @UsePipes(new ValidationPipe({ whitelist: true }), new PathParamsPipe(), ValidateVaultPipe)
   @HttpCode(200)
   @Patch(':id')
-  updateVault(@Param('id') id: string, @Body() updateVaultDto: UpdateVaultDto) {
-    return this.vaultsService.updateVault(id, updateVaultDto);
+  updateVault(
+    @Req() request: Request,
+    @Param('id') id: string,
+    @Body() updateVaultData: UpdateVaultDto,
+  ) {
+    return this.vaultsService.updateVault({ request, id, updateVaultData });
   }
 
   @ApiResponse({
