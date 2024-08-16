@@ -19,11 +19,8 @@ import {
 import { OrderEnum } from '../../core/shared/enums';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
 import { ApiQueryParamUnifiedModel } from '../../core/shared/models/api-query.model';
-import {
-  CreateUsersAttachmentDto,
-  CreateVaultsAttachmentDto,
-  CreateVaultsAttachmentInternalDto,
-} from './dtos/create-attachment.dto';
+import { VaultsService } from '../vaults/vaults.service';
+import { CreateAttachmentDto } from './dtos/create-attachment.dto';
 import { ListQueryAttachmentsDto } from './dtos/list-attachment.dto';
 import { Attachment } from './entities/attachment.entity';
 
@@ -33,15 +30,30 @@ export class AttachmentsService {
     @InjectRepository(Attachment)
     private readonly attachmentsRepository: Repository<Attachment>,
     private readonly filesService: FilesService,
+    private readonly vaultsService: VaultsService,
   ) {}
 
-  async uploadAttachments(
-    request: Request,
-    file: Express.Multer.File,
-    createAttachmentData: CreateUsersAttachmentDto | CreateVaultsAttachmentDto,
-  ): Promise<ApiResponseModel<Attachment>> {
+  async uploadAttachments({
+    request,
+    file,
+    createAttachmentData,
+  }: {
+    request: Request;
+    file: Express.Multer.File;
+    createAttachmentData: CreateAttachmentDto;
+  }): Promise<ApiResponseModel<Attachment>> {
     try {
-      const newAttachment = await this.#getAttachmentPayload(request, file, createAttachmentData);
+      //Validate the vault
+      if (!isMissing(createAttachmentData?.vault)) {
+        await this.#isVaultValid(createAttachmentData);
+      }
+
+      //Upload on AWS S3 and in DB
+      const newAttachment = await this.#getAttachmentPayload({
+        request,
+        file,
+        createAttachmentData,
+      });
       const data = await this.attachmentsRepository.save(newAttachment);
 
       return {
@@ -51,7 +63,7 @@ export class AttachmentsService {
       };
     } catch (error) {
       Logger.error(`Error in create attachment: ${error.message}`);
-      throw new InternalServerErrorException(`Error in create attachment: ${error.message}`);
+      throw error;
     }
   }
 
@@ -75,7 +87,7 @@ export class AttachmentsService {
       };
     } catch (error) {
       Logger.error(`Error in list attachment: ${error.message}`);
-      throw new InternalServerErrorException(`Error in list attachment: ${error.message}`);
+      throw error;
     }
   }
 
@@ -95,11 +107,15 @@ export class AttachmentsService {
     return { data, metadata: { params: { id } } };
   }
 
-  async #getAttachmentPayload(
-    request: Request,
-    file: Express.Multer.File,
-    createAttachmentData: CreateUsersAttachmentDto | CreateVaultsAttachmentDto,
-  ): Promise<CreateVaultsAttachmentInternalDto | CreateVaultsAttachmentInternalDto> {
+  async #getAttachmentPayload({
+    request,
+    file,
+    createAttachmentData,
+  }: {
+    request: Request;
+    file: Express.Multer.File;
+    createAttachmentData: CreateAttachmentDto;
+  }): Promise<CreateAttachmentDto> {
     const identifier: string = this.#getIdentifier(request);
     const s3Path: string = this.#getS3Path(createAttachmentData);
 
@@ -108,20 +124,27 @@ export class AttachmentsService {
       fileFormat: getFileExtension(file?.originalname),
       key: getS3FileKey(identifier, file, s3Path),
       url: (await this.filesService.uplaodFileToS3(file, s3Path, identifier))?.data?.url,
+      user: request?.['user']?.id,
       ...createAttachmentData,
-    } as CreateVaultsAttachmentInternalDto | CreateVaultsAttachmentInternalDto;
+    } as CreateAttachmentDto;
   }
 
   #getIdentifier = (request: Request) => {
-    const identifier = containsKey({ ...request?.['user'] }, 'id') && request?.['user']?.['id'];
+    const identifier = containsKey({ ...request?.['user'] }, 'id') && request?.['user']?.id;
     if (isMissing(identifier))
       throw new InternalServerErrorException(`Something went wrong. Please login with valid user.`);
     return identifier;
   };
 
-  #getS3Path = (createAttachmentData: CreateUsersAttachmentDto | CreateVaultsAttachmentDto) => {
+  #getS3Path = (createAttachmentData: CreateAttachmentDto) => {
     return containsKey({ ...createAttachmentData }, 'vault')
       ? getVaultsS3Path(createAttachmentData)
       : getUsersS3Path(createAttachmentData);
+  };
+
+  #isVaultValid = async ({ vault }: CreateAttachmentDto) => {
+    const isVaultExist = await this.vaultsService.findVaultByValue({ id: vault });
+    if (!isVaultExist) throw new NotFoundException(`Vault is invalid with id: ${vault}`);
+    return true;
   };
 }

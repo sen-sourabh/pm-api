@@ -42,6 +42,8 @@ export class Attachment {
   @Column({
     length: 255,
     type: 'varchar',
+    nullable: true,
+    default: null,
   })
   @IsString()
   @IsOptional()
@@ -55,6 +57,8 @@ export class Attachment {
   @Column({
     type: 'enum',
     enum: FileFormatEnum,
+    nullable: false,
+    default: FileFormatEnum.JPEG,
   })
   @IsEnum(FileFormatEnum)
   @IsOptional()
@@ -68,6 +72,8 @@ export class Attachment {
   @Column({
     type: 'enum',
     enum: CategoryEnum,
+    nullable: false,
+    default: CategoryEnum.ADDITIONAL,
   })
   @IsEnum(CategoryEnum)
   @IsOptional()
@@ -92,6 +98,8 @@ export class Attachment {
   })
   @Column({
     type: 'mediumtext',
+    nullable: true,
+    default: null,
   })
   @IsString()
   @IsOptional()
@@ -102,7 +110,7 @@ export class Attachment {
     required: false,
   })
   @ManyToOne(() => User)
-  @Column({ name: 'userId', type: 'varchar', nullable: true })
+  @Column({ name: 'userId', type: 'varchar', nullable: true, default: null })
   @IsString()
   @IsOptional()
   user?: string;
@@ -112,20 +120,10 @@ export class Attachment {
     required: false,
   })
   @ManyToOne(() => Vault)
-  @Column({ name: 'vaultId', type: 'varchar', nullable: true })
+  @Column({ name: 'vaultId', type: 'varchar', nullable: true, default: null })
   @IsString()
   @IsOptional()
   vault?: string;
-
-  // @ApiPropertyOptional({
-  //   description: 'The provider of the attachment',
-  //   required:false,
-  // })
-  // @ManyToOne(() => Provider)
-  // @Column({ name: 'providerId', type: 'varchar' })
-  // @IsString()
-  // @IsOptional()
-  // provider?: string;
 
   @ApiPropertyOptional({
     description: 'The attachment is archived or not',

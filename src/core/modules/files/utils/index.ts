@@ -1,4 +1,4 @@
-import { CreateAttachmentDto } from '../../../../modules/attachments/dtos/create-attachment.dto';
+import { CreateAttachmentInternalDto } from '../../../../modules/attachments/dtos/create-attachment.dto';
 import { CategoryEnum, UpoadFileS3PathEnum } from '../enums/category.enum';
 import { CoreFileModel } from '../models/file.model';
 
@@ -45,13 +45,13 @@ export const getS3ObjectUrl = (bucket: string, fileKey: string): string => {
   return `https://${bucket}.s3.amazonaws.com/${fileKey}`;
 };
 
-export const getUsersS3Path = ({ category }: CreateAttachmentDto): string => {
+export const getUsersS3Path = ({ category }: CreateAttachmentInternalDto): string => {
   return category?.trim().toString() === CategoryEnum.PROFILE
     ? UpoadFileS3PathEnum.USERS_PROFILES
     : UpoadFileS3PathEnum.USERS_ADDITIONALS;
 };
 
-export const getVaultsS3Path = ({ category }: CreateAttachmentDto): string => {
+export const getVaultsS3Path = ({ category }: CreateAttachmentInternalDto): string => {
   return category?.trim().toString() === CategoryEnum.PROFILE
     ? UpoadFileS3PathEnum.VAULTS_PROFILES
     : UpoadFileS3PathEnum.VAULTS_ADDITIONALS;

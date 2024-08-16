@@ -1337,87 +1337,45 @@
         ]
       }
     },
-    "/api/v1/attachments/users": {
-      "post": {
-        "operationId": "createUsersAttachment",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateUsersAttachmentDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Attachment"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "409": {
-            "description": "Conflict"
-          }
-        },
-        "tags": [
-          "Attachments"
-        ]
-      }
-    },
-    "/api/v1/attachments/vaults": {
-      "post": {
-        "operationId": "createVaultsAttachment",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateVaultsAttachmentDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Attachment"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "409": {
-            "description": "Conflict"
-          }
-        },
-        "tags": [
-          "Attachments"
-        ]
-      }
-    },
     "/api/v1/attachments": {
+      "post": {
+        "operationId": "createAttachment",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAttachmentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Attachment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        },
+        "tags": [
+          "Attachments"
+        ]
+      },
       "get": {
         "operationId": "findAllAttachments",
         "parameters": [
@@ -3178,7 +3136,7 @@
           "vault"
         ]
       },
-      "CreateUsersAttachmentDto": {
+      "CreateAttachmentDto": {
         "type": "object",
         "properties": {
           "file": {
@@ -3193,6 +3151,31 @@
               "ADDITIONAL"
             ]
           },
+          "name": {
+            "type": "string",
+            "description": "The attachment name"
+          },
+          "fileFormat": {
+            "type": "string",
+            "description": "The attachment file format",
+            "enum": [
+              "png",
+              "jpeg",
+              "jpg"
+            ]
+          },
+          "key": {
+            "type": "string",
+            "description": "The attachment key"
+          },
+          "url": {
+            "type": "string",
+            "description": "The attachment url"
+          },
+          "vault": {
+            "type": "string",
+            "description": "The vault of the attachment"
+          },
           "user": {
             "type": "string",
             "description": "The user of the attachment"
@@ -3200,8 +3183,7 @@
         },
         "required": [
           "file",
-          "category",
-          "user"
+          "category"
         ]
       },
       "Attachment": {
@@ -3275,32 +3257,6 @@
             "nullable": true
           }
         }
-      },
-      "CreateVaultsAttachmentDto": {
-        "type": "object",
-        "properties": {
-          "file": {
-            "type": "string",
-            "format": "binary"
-          },
-          "category": {
-            "type": "string",
-            "description": "The attachment category",
-            "enum": [
-              "PROFILE",
-              "ADDITIONAL"
-            ]
-          },
-          "vault": {
-            "type": "string",
-            "description": "The vault of the attachment"
-          }
-        },
-        "required": [
-          "file",
-          "category",
-          "vault"
-        ]
       },
       "CreateProviderDto": {
         "type": "object",

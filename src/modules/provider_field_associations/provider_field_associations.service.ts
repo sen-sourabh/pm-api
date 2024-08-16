@@ -1,10 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../core/helpers/serializers';
@@ -24,13 +18,18 @@ export class ProviderFieldAssociationsService {
     private readonly providerFieldAssociationsRepository: Repository<ProviderFieldAssociation>,
   ) {}
 
-  async createProviderFieldAssociation(
-    createProviderFieldAssociationData: CreateProviderFieldAssociationDto,
-  ): Promise<ApiResponseModel<ProviderFieldAssociation>> {
+  async createProviderFieldAssociation({
+    request,
+    createProviderFieldAssociationData,
+  }: {
+    request: Request;
+    createProviderFieldAssociationData: CreateProviderFieldAssociationDto;
+  }): Promise<ApiResponseModel<ProviderFieldAssociation>> {
     try {
-      const newProviderFieldAssociation = this.providerFieldAssociationsRepository.create(
-        createProviderFieldAssociationData,
-      );
+      const newProviderFieldAssociation = this.providerFieldAssociationsRepository.create({
+        ...createProviderFieldAssociationData,
+        addedBy: request?.['user']?.id,
+      });
       const data = await this.providerFieldAssociationsRepository.save(newProviderFieldAssociation);
       return {
         data,
@@ -39,9 +38,7 @@ export class ProviderFieldAssociationsService {
       };
     } catch (error) {
       Logger.error(`Error in create provider field association: ${error.message}`);
-      throw new InternalServerErrorException(
-        `Error in create provider field association: ${error.message}`,
-      );
+      throw error;
     }
   }
 
@@ -65,9 +62,7 @@ export class ProviderFieldAssociationsService {
       };
     } catch (error) {
       Logger.error(`Error in list provider field association: ${error.message}`);
-      throw new InternalServerErrorException(
-        `Error in list provider field association: ${error.message}`,
-      );
+      throw error;
     }
   }
 

@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -44,11 +45,13 @@ export class ProviderFieldAssociationsController {
   @HttpCode(201)
   @Post()
   createProviderFieldAssociation(
-    @Body() createProviderFieldAssociationDto: CreateProviderFieldAssociationDto,
+    @Req() request: Request,
+    @Body() createProviderFieldAssociationData: CreateProviderFieldAssociationDto,
   ): Promise<ApiResponseModel<ProviderFieldAssociation>> {
-    return this.providerFieldAssociationsService.createProviderFieldAssociation(
-      createProviderFieldAssociationDto,
-    );
+    return this.providerFieldAssociationsService.createProviderFieldAssociation({
+      request,
+      createProviderFieldAssociationData,
+    });
   }
 
   @ApiResponse({

@@ -25,10 +25,9 @@ import { PaginatePipe } from '../../core/shared/pipes/paginate.pipe';
 import { PathParamsPipe } from '../../core/shared/pipes/path-params.pipe';
 import { QueryParamsPipe } from '../../core/shared/pipes/query-params.pipe';
 import { AttachmentsService } from './attachments.service';
-import { CreateUsersAttachmentDto, CreateVaultsAttachmentDto } from './dtos/create-attachment.dto';
+import { CreateAttachmentDto } from './dtos/create-attachment.dto';
 import { ListQueryAttachmentsDto } from './dtos/list-attachment.dto';
 import { Attachment } from './entities/attachment.entity';
-import { AttachmentBodyParserPipe } from './pipes/body-parser.pipe';
 
 @UseGuards(JwtAuthGuard)
 @ApiTags('Attachments')
@@ -44,42 +43,22 @@ export class AttachmentsController {
   )
   @ApiConsumes('multipart/form-data')
   @ApiBody({
-    type: CreateUsersAttachmentDto,
+    type: CreateAttachmentDto,
   })
   @UseInterceptors(FileInterceptor('file'))
-  @UsePipes(AttachmentBodyParserPipe)
   @HttpCode(201)
-  @Post('users')
-  createUsersAttachment(
+  @Post()
+  createAttachment(
     @Req() request: Request,
     @UploadedFile(new ParseFilePipe(FILE_VALIDATORS))
     file: Express.Multer.File,
-    @Body() createUsersAttachmentDto: CreateUsersAttachmentDto,
+    @Body() createAttachmentData: any,
   ): Promise<ApiResponseModel<Attachment>> {
-    return this.attachmentsService.uploadAttachments(request, file, createUsersAttachmentDto);
-  }
-
-  @ApiResponse({ status: 201, type: Attachment })
-  @ApiXResponses(
-    ApiXResponsesEnum.Unauthorized,
-    ApiXResponsesEnum.BadRequest,
-    ApiXResponsesEnum.Conflict,
-  )
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    type: CreateVaultsAttachmentDto,
-  })
-  @UseInterceptors(FileInterceptor('file'))
-  @UsePipes(AttachmentBodyParserPipe)
-  @HttpCode(201)
-  @Post('vaults')
-  createVaultsAttachment(
-    @Req() request: Request,
-    @UploadedFile(new ParseFilePipe(FILE_VALIDATORS))
-    file: Express.Multer.File,
-    @Body() createVaultsAttachmentDto: CreateVaultsAttachmentDto,
-  ): Promise<ApiResponseModel<Attachment>> {
-    return this.attachmentsService.uploadAttachments(request, file, createVaultsAttachmentDto);
+    return this.attachmentsService.uploadAttachments({
+      request,
+      file,
+      createAttachmentData,
+    });
   }
 
   @ApiResponse({
