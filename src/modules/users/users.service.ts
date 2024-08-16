@@ -46,7 +46,7 @@ export class UsersService {
 
       const data = await this.usersRepository.find({
         where: query,
-        relations: relations && ['role', 'accounttype'],
+        relations: relations && ['role', 'accountType'],
         skip,
         take,
         order: { updatedAt: OrderEnum.DESC },
@@ -70,7 +70,7 @@ export class UsersService {
 
     const data = await this.usersRepository.findOne({
       where: { id },
-      relations: relations && ['role', 'accounttype'],
+      relations: relations && ['role', 'accountType'],
     });
     if (isMissing(data)) {
       throw new NotFoundException(`Record not found with id: ${id}`);

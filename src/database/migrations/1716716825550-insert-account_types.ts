@@ -7,11 +7,11 @@ export class InsertAccountTypes1716716825550 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     try {
       await queryRunner.query(
-        `INSERT INTO accounttypes (name) VALUES ('organization'), ('individual')`,
+        `INSERT INTO account_types (name) VALUES ('organization'), ('individual')`,
       );
-      this.logger.log(`Up: Insert accounttypes executed`);
+      this.logger.log(`Up: Insert account_types executed`);
     } catch (error) {
-      this.logger.error(`Up: Insert accounttypes have an error: `, error?.message);
+      this.logger.error(`Up: Insert account_types have an error: `, error?.message);
     }
   }
 

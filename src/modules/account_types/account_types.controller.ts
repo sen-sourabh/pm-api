@@ -7,35 +7,35 @@ import { ApiResponseModel } from '../../core/shared/interfaces/api-response.inte
 import { PaginatePipe } from '../../core/shared/pipes/paginate.pipe';
 import { PathParamsPipe } from '../../core/shared/pipes/path-params.pipe';
 import { QueryParamsPipe } from '../../core/shared/pipes/query-params.pipe';
-import { AccounttypesService } from './accounttypes.service';
-import { ListQueryAccounttypesDto } from './dto/list-accounttype.dto';
-import { Accounttype } from './entities/accounttype.entity';
+import { AccountTypesService } from './account_types.service';
+import { ListQueryAccountTypesDto } from './dto/list-account_type.dto';
+import { AccountType } from './entities/account_type.entity';
 
 @UseGuards(JwtAuthGuard)
-@ApiTags('Accounttypes')
-@Controller('accounttypes')
-export class AccounttypesController {
-  constructor(private readonly accounttypesService: AccounttypesService) {}
+@ApiTags('AccountTypes')
+@Controller('account-types')
+export class AccountTypesController {
+  constructor(private readonly accountTypesService: AccountTypesService) {}
 
   @ApiResponse({
-    description: 'returns list of accounttypes',
-    type: [Accounttype],
+    description: 'returns list of account types',
+    type: [AccountType],
     status: 200,
   })
   @ApiXResponses(ApiXResponsesEnum.Unauthorized, ApiXResponsesEnum.BadRequest)
   @UsePipes(new QueryParamsPipe(), new PaginatePipe())
   @HttpCode(200)
   @Get()
-  findAllAccounttypes(
+  findAllAccountTypes(
     @Query()
-    listQueryAccounttypesDto?: ListQueryAccounttypesDto,
-  ): Promise<ApiResponseModel<Accounttype[]>> {
-    return this.accounttypesService.findAllAccounttypes(listQueryAccounttypesDto);
+    listQueryAccountTypesDto?: ListQueryAccountTypesDto,
+  ): Promise<ApiResponseModel<AccountType[]>> {
+    return this.accountTypesService.findAllAccountTypes(listQueryAccountTypesDto);
   }
 
   @ApiResponse({
-    description: 'return accounttype as per the identifier',
-    type: Accounttype,
+    description: 'return account type as per the identifier',
+    type: AccountType,
     status: 200,
   })
   @ApiXResponses(
@@ -47,6 +47,6 @@ export class AccounttypesController {
   @HttpCode(200)
   @Get(':id')
   findOneUsertype(@Param('id') id: number) {
-    return this.accounttypesService.findOneAccounttype(+id);
+    return this.accountTypesService.findOneAccountType(+id);
   }
 }

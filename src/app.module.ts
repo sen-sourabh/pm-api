@@ -19,8 +19,8 @@ import { HttpExceptionFilter } from './core/shared/exception-filters/http-except
 import { TokenExpiredExceptionFilter } from './core/shared/exception-filters/token-expire.filter';
 import { LoggingInterceptor } from './core/shared/interceptors/logging.interceptor';
 import { AuthMiddleware } from './core/shared/middlewares/auth.middleware';
-import { AccounttypesController } from './modules/accounttypes/accounttypes.controller';
-import { AccounttypesModule } from './modules/accounttypes/accounttypes.module';
+import { AccountTypesController } from './modules/account_types/account_types.controller';
+import { AccountTypesModule } from './modules/account_types/account_types.module';
 import { AttachmentsController } from './modules/attachments/attachments.controller';
 import { AttachmentsModule } from './modules/attachments/attachments.module';
 import { ProviderFieldAssociationsController } from './modules/provider_field_associations/provider_field_associations.controller';
@@ -52,7 +52,7 @@ import { VaultsCollaboratorsModule } from './modules/vaults_collaborators/vaults
     MessengerModule,
     WebhooksModule,
     RolesModule,
-    AccounttypesModule,
+    AccountTypesModule,
     UsersModule,
     ActivityLogsModule,
     VaultsModule,
@@ -87,7 +87,7 @@ export class AppModule {
       .apply(AuthMiddleware)
       .forRoutes(
         ActivityLogsController,
-        AccounttypesController,
+        AccountTypesController,
         RolesController,
         UsersController,
         VaultsController,

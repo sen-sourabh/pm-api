@@ -9,7 +9,7 @@ export class CreateAccountTypes1716716692286 implements MigrationInterface {
     try {
       await queryRunner.createTable(
         new Table({
-          name: 'accounttypes',
+          name: 'account_types',
           columns: [
             {
               name: 'id',
@@ -56,18 +56,18 @@ export class CreateAccountTypes1716716692286 implements MigrationInterface {
         }),
         false, // Skip table type check as it can vary across databases
       );
-      this.logger.log(`Up: Create accounttypes executed`);
+      this.logger.log(`Up: Create account_types executed`);
     } catch (error) {
-      printMigrationErrorLogs(this.logger, 'accounttypes', error?.message);
+      printMigrationErrorLogs(this.logger, 'account_types', error?.message);
     }
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     try {
-      await queryRunner.dropTable('accounttypes');
-      this.logger.log(`Down: Drop accounttypes executed`);
+      await queryRunner.dropTable('account_types');
+      this.logger.log(`Down: Drop account_types executed`);
     } catch (error) {
-      this.logger.error(`Down: Drop accounttypes has an error: `, error?.message);
+      this.logger.error(`Down: Drop account_types has an error: `, error?.message);
     }
   }
 }
