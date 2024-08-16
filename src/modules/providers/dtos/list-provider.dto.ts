@@ -4,7 +4,7 @@ import { ApiQueryParamUnifiedModel } from '../../../core/shared/models/api-query
 import { Provider } from '../entities/provider.entity';
 
 export class ListQueryProvidersDto extends IntersectionType(
-  PickType(Provider, ['vault', 'name', 'isEnabled', 'isDeleted']),
+  PickType(Provider, ['vault', 'name', 'addedBy', 'isEnabled', 'isDeleted']),
   ApiPaginateUnifiedModel,
   ApiQueryParamUnifiedModel,
 ) {}

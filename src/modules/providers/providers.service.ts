@@ -1,10 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../core/helpers/serializers';
@@ -24,9 +18,18 @@ export class ProvidersService {
     private readonly providersRepository: Repository<Provider>,
   ) {}
 
-  async createProvider(createProviderData: CreateProviderDto): Promise<ApiResponseModel<Provider>> {
+  async createProvider({
+    request,
+    createProviderData,
+  }: {
+    request: Request;
+    createProviderData: CreateProviderDto;
+  }): Promise<ApiResponseModel<Provider>> {
     try {
-      const newProvider = this.providersRepository.create(createProviderData);
+      const newProvider = this.providersRepository.create({
+        ...createProviderData,
+        addedBy: request?.['user']?.id,
+      });
       const data = await this.providersRepository.save(newProvider);
       return {
         data,
@@ -35,7 +38,7 @@ export class ProvidersService {
       };
     } catch (error) {
       Logger.error(`Error in create provider: ${error.message}`);
-      throw new InternalServerErrorException(`Error in create provider: ${error.message}`);
+      throw error;
     }
   }
 
@@ -57,7 +60,7 @@ export class ProvidersService {
       };
     } catch (error) {
       Logger.error(`Error in list provider: ${error.message}`);
-      throw new InternalServerErrorException(`Error in list provider: ${error.message}`);
+      throw error;
     }
   }
 
@@ -77,12 +80,15 @@ export class ProvidersService {
     return { data, metadata: { params: { id } } };
   }
 
-  async updateProvider(
-    id: string,
-    updateProviderDto: UpdateProviderDto,
-  ): Promise<ApiResponseModel<Provider>> {
+  async updateProvider({
+    id,
+    updateProviderData,
+  }: {
+    id: string;
+    updateProviderData: UpdateProviderDto;
+  }): Promise<ApiResponseModel<Provider>> {
     //Actual provider update
-    const updated = await this.providersRepository.update(id, updateProviderDto);
+    const updated = await this.providersRepository.update(id, updateProviderData);
     if (!updated?.affected) {
       throw new BadRequestException(`Not updated`);
     }
@@ -94,7 +100,7 @@ export class ProvidersService {
       data,
       metadata: {
         params: { id },
-        body: updateProviderDto,
+        body: updateProviderData,
       },
       message: 'Provider updated successfully',
     };
