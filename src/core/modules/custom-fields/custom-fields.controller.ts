@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -41,13 +42,14 @@ export class CustomFieldsController {
     ApiXResponsesEnum.BadRequest,
     ApiXResponsesEnum.Conflict,
   )
-  @UsePipes(new ValidationPipe({ whitelist: true }), new BodyParserPipe(), ValidateCustomFieldPipe)
+  @UsePipes(new ValidationPipe({ whitelist: true }), new BodyParserPipe())
   @HttpCode(201)
   @Post()
   createCustomField(
-    @Body() createCustomFieldDto: CreateCustomFieldDto,
+    @Req() request: Request,
+    @Body() createCustomFieldData: CreateCustomFieldDto,
   ): Promise<ApiResponseModel<CustomField>> {
-    return this.customFieldsService.createCustomField(createCustomFieldDto);
+    return this.customFieldsService.createCustomField({ request, createCustomFieldData });
   }
 
   @ApiResponse({
@@ -97,8 +99,12 @@ export class CustomFieldsController {
   @UsePipes(new ValidationPipe({ whitelist: true }), new PathParamsPipe(), ValidateCustomFieldPipe)
   @HttpCode(200)
   @Patch(':id')
-  updateCustomField(@Param('id') id: string, @Body() updateCustomFieldDto: UpdateCustomFieldDto) {
-    return this.customFieldsService.updateCustomField(id, updateCustomFieldDto);
+  updateCustomField(
+    @Req() request: Request,
+    @Param('id') id: string,
+    @Body() updateCustomFieldData: UpdateCustomFieldDto,
+  ) {
+    return this.customFieldsService.updateCustomField({ request, id, updateCustomFieldData });
   }
 
   @ApiResponse({

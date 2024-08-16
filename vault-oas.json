@@ -1933,6 +1933,15 @@
             }
           },
           {
+            "name": "addedBy",
+            "required": false,
+            "in": "query",
+            "description": "The user who updated the field at last",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "isEnabled",
             "required": false,
             "in": "query",

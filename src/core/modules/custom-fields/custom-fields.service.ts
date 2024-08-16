@@ -1,7 +1,7 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
-  InternalServerErrorException,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
@@ -24,11 +24,24 @@ export class CustomFieldsService {
     private readonly customFieldsRepository: Repository<CustomField>,
   ) {}
 
-  async createCustomField(
-    createCustomFieldData: CreateCustomFieldDto,
-  ): Promise<ApiResponseModel<CustomField>> {
+  async createCustomField({
+    request,
+    createCustomFieldData,
+  }: {
+    request: Request;
+    createCustomFieldData: CreateCustomFieldDto;
+  }): Promise<ApiResponseModel<CustomField>> {
     try {
-      const newCustomField = this.customFieldsRepository.create(createCustomFieldData);
+      //Verify uniqueness of custom_field name within the user
+      await this.#checkCustomFieldNameIsUnique({
+        key: createCustomFieldData?.['key'],
+        addedBy: request?.['user']?.id,
+      });
+
+      const newCustomField = this.customFieldsRepository.create({
+        ...createCustomFieldData,
+        addedBy: request?.['user']?.id,
+      });
       const data = await this.customFieldsRepository.save(newCustomField);
       return {
         data,
@@ -37,7 +50,7 @@ export class CustomFieldsService {
       };
     } catch (error) {
       Logger.error(`Error in create custom field: ${error.message}`);
-      throw new InternalServerErrorException(`Error in create custom field: ${error.message}`);
+      throw error;
     }
   }
 
@@ -61,7 +74,7 @@ export class CustomFieldsService {
       };
     } catch (error) {
       Logger.error(`Error in list custom field: ${error.message}`);
-      throw new InternalServerErrorException(`Error in list custom field: ${error.message}`);
+      throw error;
     }
   }
 
@@ -81,12 +94,25 @@ export class CustomFieldsService {
     return { data, metadata: { params: { id } } };
   }
 
-  async updateCustomField(
-    id: string,
-    updateCustomFieldDto: UpdateCustomFieldDto,
-  ): Promise<ApiResponseModel<CustomField>> {
+  async updateCustomField({
+    request,
+    id,
+    updateCustomFieldData,
+  }: {
+    request: Request;
+    id: string;
+    updateCustomFieldData: UpdateCustomFieldDto;
+  }): Promise<ApiResponseModel<CustomField>> {
+    //Verify uniqueness of custom_field name within the user
+    if (!isMissing(updateCustomFieldData?.name)) {
+      await this.#checkCustomFieldNameIsUnique({
+        key: updateCustomFieldData?.['key'],
+        addedBy: request?.['user']?.id,
+      });
+    }
+
     //Actual custom field update
-    const updated = await this.customFieldsRepository.update(id, updateCustomFieldDto);
+    const updated = await this.customFieldsRepository.update(id, updateCustomFieldData);
     if (!updated?.affected) {
       throw new BadRequestException(`Not updated`);
     }
@@ -98,7 +124,7 @@ export class CustomFieldsService {
       data,
       metadata: {
         params: { id },
-        body: updateCustomFieldDto,
+        body: updateCustomFieldData,
       },
       message: 'CustomField updated successfully',
     };
@@ -137,4 +163,15 @@ export class CustomFieldsService {
       return false;
     }
   }
+
+  #checkCustomFieldNameIsUnique = async ({ key, addedBy }: { key?: string; addedBy?: string }) => {
+    const isNameUnique = await this.findCustomFieldByValue({
+      key,
+      addedBy,
+    });
+    if (isNameUnique) {
+      throw new ConflictException(`Name should be unique`);
+    }
+    return true;
+  };
 }
