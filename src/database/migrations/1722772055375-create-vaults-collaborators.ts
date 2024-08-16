@@ -38,7 +38,7 @@ export class CreateVaultsCollaborators1722772055375 implements MigrationInterfac
               default: 3,
             },
             {
-              name: 'addedById',
+              name: 'updatedById',
               type: 'varchar',
               length: '255',
               isNullable: false,
@@ -82,8 +82,8 @@ export class CreateVaultsCollaborators1722772055375 implements MigrationInterfac
             },
             // Foreign key for addedBy association
             {
-              name: 'FK_vaults_collaborators_addedby',
-              columnNames: ['addedById'],
+              name: 'FK_vaults_collaborators_updateBy',
+              columnNames: ['updatedById'],
               referencedTableName: 'users',
               referencedColumnNames: ['id'],
               onDelete: 'CASCADE', // Optional: Set deletion behavior (e.g., CASCADE, SET NULL)

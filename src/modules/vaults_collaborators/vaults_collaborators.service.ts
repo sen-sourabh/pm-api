@@ -64,7 +64,7 @@ export class VaultsCollaboratorsService {
 
       const data = await this.vaultsCollaboratorsRepository.find({
         where: query,
-        relations: relations && ['user', 'vault', 'role'],
+        relations: relations && ['user', 'vault', 'role', 'updatedBy'],
         skip,
         take,
         order: { updatedAt: OrderEnum.DESC },
@@ -88,7 +88,7 @@ export class VaultsCollaboratorsService {
 
     const data = await this.vaultsCollaboratorsRepository.findOne({
       where: { id },
-      relations: relations && ['user', 'vault', 'role'],
+      relations: relations && ['user', 'vault', 'role', 'updatedBy'],
     });
     if (isMissing(data)) {
       throw new NotFoundException(`Record not found with id: ${id}`);

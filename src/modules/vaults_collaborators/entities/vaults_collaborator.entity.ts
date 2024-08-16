@@ -68,15 +68,15 @@ export class VaultsCollaborator {
   role: number;
 
   @ApiPropertyOptional({
-    description: 'The user who given the access',
+    description: 'The user who given/updated the access',
     required: false,
     nullable: false,
   })
   @ManyToOne(() => User)
-  @Column({ name: 'addedById', nullable: false })
+  @Column({ name: 'updatedById', nullable: false })
   @IsString()
   @IsOptional()
-  addedBy?: string;
+  updatedBy?: string;
 
   @ApiPropertyOptional({
     description: 'whether collaborator is enabled or not',
