@@ -4,7 +4,7 @@ import { ApiQueryParamUnifiedModel } from '../../../shared/models/api-query.mode
 import { CustomField } from '../entities/custom-field.entity';
 
 export class ListQueryCustomFieldsDto extends IntersectionType(
-  PickType(CustomField, ['name', 'type', 'key', 'isEnabled', 'isDeleted']),
+  PickType(CustomField, ['name', 'type', 'key', 'addedBy', 'isEnabled', 'isDeleted']),
   ApiPaginateUnifiedModel,
   ApiQueryParamUnifiedModel,
 ) {}

@@ -41,7 +41,6 @@ export class VaultsController {
     ApiXResponsesEnum.BadRequest,
     ApiXResponsesEnum.Conflict,
   )
-  @UsePipes(ValidateVaultPipe)
   @HttpCode(201)
   @Post()
   createVault(
