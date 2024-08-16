@@ -8,12 +8,15 @@ import {
   Patch,
   Post,
   Query,
+  Req,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiXResponses } from '../../core/shared/decorators/apply-filters/apply-filters.decorator';
 import { ApiXResponsesEnum } from '../../core/shared/enums';
+import { JwtAuthGuard } from '../../core/shared/guards/jwt-auth.guard';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
 import { ApiQueryParamUnifiedModel } from '../../core/shared/models/api-query.model';
 import { PaginatePipe } from '../../core/shared/pipes/paginate.pipe';
@@ -26,6 +29,7 @@ import { VaultsCollaborator } from './entities/vaults_collaborator.entity';
 import { ValidateVaultsCollaboratorPipe } from './pipes/validate-collaborator.pipe';
 import { VaultsCollaboratorsService } from './vaults_collaborators.service';
 
+@UseGuards(JwtAuthGuard)
 @ApiTags('Vaults Collaborators')
 @Controller('vaults-collaborators')
 export class VaultsCollaboratorsController {
@@ -40,9 +44,13 @@ export class VaultsCollaboratorsController {
   @HttpCode(201)
   @Post()
   createVaultsCollaborator(
-    @Body() createVaultsCollaboratorDto: CreateVaultsCollaboratorDto,
+    @Req() request: Request,
+    @Body() createVaultsCollaboratorData: CreateVaultsCollaboratorDto,
   ): Promise<ApiResponseModel<VaultsCollaborator>> {
-    return this.vaultsCollaboratorsService.createVaultsCollaborator(createVaultsCollaboratorDto);
+    return this.vaultsCollaboratorsService.createVaultsCollaborator({
+      request,
+      createVaultsCollaboratorData,
+    });
   }
 
   @ApiResponse({
@@ -99,13 +107,15 @@ export class VaultsCollaboratorsController {
   @HttpCode(200)
   @Patch(':id')
   updateVaultsCollaborator(
+    @Req() request: Request,
     @Param('id') id: string,
-    @Body() updateVaultsCollaboratorDto: UpdateVaultsCollaboratorDto,
+    @Body() updateVaultsCollaboratorData: UpdateVaultsCollaboratorDto,
   ) {
-    return this.vaultsCollaboratorsService.updateVaultsCollaborator(
+    return this.vaultsCollaboratorsService.updateVaultsCollaborator({
+      request,
       id,
-      updateVaultsCollaboratorDto,
-    );
+      updateVaultsCollaboratorData,
+    });
   }
 
   @ApiResponse({
