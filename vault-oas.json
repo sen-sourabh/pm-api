@@ -1631,6 +1631,16 @@
             }
           },
           {
+            "name": "addedBy",
+            "required": false,
+            "in": "query",
+            "description": "The user who added the provider",
+            "schema": {
+              "nullable": false,
+              "type": "string"
+            }
+          },
+          {
             "name": "isEnabled",
             "required": false,
             "in": "query",
@@ -3290,6 +3300,11 @@
             "type": "string",
             "description": "The description of the provider"
           },
+          "addedBy": {
+            "type": "string",
+            "description": "The user who added the provider",
+            "nullable": false
+          },
           "vault": {
             "type": "string",
             "description": "The vault where provider belongs to.",
@@ -3298,17 +3313,11 @@
           "name": {
             "type": "string",
             "description": "The name of the provider"
-          },
-          "addedBy": {
-            "type": "string",
-            "description": "The user who added the provider",
-            "nullable": false
           }
         },
         "required": [
           "vault",
-          "name",
-          "addedBy"
+          "name"
         ]
       },
       "Provider": {
@@ -3389,11 +3398,6 @@
             "type": "string",
             "description": "The date time of provider's last access",
             "nullable": true
-          },
-          "addedBy": {
-            "type": "string",
-            "description": "The user who added the provider",
-            "nullable": false
           },
           "isEnabled": {
             "type": "boolean",

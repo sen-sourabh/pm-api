@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -44,9 +45,10 @@ export class ProvidersController {
   @HttpCode(201)
   @Post()
   createProvider(
-    @Body() createProviderDto: CreateProviderDto,
+    @Req() request: Request,
+    @Body() createProviderData: CreateProviderDto,
   ): Promise<ApiResponseModel<Provider>> {
-    return this.providersService.createProvider(createProviderDto);
+    return this.providersService.createProvider({ request, createProviderData });
   }
 
   @ApiResponse({
@@ -96,8 +98,8 @@ export class ProvidersController {
   @UsePipes(new ValidationPipe({ whitelist: true }), new PathParamsPipe(), ValidateProviderPipe)
   @HttpCode(200)
   @Patch(':id')
-  updateProvider(@Param('id') id: string, @Body() updateProviderDto: UpdateProviderDto) {
-    return this.providersService.updateProvider(id, updateProviderDto);
+  updateProvider(@Param('id') id: string, @Body() updateProviderData: UpdateProviderDto) {
+    return this.providersService.updateProvider({ id, updateProviderData });
   }
 
   @ApiResponse({

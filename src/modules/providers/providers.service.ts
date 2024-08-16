@@ -24,9 +24,18 @@ export class ProvidersService {
     private readonly providersRepository: Repository<Provider>,
   ) {}
 
-  async createProvider(createProviderData: CreateProviderDto): Promise<ApiResponseModel<Provider>> {
+  async createProvider({
+    request,
+    createProviderData,
+  }: {
+    request: Request;
+    createProviderData: CreateProviderDto;
+  }): Promise<ApiResponseModel<Provider>> {
     try {
-      const newProvider = this.providersRepository.create(createProviderData);
+      const newProvider = this.providersRepository.create({
+        ...createProviderData,
+        addedBy: request?.['user']?.id,
+      });
       const data = await this.providersRepository.save(newProvider);
       return {
         data,
@@ -77,12 +86,15 @@ export class ProvidersService {
     return { data, metadata: { params: { id } } };
   }
 
-  async updateProvider(
-    id: string,
-    updateProviderDto: UpdateProviderDto,
-  ): Promise<ApiResponseModel<Provider>> {
+  async updateProvider({
+    id,
+    updateProviderData,
+  }: {
+    id: string;
+    updateProviderData: UpdateProviderDto;
+  }): Promise<ApiResponseModel<Provider>> {
     //Actual provider update
-    const updated = await this.providersRepository.update(id, updateProviderDto);
+    const updated = await this.providersRepository.update(id, updateProviderData);
     if (!updated?.affected) {
       throw new BadRequestException(`Not updated`);
     }
@@ -94,7 +106,7 @@ export class ProvidersService {
       data,
       metadata: {
         params: { id },
-        body: updateProviderDto,
+        body: updateProviderData,
       },
       message: 'Provider updated successfully',
     };

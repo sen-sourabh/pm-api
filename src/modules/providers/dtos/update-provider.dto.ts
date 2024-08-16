@@ -5,7 +5,6 @@ export class UpdateProviderDto extends PickType(Provider, [
   'name',
   'description',
   'lastAccessed',
-  'addedBy',
   'isEnabled',
   'isDeleted',
   'vault',
