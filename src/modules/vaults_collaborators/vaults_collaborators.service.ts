@@ -1,10 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../core/helpers/serializers';
@@ -26,33 +20,34 @@ export class VaultsCollaboratorsService {
     private readonly usersService: UsersService,
   ) {}
 
-  async createVaultsCollaborator(
-    createVaultData: CreateVaultsCollaboratorDto,
-  ): Promise<ApiResponseModel<VaultsCollaborator>> {
+  async createVaultsCollaborator({
+    request,
+    createVaultsCollaboratorData,
+  }: {
+    request: Request;
+    createVaultsCollaboratorData: CreateVaultsCollaboratorDto;
+  }): Promise<ApiResponseModel<VaultsCollaborator>> {
     try {
       //Email exist or not
       const userId = await this.usersService.findOrCreateUserByEmail({
-        email: createVaultData?.user,
+        email: createVaultsCollaboratorData?.user,
       });
 
       const newVault = this.vaultsCollaboratorsRepository.create({
-        ...createVaultData,
+        ...createVaultsCollaboratorData,
         user: userId,
+        updatedBy: request?.['user']?.id,
       });
+
       const data = await this.vaultsCollaboratorsRepository.save(newVault);
       return {
         data,
-        metadata: { body: createVaultData },
+        metadata: { body: createVaultsCollaboratorData },
         message: 'Vaults Collaborator created successfully',
       };
     } catch (error) {
       Logger.error(`Error in create vaults collaborator: ${error.message}`);
-      if (error instanceof BadRequestException) {
-        throw error;
-      }
-      throw new InternalServerErrorException(
-        `Error in create vaults collaborator: ${error.message}`,
-      );
+      throw error;
     }
   }
 
@@ -76,7 +71,7 @@ export class VaultsCollaboratorsService {
       };
     } catch (error) {
       Logger.error(`Error in list vaults collaborator: ${error.message}`);
-      throw new InternalServerErrorException(`Error in list vaults collaborator: ${error.message}`);
+      throw error;
     }
   }
 
@@ -96,27 +91,38 @@ export class VaultsCollaboratorsService {
     return { data, metadata: { params: { id } } };
   }
 
-  async updateVaultsCollaborator(
-    id: string,
-    updateVaultDto: UpdateVaultsCollaboratorDto,
-  ): Promise<ApiResponseModel<VaultsCollaborator>> {
+  async updateVaultsCollaborator({
+    request,
+    id,
+    updateVaultsCollaboratorData,
+  }: {
+    request: Request;
+    id: string;
+    updateVaultsCollaboratorData: UpdateVaultsCollaboratorDto;
+  }): Promise<ApiResponseModel<VaultsCollaborator>> {
     //Email exist or not
-    if (!isMissing(updateVaultDto?.user)) {
-      const userId = await this.usersService.findOrCreateUserByEmail({
-        email: updateVaultDto?.user,
+    let userId: string;
+    if (!isMissing(updateVaultsCollaboratorData?.user)) {
+      userId = await this.usersService.findOrCreateUserByEmail({
+        email: updateVaultsCollaboratorData?.user,
       });
-      updateVaultDto = {
-        ...updateVaultDto,
-        user: userId,
-      };
     }
 
-    //Actual user update
-    const updated = await this.vaultsCollaboratorsRepository.update(id, updateVaultDto);
+    updateVaultsCollaboratorData = {
+      ...updateVaultsCollaboratorData,
+      user: userId,
+      updatedBy: request?.['user']?.id,
+    };
+
+    //Actual collaborator update
+    const updated = await this.vaultsCollaboratorsRepository.update(
+      id,
+      updateVaultsCollaboratorData,
+    );
     if (!updated?.affected) {
       throw new BadRequestException(`Not updated`);
     }
-    //Get updated user
+    //Get updated collaborator
     const data = await this.vaultsCollaboratorsRepository.findOneBy({
       id,
     });
@@ -124,7 +130,7 @@ export class VaultsCollaboratorsService {
       data,
       metadata: {
         params: { id },
-        body: updateVaultDto,
+        body: updateVaultsCollaboratorData,
       },
       message: 'Vaults Collaborator updated successfully',
     };

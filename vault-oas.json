@@ -3058,6 +3058,11 @@
             "type": "number",
             "description": "The access of the vault"
           },
+          "updatedBy": {
+            "type": "string",
+            "description": "The user who given/updated the access",
+            "nullable": false
+          },
           "user": {
             "type": "string",
             "description": "The collaborator`s email id of the vault",
@@ -3067,17 +3072,11 @@
             "type": "string",
             "description": "The shared vault",
             "nullable": false
-          },
-          "updatedBy": {
-            "type": "string",
-            "description": "The user who given/updated the access",
-            "nullable": false
           }
         },
         "required": [
           "user",
-          "vault",
-          "updatedBy"
+          "vault"
         ]
       },
       "VaultsCollaborator": {
@@ -3135,6 +3134,11 @@
             "type": "number",
             "description": "The access of the vault"
           },
+          "updatedBy": {
+            "type": "string",
+            "description": "The user who given/updated the access",
+            "nullable": false
+          },
           "isEnabled": {
             "type": "boolean",
             "description": "whether collaborator is enabled or not"
@@ -3148,17 +3152,11 @@
             "type": "string",
             "description": "The shared vault",
             "nullable": false
-          },
-          "updatedBy": {
-            "type": "string",
-            "description": "The user who given/updated the access",
-            "nullable": false
           }
         },
         "required": [
           "user",
-          "vault",
-          "updatedBy"
+          "vault"
         ]
       },
       "CreateUsersAttachmentDto": {

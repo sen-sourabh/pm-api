@@ -3,7 +3,10 @@ import { IsString } from 'class-validator';
 import { VaultsCollaborator } from '../entities/vaults_collaborator.entity';
 
 @ApiTags('CreateVaultsCollaborator')
-export class CreateVaultsCollaboratorDto extends PickType(VaultsCollaborator, ['role']) {
+export class CreateVaultsCollaboratorDto extends PickType(VaultsCollaborator, [
+  'role',
+  'updatedBy',
+]) {
   @ApiProperty({
     description: 'The collaborator`s email id of the vault',
     required: true,
@@ -19,12 +22,4 @@ export class CreateVaultsCollaboratorDto extends PickType(VaultsCollaborator, ['
   })
   @IsString()
   vault: string;
-
-  @ApiProperty({
-    description: 'The user who given/updated the access',
-    required: true,
-    nullable: false,
-  })
-  @IsString()
-  updatedBy: string;
 }

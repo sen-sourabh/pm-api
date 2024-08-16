@@ -5,6 +5,7 @@ import { VaultsCollaborator } from '../entities/vaults_collaborator.entity';
 @ApiTags('UpdateVaultsCollaborator')
 export class UpdateVaultsCollaboratorDto extends PickType(VaultsCollaborator, [
   'role',
+  'updatedBy',
   'isEnabled',
 ]) {
   @ApiProperty({
@@ -22,12 +23,4 @@ export class UpdateVaultsCollaboratorDto extends PickType(VaultsCollaborator, [
   })
   @IsString()
   vault: string;
-
-  @ApiProperty({
-    description: 'The user who given/updated the access',
-    required: true,
-    nullable: false,
-  })
-  @IsString()
-  updatedBy: string;
 }
