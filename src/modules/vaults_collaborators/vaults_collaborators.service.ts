@@ -1,10 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../core/helpers/serializers';
@@ -77,7 +71,7 @@ export class VaultsCollaboratorsService {
       };
     } catch (error) {
       Logger.error(`Error in list vaults collaborator: ${error.message}`);
-      throw new InternalServerErrorException(`Error in list vaults collaborator: ${error.message}`);
+      throw error;
     }
   }
 
