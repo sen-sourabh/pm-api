@@ -1,4 +1,10 @@
-import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../core/helpers/serializers';
@@ -26,6 +32,12 @@ export class ProvidersService {
     createProviderData: CreateProviderDto;
   }): Promise<ApiResponseModel<Provider>> {
     try {
+      //Verify uniqueness within the vault
+      await this.#checkProviderNameIsUnique({
+        name: createProviderData?.name,
+        vault: createProviderData?.vault,
+      });
+
       const newProvider = this.providersRepository.create({
         ...createProviderData,
         addedBy: request?.['user']?.id,
@@ -87,6 +99,14 @@ export class ProvidersService {
     id: string;
     updateProviderData: UpdateProviderDto;
   }): Promise<ApiResponseModel<Provider>> {
+    //Verify uniqueness within the vault
+    if (!isMissing(updateProviderData?.name)) {
+      await this.#checkProviderNameIsUnique({
+        name: updateProviderData?.name,
+        vault: updateProviderData?.vault,
+      });
+    }
+
     //Actual provider update
     const updated = await this.providersRepository.update(id, updateProviderData);
     if (!updated?.affected) {
@@ -141,4 +161,15 @@ export class ProvidersService {
       return false;
     }
   }
+
+  #checkProviderNameIsUnique = async ({ name, vault }: { name?: string; vault?: string }) => {
+    const isNameUnique = await this.findProviderByValue({
+      name,
+      vault,
+    });
+    if (isNameUnique) {
+      throw new ConflictException(`Name should be unique`);
+    }
+    return true;
+  };
 }
