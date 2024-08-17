@@ -10,18 +10,15 @@
             font-size: 16px;
             font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
         }
-        section .passcode {
-            margin-left: 30%;
-        }
         .passcode {
-            border: 2px solid yellow;
+            border: 1px solid blue;
             font-weight: bolder;
-            width: 14%;
-            background-color: whitesmoke;
+            width: 80%;
+            background-color: white;
             text-align: center;
             padding-top: 5px;
             padding-bottom: 5px;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
         }
     </style>
 </head>
@@ -35,17 +32,16 @@
             <br>
             <div class="content">
                 <p>
-                Please use following <strong>OTP</strong> to verify yourself.
+                Welcome to Vault. Please use the following link to complete verification of account.
                 </p>
             </div>
             <div class="passcode">
-                {{otp}}
+                {{linkWithEmail}}
             </div>
-            <div>Please find attachments about our Policies.</div>
             <br>
             <div class="closing">
                 <p>
-                    <i><strong>NOTE:</strong> This OTP will expire in {{expiry_time}} {{expiry_unit}}. Please use it promptly.</i>
+                    <i><strong>NOTE:</strong> If you are unable to verify with the above given link. Please Sign in with your account.</i>
                 </p>
             </div>
             <br>

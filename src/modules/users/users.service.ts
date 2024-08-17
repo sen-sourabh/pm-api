@@ -10,6 +10,8 @@ import { Repository } from 'typeorm';
 import { generateSecretKey } from '../../core/helpers/security';
 import { getPagination } from '../../core/helpers/serializers';
 import { isMissing, validateEmail } from '../../core/helpers/validations';
+import { EmailPurposeEnum } from '../../core/modules/messenger/enums';
+import { MessengerService } from '../../core/modules/messenger/messenger.service';
 import { OrderEnum } from '../../core/shared/enums';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
 import { ApiQueryParamUnifiedModel } from '../../core/shared/models/api-query.model';
@@ -17,22 +19,38 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { ListQueryUsersDto } from './dto/list-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { getUsersFullName } from './utils';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
+    private readonly messengerService: MessengerService,
   ) {}
 
   async createUser(createUserData: CreateUserDto): Promise<ApiResponseModel<User>> {
     try {
-      const newUser = this.usersRepository.create(createUserData);
+      const newUser = this.usersRepository.create({
+        ...createUserData,
+        secretKey: generateSecretKey(),
+      });
       const data = await this.usersRepository.save(newUser);
+
+      // INFO: Email of verification has been sent
+      const isSent = await this.messengerService.sendAccountVerificationEmail({
+        username: getUsersFullName(data),
+        email: [data?.email],
+        subject: 'Please complete your SignUp with us',
+        purpose: EmailPurposeEnum.AccountVerification,
+      });
+
       return {
         data,
         metadata: { body: createUserData },
-        message: 'User created successfully',
+        message: isSent
+          ? 'User created successfully, Please check your email to verify'
+          : 'User created successfully',
       };
     } catch (error) {
       Logger.error(`Error in create user: ${error.message}`);

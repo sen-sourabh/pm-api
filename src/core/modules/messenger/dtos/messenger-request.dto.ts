@@ -36,7 +36,7 @@ export class VerificationEmailRequestDto {
 
   @ApiProperty({
     description: 'Purpose of email',
-    example: EmailPurposeEnum.ACCOUNT_VERIFICATION,
+    example: EmailPurposeEnum.AccountVerification,
     nullable: false,
     required: true,
     enum: EmailPurposeEnum,
@@ -44,7 +44,7 @@ export class VerificationEmailRequestDto {
   @IsEnum(EmailPurposeEnum, {
     message: 'Purpose is required and Should be from the declared enums',
   })
-  readonly purpose: EmailPurposeEnum.ACCOUNT_VERIFICATION;
+  readonly purpose: EmailPurposeEnum.AccountVerification;
 
   @ApiProperty({
     description: 'Set to true, If mail content attachments',
@@ -73,7 +73,7 @@ export class VerificationEmailRequestDto {
 
   @ApiProperty({
     description: 'Unit of expiry time of passcode/link ()If any included in email)',
-    example: ExpiryTimeUnitEnum.MINUTES,
+    example: ExpiryTimeUnitEnum.Minutes,
     nullable: false,
     required: true,
     enum: ExpiryTimeUnitEnum,
@@ -81,7 +81,7 @@ export class VerificationEmailRequestDto {
   @IsEnum(ExpiryTimeUnitEnum, {
     message: 'Unit is required and Should be from the declared enums',
   })
-  readonly expiry_unit: ExpiryTimeUnitEnum.MINUTES;
+  readonly expiry_unit: ExpiryTimeUnitEnum.Minutes;
 }
 
 export class EmailAttachmentsRequestDto {
