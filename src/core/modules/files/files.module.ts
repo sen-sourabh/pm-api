@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MulterModule } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
-import { FilesController } from './files.controller';
 import { FilesService } from './files.service';
 
 @Module({
@@ -16,7 +15,6 @@ import { FilesService } from './files.service';
       inject: [ConfigService],
     }),
   ],
-  controllers: [FilesController],
   providers: [FilesService],
   exports: [FilesService],
 })

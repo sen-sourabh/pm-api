@@ -48,11 +48,11 @@ export class AttachmentsController {
   @UseInterceptors(FileInterceptor('file'))
   @HttpCode(201)
   @Post()
-  createAttachment(
+  upsertAttachment(
     @Req() request: Request,
     @UploadedFile(new ParseFilePipe(FILE_VALIDATORS))
     file: Express.Multer.File,
-    @Body() createAttachmentData: any,
+    @Body() createAttachmentData: CreateAttachmentDto,
   ): Promise<ApiResponseModel<Attachment>> {
     return this.attachmentsService.uploadAttachments({
       request,
@@ -91,6 +91,6 @@ export class AttachmentsController {
   @HttpCode(200)
   @Get(':id')
   findOneAttachment(@Param('id') id: string, @Query() query?: ApiQueryParamUnifiedModel) {
-    return this.attachmentsService.findOneAttachment(id, query);
+    return this.attachmentsService.findOneAttachment({ id, query });
   }
 }

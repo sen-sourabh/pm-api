@@ -29,7 +29,7 @@ import { ProviderFieldAssociation } from './entities/provider_field_association.
 import { ProviderFieldAssociationsService } from './provider_field_associations.service';
 
 @UseGuards(JwtAuthGuard)
-@ApiTags('ProviderFieldAssociations')
+@ApiTags('Provider Field Associations')
 @Controller('provider-field-associations')
 export class ProviderFieldAssociationsController {
   constructor(
