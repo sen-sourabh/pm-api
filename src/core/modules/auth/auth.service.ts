@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { CreateUserDto } from '../../../modules/users/dto/create-user.dto';
 import { User } from '../../../modules/users/entities/user.entity';
 import { UsersService } from '../../../modules/users/users.service';
 import { ApiResponseModel } from '../../shared/interfaces/api-response.interface';
@@ -10,8 +11,8 @@ import { getLocalDateTime } from './utils';
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
-    private jwtService: JwtService,
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async validateUser(loginRequestDto: LoginRequestDto): Promise<User> {
@@ -41,5 +42,9 @@ export class AuthService {
         }),
       },
     };
+  }
+
+  async register(createUserData: CreateUserDto): Promise<ApiResponseModel<User>> {
+    return await this.usersService.createUser(createUserData);
   }
 }

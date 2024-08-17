@@ -25,7 +25,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { ListQueryUsersDto } from './dto/list-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { BodyParserPipe } from './pipes/body-parser.pipe';
 import { ValidateUserPipe } from './pipes/validate-user.pipe';
 import { UsersService } from './users.service';
 
@@ -41,7 +40,7 @@ export class UsersController {
     ApiXResponsesEnum.BadRequest,
     ApiXResponsesEnum.Conflict,
   )
-  @UsePipes(ValidateUserPipe, new BodyParserPipe())
+  @UsePipes(ValidateUserPipe)
   @HttpCode(201)
   @Post()
   createUser(@Body() createUserDto: CreateUserDto): Promise<ApiResponseModel<User>> {

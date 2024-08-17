@@ -38,6 +38,46 @@
         ]
       }
     },
+    "/api/v1/auth/register": {
+      "post": {
+        "operationId": "register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
     "/api/v1/messenger/send-otp": {
       "post": {
         "operationId": "sendOTP",
@@ -2413,183 +2453,6 @@
           "access_token"
         ]
       },
-      "VerificationEmailRequestDto": {
-        "type": "object",
-        "properties": {
-          "username": {
-            "type": "string",
-            "description": "Name of the receiver",
-            "example": "Alan",
-            "maxLength": 100,
-            "nullable": false
-          },
-          "email": {
-            "description": "Receiver emails seperated by comma",
-            "example": [
-              "alan@gmail.com",
-              "alex@gmail.com"
-            ],
-            "nullable": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "subject": {
-            "type": "string",
-            "description": "Subject of sending email",
-            "example": "Here is the subject",
-            "nullable": false
-          },
-          "purpose": {
-            "type": "string",
-            "description": "Purpose of email",
-            "example": "Account Verification",
-            "nullable": false,
-            "enum": [
-              "Sign Up",
-              "Password Reset",
-              "Account Verification",
-              "Custom"
-            ]
-          },
-          "attachments": {
-            "type": "boolean",
-            "description": "Set to true, If mail content attachments",
-            "example": false,
-            "nullable": false
-          },
-          "expiry_time": {
-            "type": "number",
-            "description": "Time of expiry of pascode/link (If any included in email)",
-            "example": 10,
-            "nullable": false
-          },
-          "expiry_unit": {
-            "type": "string",
-            "description": "Unit of expiry time of passcode/link ()If any included in email)",
-            "example": "minutes",
-            "nullable": false,
-            "enum": [
-              "seconds",
-              "minutes",
-              "hours",
-              "days",
-              "weeks",
-              "months"
-            ]
-          }
-        },
-        "required": [
-          "username",
-          "email",
-          "subject",
-          "purpose",
-          "attachments",
-          "expiry_time",
-          "expiry_unit"
-        ]
-      },
-      "WebhookRequestDto": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "description": "type of webhook request that is built-in",
-            "example": "user:created"
-          },
-          "payload": {
-            "type": "object",
-            "description": "payload data for webhook"
-          }
-        }
-      },
-      "Role": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "number",
-            "description": "Id is the unique number identifier",
-            "example": 1,
-            "nullable": false,
-            "uniqueItems": true
-          },
-          "name": {
-            "type": "string",
-            "description": "name of the role"
-          },
-          "isDefault": {
-            "type": "boolean",
-            "description": "The role is default or not"
-          },
-          "isEnabled": {
-            "type": "boolean",
-            "description": "The role is enabled or not"
-          },
-          "isDeleted": {
-            "type": "boolean",
-            "description": "The role is deleted or not"
-          },
-          "createdAt": {
-            "format": "T",
-            "type": "string",
-            "description": "With record create it`ll be auto generated",
-            "nullable": false
-          },
-          "updatedAt": {
-            "format": "T",
-            "type": "string",
-            "description": "With record update it`ll be auto generated",
-            "nullable": true
-          }
-        },
-        "required": [
-          "id"
-        ]
-      },
-      "AccountType": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "number",
-            "description": "Id is the unique number identifier",
-            "example": 1,
-            "nullable": false,
-            "uniqueItems": true
-          },
-          "name": {
-            "type": "string",
-            "description": "name of the account type"
-          },
-          "isDefault": {
-            "type": "boolean",
-            "description": "The account type is default or not"
-          },
-          "isEnabled": {
-            "type": "boolean",
-            "description": "The account type is enabled or not"
-          },
-          "isDeleted": {
-            "type": "boolean",
-            "description": "The account type is deleted or not"
-          },
-          "createdAt": {
-            "format": "T",
-            "type": "string",
-            "description": "With record create it`ll be auto generated",
-            "nullable": false
-          },
-          "updatedAt": {
-            "format": "T",
-            "type": "string",
-            "description": "With record update it`ll be auto generated",
-            "nullable": true
-          }
-        },
-        "required": [
-          "id"
-        ]
-      },
       "CreateUserDto": {
         "type": "object",
         "properties": {
@@ -2732,6 +2595,183 @@
             "description": "account type of the user"
           }
         }
+      },
+      "VerificationEmailRequestDto": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "Name of the receiver",
+            "example": "Alan",
+            "maxLength": 100,
+            "nullable": false
+          },
+          "email": {
+            "description": "Receiver emails seperated by comma",
+            "example": [
+              "alan@gmail.com",
+              "alex@gmail.com"
+            ],
+            "nullable": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "subject": {
+            "type": "string",
+            "description": "Subject of sending email",
+            "example": "Here is the subject",
+            "nullable": false
+          },
+          "purpose": {
+            "type": "string",
+            "description": "Purpose of email",
+            "example": "account_verification",
+            "nullable": false,
+            "enum": [
+              "sign_in",
+              "password_reset",
+              "account_verification",
+              "custom"
+            ]
+          },
+          "attachments": {
+            "type": "boolean",
+            "description": "Set to true, If mail content attachments",
+            "example": false,
+            "nullable": false
+          },
+          "expiry_time": {
+            "type": "number",
+            "description": "Time of expiry of pascode/link (If any included in email)",
+            "example": 10,
+            "nullable": false
+          },
+          "expiry_unit": {
+            "type": "string",
+            "description": "Unit of expiry time of passcode/link ()If any included in email)",
+            "example": "minutes",
+            "nullable": false,
+            "enum": [
+              "seconds",
+              "minutes",
+              "hours",
+              "days",
+              "weeks",
+              "months"
+            ]
+          }
+        },
+        "required": [
+          "username",
+          "email",
+          "subject",
+          "purpose",
+          "attachments",
+          "expiry_time",
+          "expiry_unit"
+        ]
+      },
+      "WebhookRequestDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "type of webhook request that is built-in",
+            "example": "user:created"
+          },
+          "payload": {
+            "type": "object",
+            "description": "payload data for webhook"
+          }
+        }
+      },
+      "Role": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Id is the unique number identifier",
+            "example": 1,
+            "nullable": false,
+            "uniqueItems": true
+          },
+          "name": {
+            "type": "string",
+            "description": "name of the role"
+          },
+          "isDefault": {
+            "type": "boolean",
+            "description": "The role is default or not"
+          },
+          "isEnabled": {
+            "type": "boolean",
+            "description": "The role is enabled or not"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "description": "The role is deleted or not"
+          },
+          "createdAt": {
+            "format": "T",
+            "type": "string",
+            "description": "With record create it`ll be auto generated",
+            "nullable": false
+          },
+          "updatedAt": {
+            "format": "T",
+            "type": "string",
+            "description": "With record update it`ll be auto generated",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "AccountType": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Id is the unique number identifier",
+            "example": 1,
+            "nullable": false,
+            "uniqueItems": true
+          },
+          "name": {
+            "type": "string",
+            "description": "name of the account type"
+          },
+          "isDefault": {
+            "type": "boolean",
+            "description": "The account type is default or not"
+          },
+          "isEnabled": {
+            "type": "boolean",
+            "description": "The account type is enabled or not"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "description": "The account type is deleted or not"
+          },
+          "createdAt": {
+            "format": "T",
+            "type": "string",
+            "description": "With record create it`ll be auto generated",
+            "nullable": false
+          },
+          "updatedAt": {
+            "format": "T",
+            "type": "string",
+            "description": "With record update it`ll be auto generated",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id"
+        ]
       },
       "UpdateUserDto": {
         "type": "object",
