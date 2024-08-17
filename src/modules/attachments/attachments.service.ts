@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -8,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../core/helpers/serializers';
 import { containsKey, isMissing } from '../../core/helpers/validations';
+import { CategoryEnum } from '../../core/modules/files/enums/category.enum';
 import { FilesService } from '../../core/modules/files/files.service';
 import {
   getFileExtension,
@@ -48,13 +50,36 @@ export class AttachmentsService {
         await this.#isVaultValid(createAttachmentData);
       }
 
+      //If users PROFILE Attachment is already exists in database
+      let isExists: Promise<Attachment> | Attachment | null;
+      if (createAttachmentData?.category === CategoryEnum.PROFILE) {
+        isExists = await this.attachmentsRepository.findOne({
+          where: {
+            user: request?.['user']?.id,
+            category: CategoryEnum.PROFILE,
+          },
+        });
+      }
+
       //Upload on AWS S3 and in DB
       const newAttachment = await this.#getAttachmentPayload({
+        keyExists: isExists?.['key'],
         request,
         file,
         createAttachmentData,
       });
-      const data = await this.attachmentsRepository.save(newAttachment);
+
+      //If Exists, then update same record else create new attachment record
+      let data: Promise<Attachment> | Attachment;
+      if (!isMissing(isExists)) {
+        const id = await this.#updateAttachment({
+          id: isExists?.['id'],
+          updateAttachmentData: newAttachment,
+        });
+        data = await this.attachmentsRepository.findOne({ where: { id } });
+      } else {
+        data = await this.attachmentsRepository.save(newAttachment);
+      }
 
       return {
         data,
@@ -91,10 +116,13 @@ export class AttachmentsService {
     }
   }
 
-  async findOneAttachment(
-    id: string,
-    query?: ApiQueryParamUnifiedModel,
-  ): Promise<ApiResponseModel<Attachment>> {
+  async findOneAttachment({
+    id,
+    query,
+  }: {
+    id: string;
+    query?: ApiQueryParamUnifiedModel;
+  }): Promise<ApiResponseModel<Attachment>> {
     const { relations } = getPagination(query);
 
     const data = await this.attachmentsRepository.findOne({
@@ -107,11 +135,27 @@ export class AttachmentsService {
     return { data, metadata: { params: { id } } };
   }
 
+  async #updateAttachment({
+    id,
+    updateAttachmentData,
+  }: {
+    id: string;
+    updateAttachmentData: CreateAttachmentDto;
+  }): Promise<string> {
+    const updated = await this.attachmentsRepository.update(id, updateAttachmentData);
+    if (!updated?.affected) {
+      throw new BadRequestException(`Not updated`);
+    }
+    return id;
+  }
+
   async #getAttachmentPayload({
+    keyExists,
     request,
     file,
     createAttachmentData,
   }: {
+    keyExists?: string;
     request: Request;
     file: Express.Multer.File;
     createAttachmentData: CreateAttachmentDto;
@@ -123,7 +167,8 @@ export class AttachmentsService {
       name: getFileName(file?.originalname),
       fileFormat: getFileExtension(file?.originalname),
       key: getS3FileKey(identifier, file, s3Path),
-      url: (await this.filesService.uplaodFileToS3(file, s3Path, identifier))?.data?.url,
+      url: (await this.filesService.uplaodFileToS3({ keyExists, file, s3Path, identifier }))?.data
+        ?.url,
       user: request?.['user']?.id,
       ...createAttachmentData,
     } as CreateAttachmentDto;
