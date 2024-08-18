@@ -35,6 +35,7 @@ import { VaultsController } from './modules/vaults/vaults.controller';
 import { VaultsModule } from './modules/vaults/vaults.module';
 import { VaultsCollaboratorsController } from './modules/vaults_collaborators/vaults_collaborators.controller';
 import { VaultsCollaboratorsModule } from './modules/vaults_collaborators/vaults_collaborators.module';
+import { SubscriptionModule } from './core/modules/subscription/subscription.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { VaultsCollaboratorsModule } from './modules/vaults_collaborators/vaults
     ProvidersModule,
     CustomFieldsModule,
     ProviderFieldAssociationsModule,
+    SubscriptionModule,
   ],
   controllers: [AppController],
   providers: [
