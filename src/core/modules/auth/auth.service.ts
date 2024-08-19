@@ -45,6 +45,6 @@ export class AuthService {
   }
 
   async register(createUserData: CreateUserDto): Promise<ApiResponseModel<User>> {
-    return await this.usersService.createUser(createUserData);
+    return await this.usersService.createUser({ createUserData });
   }
 }

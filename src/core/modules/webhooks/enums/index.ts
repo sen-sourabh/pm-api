@@ -28,3 +28,8 @@ export enum WebhookEventEnum {
   AttachmentUpdated = 'attachment:updated',
   AttachmentDeleted = 'attachment:deleted',
 }
+
+export enum WebhookStatusEnum {
+  Success = 'success',
+  Failed = 'failed',
+}

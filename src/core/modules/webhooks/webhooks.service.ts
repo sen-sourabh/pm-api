@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Equal, Repository } from 'typeorm';
 import { getPagination } from '../../helpers/serializers';
 import { isMissing } from '../../helpers/validations';
 import { OrderEnum } from '../../shared/enums';
@@ -16,12 +16,16 @@ import { CreateWebhookDto } from './dtos/create-webhook.dto';
 import { ListQueryWebhooksDto } from './dtos/list-webhook.dto';
 import { UpdateWebhookDto } from './dtos/update-webhook.dto';
 import { Webhook } from './entities/webhook.entity';
+import { WebhookEventEnum, WebhookStatusEnum } from './enums';
+import { evaluateNextTriggerDateTime } from './utils';
+import { WebhookHistoriesService } from './webhook_history.service';
 
 @Injectable()
 export class WebhooksService {
   constructor(
     @InjectRepository(Webhook)
     private readonly webhooksRepository: Repository<Webhook>,
+    private readonly webhookHistoriesService: WebhookHistoriesService,
   ) {}
 
   async createWebhook({
@@ -163,6 +167,80 @@ export class WebhooksService {
       throw error;
     }
   }
+
+  prepareToSendWebhooks = async ({
+    user,
+    event,
+    payload,
+  }: {
+    user: string;
+    event: string;
+    payload: any;
+  }) => {
+    try {
+      // INFO: Fetch webhook data to send payload
+      const webhook = await this.webhooksRepository.findOne({
+        where: {
+          user,
+          event: Equal(event as WebhookEventEnum),
+        },
+      });
+
+      // INFO: Send webhook to the target url
+      const webhookResponse = await this.#sendWebhooks({ webhook, payload });
+
+      // INFO: Update last trigger value in database
+      await this.webhooksRepository.update(webhook?.id, {
+        lastTriggered: new Date().toISOString(),
+      });
+
+      // INFO: Create Webhook History on Success or Failure
+      const webhookHistoryResponse = await this.webhookHistoriesService.createWebhookHistory({
+        webhook: webhook?.id,
+        responseCode: webhookResponse?.status,
+        status:
+          webhookResponse?.status === 200 ? WebhookStatusEnum.Success : WebhookStatusEnum.Failed,
+        nextTrigger: webhookResponse?.status !== 200 ? evaluateNextTriggerDateTime() : null,
+        payload,
+      });
+      Logger.verbose(
+        `Webhook history generated for webhook history with id: ${webhookHistoryResponse?.id}`,
+      );
+    } catch (error) {
+      Logger.error(`Error prepare webhook: `, error?.message);
+      return error;
+    }
+  };
+
+  #sendWebhooks = async ({
+    webhook,
+    payload,
+  }: {
+    webhook: Webhook;
+    payload: Record<string, unknown>;
+  }) => {
+    try {
+      let headers: Record<string, unknown>;
+      if (!isMissing(webhook?.secret)) {
+        headers = {
+          'x-webhook-id': webhook?.secret,
+        };
+      }
+      const response = await fetch(webhook?.targetUrl, {
+        method: 'POST',
+        headers: {
+          ...headers,
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+      return response;
+    } catch (error) {
+      Logger.error(`Error sending webhook to ${webhook.targetUrl}:`, error?.message);
+      return error;
+    }
+  };
 
   #isWebhookIsUnique = async ({ event, user }: { event?: string; user: string }) => {
     const isWebhookUnique = await this.findWebhookByValue({

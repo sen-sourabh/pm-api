@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -43,8 +44,11 @@ export class UsersController {
   @UsePipes(ValidateUserPipe)
   @HttpCode(201)
   @Post()
-  createUser(@Body() createUserDto: CreateUserDto): Promise<ApiResponseModel<User>> {
-    return this.usersService.createUser(createUserDto);
+  createUser(
+    @Req() request: Request,
+    @Body() createUserData: CreateUserDto,
+  ): Promise<ApiResponseModel<User>> {
+    return this.usersService.createUser({ request, createUserData });
   }
 
   @ApiResponse({
