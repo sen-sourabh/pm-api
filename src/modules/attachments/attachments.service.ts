@@ -9,7 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../core/helpers/serializers';
 import { containsKey, isMissing } from '../../core/helpers/validations';
-import { CategoryEnum } from '../../core/modules/files/enums/category.enum';
+import { CategoryEnum } from '../../core/modules/files/enums';
 import { FilesService } from '../../core/modules/files/files.service';
 import {
   getFileExtension,
@@ -52,11 +52,11 @@ export class AttachmentsService {
 
       //If users PROFILE Attachment is already exists in database
       let isExists: Promise<Attachment> | Attachment | null;
-      if (createAttachmentData?.category === CategoryEnum.PROFILE) {
+      if (createAttachmentData?.category === CategoryEnum.Profile) {
         isExists = await this.attachmentsRepository.findOne({
           where: {
             user: request?.['user']?.id,
-            category: CategoryEnum.PROFILE,
+            category: CategoryEnum.Profile,
           },
         });
       }

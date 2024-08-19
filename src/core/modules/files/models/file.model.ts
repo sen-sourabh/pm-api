@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { Readable } from 'stream';
-import { CategoryEnum, FileFormatEnum } from '../enums/category.enum';
+import { CategoryEnum, FileFormatEnum } from '../enums';
 
 export class FileUploadModel {
   @ApiProperty({ type: 'string', format: 'binary' })

@@ -14,6 +14,8 @@ import { CustomFieldsController } from './core/modules/custom-fields/custom-fiel
 import { CustomFieldsModule } from './core/modules/custom-fields/custom-fields.module';
 import { FilesModule } from './core/modules/files/files.module';
 import { MessengerModule } from './core/modules/messenger/messenger.module';
+import { SubscriptionModule } from './core/modules/subscription/subscription.module';
+import { WebhooksController } from './core/modules/webhooks/webhooks.controller';
 import { WebhooksModule } from './core/modules/webhooks/webhooks.module';
 import { HttpExceptionFilter } from './core/shared/exception-filters/http-exception.filter';
 import { TokenExpiredExceptionFilter } from './core/shared/exception-filters/token-expire.filter';
@@ -35,7 +37,6 @@ import { VaultsController } from './modules/vaults/vaults.controller';
 import { VaultsModule } from './modules/vaults/vaults.module';
 import { VaultsCollaboratorsController } from './modules/vaults_collaborators/vaults_collaborators.controller';
 import { VaultsCollaboratorsModule } from './modules/vaults_collaborators/vaults_collaborators.module';
-import { SubscriptionModule } from './core/modules/subscription/subscription.module';
 
 @Module({
   imports: [
@@ -98,6 +99,7 @@ export class AppModule {
         AttachmentsController,
         CustomFieldsController,
         ProviderFieldAssociationsController,
+        WebhooksController,
       );
   }
 }

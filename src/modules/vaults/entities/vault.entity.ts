@@ -101,7 +101,7 @@ export class Vault {
   @ApiPropertyOptional({
     description: "The date time of vault's last access",
     required: false,
-    name: 'lastAccess',
+    name: 'lastAccessed',
     nullable: true,
     format: 'T',
   })

@@ -2,7 +2,7 @@ import { DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ApiResponseModel } from '../../shared/interfaces/api-response.interface';
-import { UpoadFileS3PathEnum } from './enums/category.enum';
+import { UpoadFileS3PathEnum } from './enums';
 import { CoreFileModel, FilesResponseModel } from './models/file.model';
 import { getS3FileKey, getS3ObjectUrl } from './utils';
 
@@ -26,8 +26,8 @@ export class FilesService {
   async uplaodFileToS3({
     keyExists,
     file,
-    s3Path = UpoadFileS3PathEnum.DEFAULT,
-    identifier = UpoadFileS3PathEnum.DEFAULT,
+    s3Path = UpoadFileS3PathEnum.Default,
+    identifier = UpoadFileS3PathEnum.Default,
   }: {
     keyExists?: string;
     file: CoreFileModel;

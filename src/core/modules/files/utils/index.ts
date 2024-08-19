@@ -1,5 +1,5 @@
 import { CreateAttachmentInternalDto } from '../../../../modules/attachments/dtos/create-attachment.dto';
-import { CategoryEnum, UpoadFileS3PathEnum } from '../enums/category.enum';
+import { CategoryEnum, UpoadFileS3PathEnum } from '../enums';
 import { CoreFileModel } from '../models/file.model';
 
 const ONE_KB = 1024;

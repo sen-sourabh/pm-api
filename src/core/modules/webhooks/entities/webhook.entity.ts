@@ -1,17 +1,20 @@
 import { ApiPropertyOptional, ApiTags } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsBoolean, IsDateString, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsDateString, IsEnum, IsOptional, IsString } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { User } from '../../../../modules/users/entities/user.entity';
+import { WebhookEventEnum } from '../enums';
 
-@ApiTags('Webhook Events')
-@Entity('webhook_events')
-export class WebhookEvent {
+@ApiTags('Webhooks')
+@Entity('webhooks')
+export class Webhook {
   @ApiPropertyOptional({
     description: 'Id is the unique uuid identifier',
     example: 'e762634c-3e41-11eb-b897-0862660ccbd4',
@@ -32,7 +35,7 @@ export class WebhookEvent {
   id?: string;
 
   @ApiPropertyOptional({
-    description: 'The name of the event',
+    description: 'The name of the webhook',
     required: false,
   })
   @Column({
@@ -44,32 +47,75 @@ export class WebhookEvent {
   name?: string;
 
   @ApiPropertyOptional({
-    description: 'The key of the event',
-    required: false,
+    description: 'The event of the webhook',
+    required: true,
+    enum: WebhookEventEnum,
   })
   @Column({
-    type: 'varchar',
+    type: 'enum',
+    enum: WebhookEventEnum,
     nullable: false,
+    default: WebhookEventEnum.UserCreated,
   })
-  @IsString({ message: 'key must be a string' })
+  @IsEnum(WebhookEventEnum)
   @IsOptional()
-  key?: string;
+  event?: WebhookEventEnum;
 
   @ApiPropertyOptional({
-    description: 'The description of the event',
+    description: 'The target url of the webhook',
     required: false,
   })
   @Column({
     type: 'mediumtext',
-    nullable: true,
-    default: null,
+    nullable: false,
   })
-  @IsString({ message: 'description must be a string' })
+  @IsString({ message: 'target url must be a string' })
   @IsOptional()
-  description?: string;
+  targetUrl?: string;
 
   @ApiPropertyOptional({
-    description: 'whether event is enabled or not',
+    description: 'The secret of the webhook',
+    required: false,
+  })
+  @Column({
+    type: 'mediumtext',
+    nullable: false,
+  })
+  @IsString({ message: 'secret must be a string' })
+  @IsOptional()
+  secret?: string;
+
+  @ApiPropertyOptional({
+    description: 'The owner of the webhook',
+    required: false,
+  })
+  @ManyToOne(() => User)
+  @Column({ name: 'userId', nullable: false })
+  @IsString({
+    message: 'user id must be a string',
+  })
+  @IsOptional()
+  user?: string;
+
+  @ApiPropertyOptional({
+    description: 'The date time of webhook when last triggered',
+    required: false,
+    name: 'lastTriggered',
+    nullable: true,
+    format: 'T',
+  })
+  @IsDateString({
+    strict: true,
+    strictSeparator: true,
+  })
+  @Column({ type: 'datetime', nullable: true })
+  @IsOptional()
+  lastTriggered?: Date;
+
+  @ApiPropertyOptional({
+    // INFO: It’ll retry sending the last payload five times otherwise
+    // INFO: It’ll be disabled and at every unsuccess email of fail will be triggered
+    description: 'whether webhook is enabled or not',
     required: false,
   })
   @Column({ type: 'tinyint', default: '1' })
@@ -79,7 +125,7 @@ export class WebhookEvent {
   isEnabled?: boolean;
 
   @ApiPropertyOptional({
-    description: 'whether event is deleted or not',
+    description: 'whether webhook is deleted or not',
     required: false,
   })
   @Column({ type: 'tinyint', default: '0' })
