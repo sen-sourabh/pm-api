@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
-import { CategoryEnum, FileFormatEnum } from '../../../core/modules/files/enums/category.enum';
+import { CategoryEnum, FileFormatEnum } from '../../../core/modules/files/enums';
 
 export class CreateAttachmentInternalDto {
   @ApiProperty({ type: 'string', format: 'binary', required: true })

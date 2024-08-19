@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { CategoryEnum, FileFormatEnum } from '../../../core/modules/files/enums/category.enum';
+import { CategoryEnum, FileFormatEnum } from '../../../core/modules/files/enums';
 import { User } from '../../users/entities/user.entity';
 import { Vault } from '../../vaults/entities/vault.entity';
 
@@ -58,7 +58,7 @@ export class Attachment {
     type: 'enum',
     enum: FileFormatEnum,
     nullable: false,
-    default: FileFormatEnum.JPEG,
+    default: FileFormatEnum.Jpeg,
   })
   @IsEnum(FileFormatEnum)
   @IsOptional()
@@ -73,7 +73,7 @@ export class Attachment {
     type: 'enum',
     enum: CategoryEnum,
     nullable: false,
-    default: CategoryEnum.ADDITIONAL,
+    default: CategoryEnum.Additional,
   })
   @IsEnum(CategoryEnum)
   @IsOptional()

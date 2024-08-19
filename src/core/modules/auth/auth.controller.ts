@@ -36,7 +36,7 @@ export class AuthController {
   @UsePipes(ValidateUserPipe)
   @HttpCode(201)
   @Post('register')
-  register(@Body() createUserDto: CreateUserDto): Promise<ApiResponseModel<User>> {
-    return this.authService.register(createUserDto);
+  register(@Body() createUserData: CreateUserDto): Promise<ApiResponseModel<User>> {
+    return this.authService.register(createUserData);
   }
 }

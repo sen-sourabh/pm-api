@@ -12,6 +12,8 @@ import { getPagination } from '../../core/helpers/serializers';
 import { isMissing, validateEmail } from '../../core/helpers/validations';
 import { EmailPurposeEnum } from '../../core/modules/messenger/enums';
 import { MessengerService } from '../../core/modules/messenger/messenger.service';
+import { WebhookEventEnum } from '../../core/modules/webhooks/enums';
+import { WebhooksService } from '../../core/modules/webhooks/webhooks.service';
 import { OrderEnum } from '../../core/shared/enums';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
 import { ApiQueryParamUnifiedModel } from '../../core/shared/models/api-query.model';
@@ -27,9 +29,16 @@ export class UsersService {
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
     private readonly messengerService: MessengerService,
+    private readonly webhooksService: WebhooksService,
   ) {}
 
-  async createUser(createUserData: CreateUserDto): Promise<ApiResponseModel<User>> {
+  async createUser({
+    request,
+    createUserData,
+  }: {
+    request?: Request;
+    createUserData: CreateUserDto;
+  }): Promise<ApiResponseModel<User>> {
     try {
       const newUser = this.usersRepository.create({
         ...createUserData,
@@ -43,6 +52,12 @@ export class UsersService {
         email: [data?.email],
         subject: 'Please complete your SignUp with us',
         purpose: EmailPurposeEnum.AccountVerification,
+      });
+
+      this.webhooksService.prepareToSendWebhooks({
+        user: request?.['user']?.id,
+        event: WebhookEventEnum.UserCreated,
+        payload: data,
       });
 
       return {

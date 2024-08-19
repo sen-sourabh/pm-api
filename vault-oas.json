@@ -113,21 +113,296 @@
     },
     "/api/v1/webhooks": {
       "post": {
-        "operationId": "handleWebhook",
+        "operationId": "createWebhook",
         "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/WebhookRequestDto"
+                "$ref": "#/components/schemas/CreateWebhookDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Webhook"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        },
+        "tags": [
+          "Webhooks"
+        ]
+      },
+      "get": {
+        "operationId": "findAllWebhooks",
+        "parameters": [
+          {
+            "name": "event",
+            "required": false,
+            "in": "query",
+            "description": "The event of the webhook",
+            "schema": {
+              "enum": [
+                "user:created",
+                "user:updated",
+                "user:deleted",
+                "vault:created",
+                "vault:updated",
+                "vault:deleted",
+                "collaborator:created",
+                "collaborator:updated",
+                "collaborator:deleted",
+                "provider:created",
+                "provider:updated",
+                "provider:deleted",
+                "providerFieldAssociation:created",
+                "providerFieldAssociation:updated",
+                "providerFieldAssociation:deleted",
+                "customField:created",
+                "customField:updated",
+                "customField:deleted",
+                "attachment:created",
+                "attachment:updated",
+                "attachment:deleted"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "user",
+            "required": false,
+            "in": "query",
+            "description": "The owner of the webhook",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lastTriggered",
+            "required": false,
+            "in": "query",
+            "description": "The date time of webhook when last triggered",
+            "schema": {
+              "format": "T",
+              "nullable": true,
+              "type": "string"
+            }
+          },
+          {
+            "name": "isEnabled",
+            "required": false,
+            "in": "query",
+            "description": "whether webhook is enabled or not",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "updatedAt",
+            "required": false,
+            "in": "query",
+            "description": "The datetime of record at updation",
+            "schema": {
+              "format": "T",
+              "nullable": true,
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageNumber",
+            "required": false,
+            "in": "query",
+            "description": "Page number",
+            "example": 1,
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "description": "No of records will be fetched in single request",
+            "example": 25,
+            "schema": {
+              "default": 25,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "returns list of webhooks",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Webhook"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [
+          "Webhooks"
+        ]
+      }
+    },
+    "/api/v1/webhooks/{id}": {
+      "get": {
+        "operationId": "findOneWebhook",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "relation",
+            "required": false,
+            "in": "query",
+            "description": "To fetch the entities with their relation`s data",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "return webhook as per the identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Webhook"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "tags": [
+          "Webhooks"
+        ]
+      },
+      "patch": {
+        "operationId": "updateWebhook",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWebhookDto"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "return updated webhook as per the identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Webhook"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        },
+        "tags": [
+          "Webhooks"
+        ]
+      },
+      "delete": {
+        "operationId": "removeWebhook",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "return deleted webhook as per the identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Webhook"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
           }
         },
         "tags": [
@@ -2380,7 +2655,103 @@
         ]
       }
     },
-    "/api/v1/vault": {
+    "/api/v1/subscription": {
+      "post": {
+        "operationId": "create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSubscriptionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      },
+      "get": {
+        "operationId": "findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/subscription/{id}": {
+      "get": {
+        "operationId": "findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
+      "patch": {
+        "operationId": "update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSubscriptionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "operationId": "remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/server": {
       "get": {
         "operationId": "isServerRunning",
         "parameters": [],
@@ -2390,7 +2761,7 @@
           }
         },
         "tags": [
-          "Vault"
+          "Server"
         ]
       }
     }
@@ -2673,17 +3044,150 @@
           "expiry_unit"
         ]
       },
-      "WebhookRequestDto": {
+      "CreateWebhookDto": {
         "type": "object",
         "properties": {
-          "type": {
+          "name": {
             "type": "string",
-            "description": "type of webhook request that is built-in",
-            "example": "user:created"
+            "description": "The name of the webhook"
           },
-          "payload": {
-            "type": "object",
-            "description": "payload data for webhook"
+          "event": {
+            "type": "string",
+            "description": "The event of the webhook",
+            "enum": [
+              "user:created",
+              "user:updated",
+              "user:deleted",
+              "vault:created",
+              "vault:updated",
+              "vault:deleted",
+              "collaborator:created",
+              "collaborator:updated",
+              "collaborator:deleted",
+              "provider:created",
+              "provider:updated",
+              "provider:deleted",
+              "providerFieldAssociation:created",
+              "providerFieldAssociation:updated",
+              "providerFieldAssociation:deleted",
+              "customField:created",
+              "customField:updated",
+              "customField:deleted",
+              "attachment:created",
+              "attachment:updated",
+              "attachment:deleted"
+            ]
+          },
+          "targetUrl": {
+            "type": "string",
+            "description": "The target url of the webhook"
+          },
+          "secret": {
+            "type": "string",
+            "description": "The secret of the webhook"
+          },
+          "user": {
+            "type": "string",
+            "description": "The owner of the webhook"
+          }
+        }
+      },
+      "Webhook": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id is the unique uuid identifier",
+            "example": "e762634c-3e41-11eb-b897-0862660ccbd4",
+            "default": "uuid",
+            "nullable": false,
+            "uniqueItems": true
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the webhook"
+          },
+          "event": {
+            "type": "string",
+            "description": "The event of the webhook",
+            "enum": [
+              "user:created",
+              "user:updated",
+              "user:deleted",
+              "vault:created",
+              "vault:updated",
+              "vault:deleted",
+              "collaborator:created",
+              "collaborator:updated",
+              "collaborator:deleted",
+              "provider:created",
+              "provider:updated",
+              "provider:deleted",
+              "providerFieldAssociation:created",
+              "providerFieldAssociation:updated",
+              "providerFieldAssociation:deleted",
+              "customField:created",
+              "customField:updated",
+              "customField:deleted",
+              "attachment:created",
+              "attachment:updated",
+              "attachment:deleted"
+            ]
+          },
+          "targetUrl": {
+            "type": "string",
+            "description": "The target url of the webhook"
+          },
+          "secret": {
+            "type": "string",
+            "description": "The secret of the webhook"
+          },
+          "user": {
+            "type": "string",
+            "description": "The owner of the webhook"
+          },
+          "lastTriggered": {
+            "format": "T",
+            "type": "string",
+            "description": "The date time of webhook when last triggered",
+            "nullable": true
+          },
+          "isEnabled": {
+            "type": "boolean",
+            "description": "whether webhook is enabled or not"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "description": "whether webhook is deleted or not"
+          },
+          "createdAt": {
+            "format": "T",
+            "type": "string",
+            "description": "The datetime of record at creation",
+            "nullable": false
+          },
+          "updatedAt": {
+            "format": "T",
+            "type": "string",
+            "description": "The datetime of record at updation",
+            "nullable": true
+          }
+        }
+      },
+      "UpdateWebhookDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the webhook"
+          },
+          "targetUrl": {
+            "type": "string",
+            "description": "The target url of the webhook"
+          },
+          "secret": {
+            "type": "string",
+            "description": "The secret of the webhook"
           }
         }
       },
@@ -2945,7 +3449,7 @@
             "type": "string",
             "description": "The owner of the vault"
           },
-          "lastAccess": {
+          "lastAccessed": {
             "format": "T",
             "type": "string",
             "description": "The date time of vault's last access",
@@ -2996,7 +3500,7 @@
             "type": "string",
             "description": "The owner of the vault"
           },
-          "lastAccess": {
+          "lastAccessed": {
             "format": "T",
             "type": "string",
             "description": "The date time of vault's last access",
@@ -3612,6 +4116,14 @@
             "description": "The user who added"
           }
         }
+      },
+      "CreateSubscriptionDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "UpdateSubscriptionDto": {
+        "type": "object",
+        "properties": {}
       }
     }
   }

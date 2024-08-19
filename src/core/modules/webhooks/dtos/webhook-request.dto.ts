@@ -1,9 +1,9 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { IsObject, IsOptional, IsString } from 'class-validator';
 
 export class WebhookRequestDto {
   @ApiPropertyOptional({
-    description: 'type of webhook request that is built-in',
+    description: 'The event of the webhook that is built-in',
     required: false,
     example: 'user:created',
   })
@@ -14,6 +14,9 @@ export class WebhookRequestDto {
   @ApiPropertyOptional({
     description: 'payload data for webhook',
     required: true,
+  })
+  @IsObject({
+    message: 'The payload should be an plain object',
   })
   @IsOptional()
   payload?: Record<string, unknown>;

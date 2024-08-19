@@ -1,6 +1,6 @@
 import { ApiPropertyOptional, ApiTags } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsBoolean, IsDateString, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsDateString, IsEnum, IsOptional, IsString } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
@@ -9,11 +9,12 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from '../../users/entities/user.entity';
+import { User } from '../../../../modules/users/entities/user.entity';
+import { WebhookEventEnum } from '../enums';
 
-@ApiTags('Vault')
-@Entity('vaults')
-export class Vault {
+@ApiTags('Webhooks')
+@Entity('webhooks')
+export class Webhook {
   @ApiPropertyOptional({
     description: 'Id is the unique uuid identifier',
     example: 'e762634c-3e41-11eb-b897-0862660ccbd4',
@@ -34,11 +35,10 @@ export class Vault {
   id?: string;
 
   @ApiPropertyOptional({
-    description: 'The name of the vault',
-    required: true,
+    description: 'The name of the webhook',
+    required: false,
   })
   @Column({
-    length: 100,
     type: 'varchar',
     nullable: false,
   })
@@ -47,47 +47,46 @@ export class Vault {
   name?: string;
 
   @ApiPropertyOptional({
-    description: 'The caption of the vault',
+    description: 'The event of the webhook',
+    required: true,
+    enum: WebhookEventEnum,
+  })
+  @Column({
+    type: 'enum',
+    enum: WebhookEventEnum,
+    nullable: false,
+    default: WebhookEventEnum.UserCreated,
+  })
+  @IsEnum(WebhookEventEnum)
+  @IsOptional()
+  event?: WebhookEventEnum;
+
+  @ApiPropertyOptional({
+    description: 'The target url of the webhook',
     required: false,
   })
   @Column({
-    length: 100,
-    type: 'varchar',
-    nullable: true,
+    type: 'mediumtext',
+    nullable: false,
   })
-  @IsString({
-    message: 'caption must be a string',
-  })
+  @IsString({ message: 'target url must be a string' })
   @IsOptional()
-  caption?: string;
+  targetUrl?: string;
 
   @ApiPropertyOptional({
-    description: 'The small description about the vault',
+    description: 'The secret of the webhook',
     required: false,
   })
   @Column({
-    length: 255,
-    type: 'varchar',
-    nullable: true,
+    type: 'mediumtext',
+    nullable: false,
   })
-  @IsString({
-    message: 'description must be a string',
-  })
+  @IsString({ message: 'secret must be a string' })
   @IsOptional()
-  description?: string;
+  secret?: string;
 
   @ApiPropertyOptional({
-    description: 'whether vault is private or not, Default vault will be private',
-    required: false,
-  })
-  @Column({ type: 'tinyint', default: '1' })
-  @Type(() => Boolean)
-  @IsBoolean()
-  @IsOptional()
-  isPrivate?: boolean;
-
-  @ApiPropertyOptional({
-    description: 'The owner of the vault',
+    description: 'The owner of the webhook',
     required: false,
   })
   @ManyToOne(() => User)
@@ -99,9 +98,9 @@ export class Vault {
   user?: string;
 
   @ApiPropertyOptional({
-    description: "The date time of vault's last access",
+    description: 'The date time of webhook when last triggered',
     required: false,
-    name: 'lastAccessed',
+    name: 'lastTriggered',
     nullable: true,
     format: 'T',
   })
@@ -111,10 +110,12 @@ export class Vault {
   })
   @Column({ type: 'datetime', nullable: true })
   @IsOptional()
-  lastAccessed?: Date;
+  lastTriggered?: Date;
 
   @ApiPropertyOptional({
-    description: 'whether vault is enabled or not',
+    // INFO: It’ll retry sending the last payload five times otherwise
+    // INFO: It’ll be disabled and at every unsuccess email of fail will be triggered
+    description: 'whether webhook is enabled or not',
     required: false,
   })
   @Column({ type: 'tinyint', default: '1' })
@@ -124,7 +125,7 @@ export class Vault {
   isEnabled?: boolean;
 
   @ApiPropertyOptional({
-    description: 'whether vault is deleted or not',
+    description: 'whether webhook is deleted or not',
     required: false,
   })
   @Column({ type: 'tinyint', default: '0' })

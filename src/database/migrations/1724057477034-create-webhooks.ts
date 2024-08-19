@@ -1,16 +1,15 @@
 import { Logger } from '@nestjs/common';
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 import { printMigrationErrorLogs } from '../../core/helpers/file-operations';
-import { CategoryEnum, FileFormatEnum } from '../../core/modules/files/enums';
 
-export class CreateAttachments1722755668991 implements MigrationInterface {
-  private readonly logger = new Logger(CreateAttachments1722755668991.name);
+export class CreateWebhooks1724057477034 implements MigrationInterface {
+  private readonly logger = new Logger(CreateWebhooks1724057477034.name);
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     try {
       await queryRunner.createTable(
         new Table({
-          name: 'attachments',
+          name: 'webhooks',
           columns: [
             {
               name: 'id',
@@ -23,55 +22,42 @@ export class CreateAttachments1722755668991 implements MigrationInterface {
             {
               name: 'name',
               type: 'varchar',
-              length: '255',
               isNullable: false,
             },
             {
-              name: 'fileFormat',
-              type: 'enum',
-              enum: [FileFormatEnum.JPEG, FileFormatEnum.JPG, FileFormatEnum.PNG],
-              isNullable: false,
-            },
-            {
-              name: 'category',
-              type: 'enum',
-              enum: [CategoryEnum.PROFILE, CategoryEnum.ADDITIONAL],
-              isNullable: false,
-            },
-            {
-              name: 'key',
+              name: 'event',
               type: 'varchar',
-              length: '255',
-              isUnique: true,
               isNullable: false,
             },
             {
-              name: 'url',
+              name: 'targetUrl',
+              type: 'mediumtext',
+              isNullable: false,
+            },
+            {
+              name: 'secret',
               type: 'mediumtext',
               isNullable: false,
             },
             {
               name: 'userId',
               type: 'varchar',
-              length: '255',
-              isNullable: true,
-            },
-            {
-              name: 'vaultId',
-              type: 'varchar',
-              length: '255',
-              isNullable: true,
-            },
-            {
-              name: 'isArchived',
-              type: 'tinyint',
-              default: 0,
               isNullable: false,
             },
             {
-              name: 'lastAccessed',
+              name: 'lastTriggered',
               type: 'datetime',
               isNullable: true,
+            },
+            {
+              name: 'isEnabled',
+              type: 'tinyint',
+              default: 1,
+            },
+            {
+              name: 'isDeleted',
+              type: 'tinyint',
+              default: 0,
             },
             {
               name: 'createdAt',
@@ -90,17 +76,9 @@ export class CreateAttachments1722755668991 implements MigrationInterface {
           foreignKeys: [
             // Foreign key for user association
             {
-              name: 'FK_attachments_users',
+              name: 'FK_webhooks_users',
               columnNames: ['userId'],
               referencedTableName: 'users',
-              referencedColumnNames: ['id'],
-              onDelete: 'CASCADE', // Optional: Set deletion behavior (e.g., CASCADE, SET NULL)
-            },
-            // Foreign key for vault association
-            {
-              name: 'FK_attachments_vaults',
-              columnNames: ['vaultId'],
-              referencedTableName: 'vaults',
               referencedColumnNames: ['id'],
               onDelete: 'CASCADE', // Optional: Set deletion behavior (e.g., CASCADE, SET NULL)
             },
@@ -108,18 +86,18 @@ export class CreateAttachments1722755668991 implements MigrationInterface {
         }),
         false, // Skip table type check as it can vary across databases
       );
-      this.logger.log(`Up: Create attachments executed`);
+      this.logger.log(`Up: Create webhooks executed`);
     } catch (error) {
-      printMigrationErrorLogs(this.logger, 'attachments', error?.message);
+      printMigrationErrorLogs(this.logger, 'webhooks', error?.message);
     }
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     try {
-      await queryRunner.dropTable('attachments');
-      this.logger.log(`Down: Drop attachments executed`);
+      await queryRunner.dropTable('webhooks');
+      this.logger.log(`Down: Drop webhooks executed`);
     } catch (error) {
-      this.logger.error(`Down: Drop attachments has an error: `, error?.message);
+      this.logger.error(`Down: Drop webhooks has an error: `, error?.message);
     }
   }
 }
