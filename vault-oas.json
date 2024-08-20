@@ -108,6 +108,11 @@
         },
         "tags": [
           "Messenger"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -148,6 +153,11 @@
         },
         "tags": [
           "Webhooks"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "get": {
@@ -271,6 +281,11 @@
         },
         "tags": [
           "Webhooks"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -320,6 +335,11 @@
         },
         "tags": [
           "Webhooks"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "patch": {
@@ -370,6 +390,11 @@
         },
         "tags": [
           "Webhooks"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "delete": {
@@ -407,6 +432,11 @@
         },
         "tags": [
           "Webhooks"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -496,6 +526,11 @@
         },
         "tags": [
           "Roles"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -535,6 +570,11 @@
         },
         "tags": [
           "Roles"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -624,6 +664,11 @@
         },
         "tags": [
           "AccountTypes"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -663,12 +708,18 @@
         },
         "tags": [
           "AccountTypes"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
     "/api/v1/users": {
       "post": {
         "operationId": "createUser",
+        "summary": "returns all the users",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -703,6 +754,11 @@
         },
         "tags": [
           "Users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "get": {
@@ -819,6 +875,11 @@
         },
         "tags": [
           "Users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -868,6 +929,11 @@
         },
         "tags": [
           "Users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "patch": {
@@ -918,6 +984,11 @@
         },
         "tags": [
           "Users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "delete": {
@@ -955,6 +1026,11 @@
         },
         "tags": [
           "Users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -1055,6 +1131,11 @@
         },
         "tags": [
           "Activity Logs"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -1095,6 +1176,11 @@
         },
         "tags": [
           "Vaults"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "get": {
@@ -1201,6 +1287,11 @@
         },
         "tags": [
           "Vaults"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -1250,6 +1341,11 @@
         },
         "tags": [
           "Vaults"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "patch": {
@@ -1300,6 +1396,11 @@
         },
         "tags": [
           "Vaults"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "delete": {
@@ -1337,6 +1438,11 @@
         },
         "tags": [
           "Vaults"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -1377,6 +1483,11 @@
         },
         "tags": [
           "Vaults Collaborators"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "get": {
@@ -1486,6 +1597,11 @@
         },
         "tags": [
           "Vaults Collaborators"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -1535,6 +1651,11 @@
         },
         "tags": [
           "Vaults Collaborators"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "patch": {
@@ -1585,6 +1706,11 @@
         },
         "tags": [
           "Vaults Collaborators"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "delete": {
@@ -1622,6 +1748,11 @@
         },
         "tags": [
           "Vaults Collaborators"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -1662,6 +1793,11 @@
         },
         "tags": [
           "Attachments"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "get": {
@@ -1763,6 +1899,11 @@
         },
         "tags": [
           "Attachments"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -1812,6 +1953,11 @@
         },
         "tags": [
           "Attachments"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -1852,6 +1998,11 @@
         },
         "tags": [
           "Providers"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "get": {
@@ -1960,6 +2111,11 @@
         },
         "tags": [
           "Providers"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -2009,6 +2165,11 @@
         },
         "tags": [
           "Providers"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "patch": {
@@ -2059,6 +2220,11 @@
         },
         "tags": [
           "Providers"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "delete": {
@@ -2096,6 +2262,11 @@
         },
         "tags": [
           "Providers"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -2136,6 +2307,11 @@
         },
         "tags": [
           "Custom Fields"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "get": {
@@ -2261,6 +2437,11 @@
         },
         "tags": [
           "Custom Fields"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -2310,6 +2491,11 @@
         },
         "tags": [
           "Custom Fields"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "patch": {
@@ -2360,6 +2546,11 @@
         },
         "tags": [
           "Custom Fields"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "delete": {
@@ -2397,6 +2588,11 @@
         },
         "tags": [
           "Custom Fields"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -2437,6 +2633,11 @@
         },
         "tags": [
           "Provider Field Associations"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "get": {
@@ -2516,6 +2717,11 @@
         },
         "tags": [
           "Provider Field Associations"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -2565,6 +2771,11 @@
         },
         "tags": [
           "Provider Field Associations"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "patch": {
@@ -2615,6 +2826,11 @@
         },
         "tags": [
           "Provider Field Associations"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "delete": {
@@ -2652,6 +2868,11 @@
         },
         "tags": [
           "Provider Field Associations"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -2673,7 +2894,15 @@
           "201": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "Subscriptions"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       },
       "get": {
         "operationId": "findAll",
@@ -2682,7 +2911,15 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "Subscriptions"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       }
     },
     "/api/v1/subscription/{id}": {
@@ -2702,7 +2939,15 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "Subscriptions"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       },
       "patch": {
         "operationId": "update",
@@ -2730,7 +2975,15 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "Subscriptions"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       },
       "delete": {
         "operationId": "remove",
@@ -2748,7 +3001,15 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "Subscriptions"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       }
     },
     "/api/v1/server": {
@@ -2784,10 +3045,6 @@
   ],
   "components": {
     "securitySchemes": {
-      "basic": {
-        "type": "http",
-        "scheme": "basic"
-      },
       "bearer": {
         "scheme": "bearer",
         "bearerFormat": "JWT",

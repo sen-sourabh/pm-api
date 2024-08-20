@@ -13,7 +13,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiXResponses } from '../../core/shared/decorators/apply-filters/apply-filters.decorator';
 import { ApiXResponsesEnum } from '../../core/shared/enums';
 import { JwtAuthGuard } from '../../core/shared/guards/jwt-auth.guard';
@@ -28,6 +28,7 @@ import { UpdateProviderFieldAssociationDto } from './dtos/update-provider_field_
 import { ProviderFieldAssociation } from './entities/provider_field_association.entity';
 import { ProviderFieldAssociationsService } from './provider_field_associations.service';
 
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @ApiTags('Provider Field Associations')
 @Controller('provider-field-associations')

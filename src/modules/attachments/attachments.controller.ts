@@ -14,7 +14,7 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBody, ApiConsumes, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FILE_VALIDATORS } from '../../core/modules/files/constants';
 import { ApiXResponses } from '../../core/shared/decorators/apply-filters/apply-filters.decorator';
 import { ApiXResponsesEnum } from '../../core/shared/enums';
@@ -29,6 +29,7 @@ import { CreateAttachmentDto } from './dtos/create-attachment.dto';
 import { ListQueryAttachmentsDto } from './dtos/list-attachment.dto';
 import { Attachment } from './entities/attachment.entity';
 
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @ApiTags('Attachments')
 @Controller('attachments')

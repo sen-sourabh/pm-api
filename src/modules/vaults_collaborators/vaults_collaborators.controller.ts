@@ -13,7 +13,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiXResponses } from '../../core/shared/decorators/apply-filters/apply-filters.decorator';
 import { ApiXResponsesEnum } from '../../core/shared/enums';
 import { JwtAuthGuard } from '../../core/shared/guards/jwt-auth.guard';
@@ -29,6 +29,7 @@ import { VaultsCollaborator } from './entities/vaults_collaborator.entity';
 import { ValidateVaultsCollaboratorPipe } from './pipes/validate-collaborator.pipe';
 import { VaultsCollaboratorsService } from './vaults_collaborators.service';
 
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @ApiTags('Vaults Collaborators')
 @Controller('vaults-collaborators')

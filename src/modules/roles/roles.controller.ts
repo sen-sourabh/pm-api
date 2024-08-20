@@ -1,5 +1,5 @@
 import { Controller, Get, HttpCode, Param, Query, UseGuards, UsePipes } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiXResponses } from '../../core/shared/decorators/apply-filters/apply-filters.decorator';
 import { ApiXResponsesEnum } from '../../core/shared/enums';
 import { JwtAuthGuard } from '../../core/shared/guards/jwt-auth.guard';
@@ -11,6 +11,7 @@ import { ListQueryRolesDto } from './dto/list-role.dto';
 import { Role } from './entities/role.entity';
 import { RolesService } from './roles.service';
 
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @ApiTags('Roles')
 @Controller('roles')
