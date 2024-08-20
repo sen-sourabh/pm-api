@@ -13,7 +13,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiXResponses } from '../../shared/decorators/apply-filters/apply-filters.decorator';
 import { ApiXResponsesEnum } from '../../shared/enums';
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
@@ -29,6 +29,7 @@ import { Webhook } from './entities/webhook.entity';
 import { ValidateWebhookPipe } from './pipes/validate-webhook.pipe';
 import { WebhooksService } from './webhooks.service';
 
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @ApiTags('Webhooks')
 @Controller('webhooks')

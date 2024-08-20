@@ -13,7 +13,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiXResponses } from '../../shared/decorators/apply-filters/apply-filters.decorator';
 import { ApiXResponsesEnum } from '../../shared/enums';
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
@@ -30,6 +30,7 @@ import { CustomField } from './entities/custom-field.entity';
 import { BodyParserPipe } from './pipes/body-parser.pipe';
 import { ValidateCustomFieldPipe } from './pipes/validate-custom-field.pipe';
 
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @ApiTags('Custom Fields')
 @Controller('custom-fields')

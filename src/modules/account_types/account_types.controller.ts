@@ -1,5 +1,5 @@
 import { Controller, Get, HttpCode, Param, Query, UseGuards, UsePipes } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiXResponses } from '../../core/shared/decorators/apply-filters/apply-filters.decorator';
 import { ApiXResponsesEnum } from '../../core/shared/enums';
 import { JwtAuthGuard } from '../../core/shared/guards/jwt-auth.guard';
@@ -11,6 +11,7 @@ import { AccountTypesService } from './account_types.service';
 import { ListQueryAccountTypesDto } from './dto/list-account_type.dto';
 import { AccountType } from './entities/account_type.entity';
 
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @ApiTags('AccountTypes')
 @Controller('account-types')
