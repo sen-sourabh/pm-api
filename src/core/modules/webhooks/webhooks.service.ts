@@ -168,6 +168,29 @@ export class WebhooksService {
     }
   }
 
+  async #createWebhookhistory({
+    webhookTargetDetails,
+    webhookResponse,
+    payload,
+  }: {
+    webhookTargetDetails: Webhook;
+    webhookResponse: Response;
+    payload: any;
+  }) {
+    // INFO: Create Webhook History on Success or Failure
+    const webhookHistoryResponse = await this.webhookHistoriesService.createWebhookHistory({
+      webhook: webhookTargetDetails?.id,
+      responseCode: webhookResponse?.status,
+      status:
+        webhookResponse?.status === 200 ? WebhookStatusEnum.Success : WebhookStatusEnum.Failed,
+      nextTrigger: webhookResponse?.status !== 200 ? evaluateNextTriggerDateTime() : null,
+      payload,
+    });
+    Logger.verbose(
+      `Webhook history generated for webhook history with id: ${webhookHistoryResponse?.id}`,
+    );
+  }
+
   prepareToSendWebhooks = async ({
     user,
     event,
@@ -176,36 +199,31 @@ export class WebhooksService {
     user: string;
     event: string;
     payload: any;
-  }) => {
+  }): Promise<void> => {
     try {
       // INFO: Fetch webhook data to send payload
-      const webhook = await this.webhooksRepository.findOne({
+      const webhookTargetDetails: Webhook = await this.webhooksRepository.findOne({
         where: {
           user,
           event: Equal(event as WebhookEventEnum),
         },
       });
 
-      // INFO: Send webhook to the target url
-      const webhookResponse = await this.#sendWebhooks({ webhook, payload });
+      if (!isMissing(webhookTargetDetails)) {
+        // INFO: Send webhook to the target url
+        const webhookResponse: Response = await this.#sendWebhooks({
+          webhookTargetDetails,
+          payload,
+        });
 
-      // INFO: Update last trigger value in database
-      await this.webhooksRepository.update(webhook?.id, {
-        lastTriggered: new Date().toISOString(),
-      });
+        // INFO: Update last trigger value in database
+        await this.webhooksRepository.update(webhookTargetDetails?.id, {
+          lastTriggered: new Date().toISOString(),
+        });
 
-      // INFO: Create Webhook History on Success or Failure
-      const webhookHistoryResponse = await this.webhookHistoriesService.createWebhookHistory({
-        webhook: webhook?.id,
-        responseCode: webhookResponse?.status,
-        status:
-          webhookResponse?.status === 200 ? WebhookStatusEnum.Success : WebhookStatusEnum.Failed,
-        nextTrigger: webhookResponse?.status !== 200 ? evaluateNextTriggerDateTime() : null,
-        payload,
-      });
-      Logger.verbose(
-        `Webhook history generated for webhook history with id: ${webhookHistoryResponse?.id}`,
-      );
+        // INFO: Create Webhook History on Success or Failure
+        await this.#createWebhookhistory({ webhookTargetDetails, webhookResponse, payload });
+      }
     } catch (error) {
       Logger.error(`Error prepare webhook: `, error?.message);
       return error;
@@ -213,20 +231,20 @@ export class WebhooksService {
   };
 
   #sendWebhooks = async ({
-    webhook,
+    webhookTargetDetails,
     payload,
   }: {
-    webhook: Webhook;
+    webhookTargetDetails: Webhook;
     payload: Record<string, unknown>;
-  }) => {
+  }): Promise<Response> => {
     try {
       let headers: Record<string, unknown>;
-      if (!isMissing(webhook?.secret)) {
+      if (!isMissing(webhookTargetDetails?.secret)) {
         headers = {
-          'x-webhook-id': webhook?.secret,
+          'x-safe-webhook-id': webhookTargetDetails?.secret,
         };
       }
-      const response = await fetch(webhook?.targetUrl, {
+      const response: Response = await fetch(webhookTargetDetails?.targetUrl, {
         method: 'POST',
         headers: {
           ...headers,
@@ -237,13 +255,19 @@ export class WebhooksService {
       });
       return response;
     } catch (error) {
-      Logger.error(`Error sending webhook to ${webhook.targetUrl}:`, error?.message);
+      Logger.error(`Error sending webhook to ${webhookTargetDetails.targetUrl}:`, error?.message);
       return error;
     }
   };
 
-  #isWebhookIsUnique = async ({ event, user }: { event?: string; user: string }) => {
-    const isWebhookUnique = await this.findWebhookByValue({
+  #isWebhookIsUnique = async ({
+    event,
+    user,
+  }: {
+    event?: string;
+    user: string;
+  }): Promise<boolean> => {
+    const isWebhookUnique: boolean = await this.findWebhookByValue({
       event,
       user,
     });

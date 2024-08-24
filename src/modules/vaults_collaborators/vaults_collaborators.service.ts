@@ -30,7 +30,8 @@ export class VaultsCollaboratorsService {
     try {
       //Email exist or not
       const userId = await this.usersService.findOrCreateUserByEmail({
-        email: createVaultsCollaboratorData?.user,
+        request,
+        createUserData: { email: createVaultsCollaboratorData?.user },
       });
 
       const newVault = this.vaultsCollaboratorsRepository.create({
