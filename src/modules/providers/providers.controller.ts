@@ -99,8 +99,12 @@ export class ProvidersController {
   @UsePipes(new ValidationPipe({ whitelist: true }), new PathParamsPipe(), ValidateProviderPipe)
   @HttpCode(200)
   @Patch(':id')
-  updateProvider(@Param('id') id: string, @Body() updateProviderData: UpdateProviderDto) {
-    return this.providersService.updateProvider({ id, updateProviderData });
+  updateProvider(
+    @Req() request: Request,
+    @Param('id') id: string,
+    @Body() updateProviderData: UpdateProviderDto,
+  ) {
+    return this.providersService.updateProvider({ request, id, updateProviderData });
   }
 
   @ApiResponse({
@@ -116,7 +120,7 @@ export class ProvidersController {
   @UsePipes(new PathParamsPipe(), ValidateProviderPipe)
   @HttpCode(200)
   @Delete(':id')
-  removeProvider(@Param('id') id: string) {
-    return this.providersService.removeProvider(id);
+  removeProvider(request: Request, @Param('id') id: string) {
+    return this.providersService.removeProvider({ request, id });
   }
 }
