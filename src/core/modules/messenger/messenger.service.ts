@@ -80,7 +80,7 @@ export class MessengerService {
       if (isMissing(response.messageId) && isMissing(response?.accepted)) {
         return false;
       }
-      Logger.verbose(`Account verification email has been sent to: ${data?.email?.[0]}`);
+      Logger.debug(`Account verification email has been sent to: ${data?.email?.[0]}`);
 
       return true;
     } catch (error) {
@@ -104,7 +104,6 @@ export class MessengerService {
         hbsTemplatePath: '/emails/simple.hbs',
       });
 
-      console.log('response: ', response);
       if (isMissing(response.messageId) && isMissing(response?.accepted)) {
         return false;
       }

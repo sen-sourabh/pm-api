@@ -186,7 +186,7 @@ export class WebhooksService {
       nextTrigger: webhookResponse?.status !== 200 ? evaluateNextTriggerDateTime() : null,
       payload,
     });
-    Logger.verbose(
+    Logger.debug(
       `Webhook history generated for webhook history with id: ${webhookHistoryResponse?.id}`,
     );
   }
@@ -238,12 +238,14 @@ export class WebhooksService {
     payload: Record<string, unknown>;
   }): Promise<Response> => {
     try {
+      // INFO: Prepare header
       let headers: Record<string, unknown>;
       if (!isMissing(webhookTargetDetails?.secret)) {
         headers = {
           'x-safe-webhook-id': webhookTargetDetails?.secret,
         };
       }
+      // INFO: Sending webhook
       const response: Response = await fetch(webhookTargetDetails?.targetUrl, {
         method: 'POST',
         headers: {
@@ -253,6 +255,12 @@ export class WebhooksService {
         },
         body: JSON.stringify(payload),
       });
+      // INFO: Error logging
+      if (response?.status !== 200)
+        Logger.error(
+          `Failed to send webhook on ${webhookTargetDetails.targetUrl}:`,
+          response?.statusText,
+        );
       return response;
     } catch (error) {
       Logger.error(`Error sending webhook to ${webhookTargetDetails.targetUrl}:`, error?.message);

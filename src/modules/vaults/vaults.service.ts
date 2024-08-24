@@ -9,6 +9,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../core/helpers/serializers';
 import { isMissing } from '../../core/helpers/validations';
+import { WebhookEventEnum } from '../../core/modules/webhooks/enums';
+import { WebhooksService } from '../../core/modules/webhooks/webhooks.service';
 import { OrderEnum } from '../../core/shared/enums';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
 import { ApiQueryParamUnifiedModel } from '../../core/shared/models/api-query.model';
@@ -22,6 +24,7 @@ export class VaultsService {
   constructor(
     @InjectRepository(Vault)
     private readonly vaultsRepository: Repository<Vault>,
+    private readonly webhooksService: WebhooksService,
   ) {}
 
   async createVault({
@@ -40,6 +43,14 @@ export class VaultsService {
         user: request?.['user']?.id,
       });
       const data = await this.vaultsRepository.save(newVault);
+
+      // INFO: Initiate webhook sender on `vault:created` event
+      this.webhooksService.prepareToSendWebhooks({
+        user: request?.['user']?.id,
+        event: WebhookEventEnum.VaultCreated,
+        payload: data,
+      });
+
       return {
         data,
         metadata: { body: CreateVaultData },
@@ -115,6 +126,14 @@ export class VaultsService {
     const data = await this.vaultsRepository.findOneBy({
       id,
     });
+
+    // INFO: Initiate webhook sender on `vault:updated` event
+    this.webhooksService.prepareToSendWebhooks({
+      user: request?.['user']?.id,
+      event: WebhookEventEnum.VaultUpdated,
+      payload: data,
+    });
+
     return {
       data,
       metadata: {
@@ -125,7 +144,13 @@ export class VaultsService {
     };
   }
 
-  async removeVault(id: string): Promise<ApiResponseModel<Vault>> {
+  async removeVault({
+    request,
+    id,
+  }: {
+    request: Request;
+    id: string;
+  }): Promise<ApiResponseModel<Vault>> {
     const deleted = await this.vaultsRepository.update(id, {
       isDeleted: true,
       isEnabled: false,
@@ -137,6 +162,14 @@ export class VaultsService {
     const data = await this.vaultsRepository.findOneBy({
       id,
     });
+
+    // INFO: Initiate webhook sender on `vault:deleted` event
+    this.webhooksService.prepareToSendWebhooks({
+      user: request?.['user']?.id,
+      event: WebhookEventEnum.VaultDeleted,
+      payload: data,
+    });
+
     return {
       data,
       metadata: { params: { id } },

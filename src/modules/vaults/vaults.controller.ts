@@ -119,7 +119,7 @@ export class VaultsController {
   @UsePipes(new PathParamsPipe(), ValidateVaultPipe)
   @HttpCode(200)
   @Delete(':id')
-  removeVault(@Param('id') id: string) {
-    return this.vaultsService.removeVault(id);
+  removeVault(@Req() request: Request, @Param('id') id: string) {
+    return this.vaultsService.removeVault({ request, id });
   }
 }
