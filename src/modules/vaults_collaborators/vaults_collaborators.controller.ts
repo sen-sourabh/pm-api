@@ -132,7 +132,7 @@ export class VaultsCollaboratorsController {
   @UsePipes(new PathParamsPipe(), ValidateVaultsCollaboratorPipe)
   @HttpCode(200)
   @Delete(':id')
-  removeVaultsCollaborator(@Param('id') id: string) {
-    return this.vaultsCollaboratorsService.removeVaultsCollaborator(id);
+  removeVaultsCollaborator(@Req() request: Request, @Param('id') id: string) {
+    return this.vaultsCollaboratorsService.removeVaultsCollaborator({ request, id });
   }
 }

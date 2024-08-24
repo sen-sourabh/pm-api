@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../core/helpers/serializers';
 import { isMissing } from '../../core/helpers/validations';
+import { WebhookEventEnum } from '../../core/modules/webhooks/enums';
+import { WebhooksService } from '../../core/modules/webhooks/webhooks.service';
 import { OrderEnum } from '../../core/shared/enums';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
 import { ApiQueryParamUnifiedModel } from '../../core/shared/models/api-query.model';
@@ -18,6 +20,7 @@ export class VaultsCollaboratorsService {
     @InjectRepository(VaultsCollaborator)
     private readonly vaultsCollaboratorsRepository: Repository<VaultsCollaborator>,
     private readonly usersService: UsersService,
+    private readonly webhooksService: WebhooksService,
   ) {}
 
   async createVaultsCollaborator({
@@ -41,6 +44,14 @@ export class VaultsCollaboratorsService {
       });
 
       const data = await this.vaultsCollaboratorsRepository.save(newVault);
+
+      // INFO: Initiate webhook sender on `collaborator:created` event
+      this.webhooksService.prepareToSendWebhooks({
+        user: request?.['user']?.id,
+        event: WebhookEventEnum.CollaboratorCreated,
+        payload: data,
+      });
+
       return {
         data,
         metadata: { body: createVaultsCollaboratorData },
@@ -105,7 +116,8 @@ export class VaultsCollaboratorsService {
     let userId: string;
     if (!isMissing(updateVaultsCollaboratorData?.user)) {
       userId = await this.usersService.findOrCreateUserByEmail({
-        email: updateVaultsCollaboratorData?.user,
+        request,
+        createUserData: { email: updateVaultsCollaboratorData?.user },
       });
     }
 
@@ -127,6 +139,14 @@ export class VaultsCollaboratorsService {
     const data = await this.vaultsCollaboratorsRepository.findOneBy({
       id,
     });
+
+    // INFO: Initiate webhook sender on `collaborator:updated` event
+    this.webhooksService.prepareToSendWebhooks({
+      user: request?.['user']?.id,
+      event: WebhookEventEnum.CollaboratorUpdated,
+      payload: data,
+    });
+
     return {
       data,
       metadata: {
@@ -137,10 +157,24 @@ export class VaultsCollaboratorsService {
     };
   }
 
-  async removeVaultsCollaborator(id: string): Promise<ApiResponseModel<VaultsCollaborator>> {
+  async removeVaultsCollaborator({
+    request,
+    id,
+  }: {
+    request: Request;
+    id: string;
+  }): Promise<ApiResponseModel<VaultsCollaborator>> {
     const deleted = await this.vaultsCollaboratorsRepository.delete(id);
 
     if (!deleted?.affected) throw new BadRequestException(`Not deleted`);
+
+    // INFO: Initiate webhook sender on `collaborator:deleted` event
+    this.webhooksService.prepareToSendWebhooks({
+      user: request?.['user']?.id,
+      event: WebhookEventEnum.CollaboratorDeleted,
+      payload: { id },
+    });
+
     return {
       message: 'Vaults Collaborator deleted successfully',
     };
