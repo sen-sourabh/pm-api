@@ -9,6 +9,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../core/helpers/serializers';
 import { isMissing } from '../../core/helpers/validations';
+import { WebhookEventEnum } from '../../core/modules/webhooks/enums';
+import { WebhooksService } from '../../core/modules/webhooks/webhooks.service';
 import { OrderEnum } from '../../core/shared/enums';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
 import { ApiQueryParamUnifiedModel } from '../../core/shared/models/api-query.model';
@@ -22,6 +24,7 @@ export class ProvidersService {
   constructor(
     @InjectRepository(Provider)
     private readonly providersRepository: Repository<Provider>,
+    private readonly webhooksService: WebhooksService,
   ) {}
 
   async createProvider({
@@ -43,6 +46,14 @@ export class ProvidersService {
         addedBy: request?.['user']?.id,
       });
       const data = await this.providersRepository.save(newProvider);
+
+      // INFO: Initiate webhook sender on `provider:created` event
+      this.webhooksService.prepareToSendWebhooks({
+        user: request?.['user']?.id,
+        event: WebhookEventEnum.ProviderCreated,
+        payload: data,
+      });
+
       return {
         data,
         metadata: { body: createProviderData },
@@ -93,9 +104,11 @@ export class ProvidersService {
   }
 
   async updateProvider({
+    request,
     id,
     updateProviderData,
   }: {
+    request: Request;
     id: string;
     updateProviderData: UpdateProviderDto;
   }): Promise<ApiResponseModel<Provider>> {
@@ -116,6 +129,14 @@ export class ProvidersService {
     const data = await this.providersRepository.findOneBy({
       id,
     });
+
+    // INFO: Initiate webhook sender on `provider:updated` event
+    this.webhooksService.prepareToSendWebhooks({
+      user: request?.['user']?.id,
+      event: WebhookEventEnum.ProviderUpdated,
+      payload: data,
+    });
+
     return {
       data,
       metadata: {
@@ -126,7 +147,13 @@ export class ProvidersService {
     };
   }
 
-  async removeProvider(id: string): Promise<ApiResponseModel<Provider>> {
+  async removeProvider({
+    request,
+    id,
+  }: {
+    request: Request;
+    id: string;
+  }): Promise<ApiResponseModel<Provider>> {
     const deleted = await this.providersRepository.update(id, {
       isDeleted: true,
       isEnabled: false,
@@ -138,6 +165,13 @@ export class ProvidersService {
     //Get deleted provider
     const data = await this.providersRepository.findOneBy({
       id,
+    });
+
+    // INFO: Initiate webhook sender on `provider:deleted` event
+    this.webhooksService.prepareToSendWebhooks({
+      user: request?.['user']?.id,
+      event: WebhookEventEnum.ProviderDeleted,
+      payload: data,
     });
 
     return {
