@@ -100,8 +100,12 @@ export class UsersController {
   @UsePipes(new ValidationPipe({ whitelist: true }), new PathParamsPipe(), ValidateUserPipe)
   @HttpCode(200)
   @Patch(':id')
-  updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.updateUser(id, updateUserDto);
+  updateUser(
+    @Req() request: Request,
+    @Param('id') id: string,
+    @Body() updateUserData: UpdateUserDto,
+  ) {
+    return this.usersService.updateUser({ request, id, updateUserData });
   }
 
   @ApiResponse({
@@ -117,7 +121,7 @@ export class UsersController {
   @UsePipes(new PathParamsPipe(), ValidateUserPipe)
   @HttpCode(200)
   @Delete(':id')
-  removeUser(@Param('id') id: string) {
-    return this.usersService.removeUser(id);
+  removeUser(@Req() request: Request, @Param('id') id: string) {
+    return this.usersService.removeUser({ request, id });
   }
 }

@@ -4,6 +4,7 @@ import { NextFunction, Request, Response } from 'express';
 import { jwtModuleOptions } from '../../../configs/jwt';
 import { UsersService } from '../../../modules/users/users.service';
 import { isMissing } from '../../helpers/validations';
+import { AuthUserPayload } from '../../modules/auth/types';
 import { TokenExpiredExceptionFilter } from '../exception-filters/token-expire.filter';
 
 @Injectable()
@@ -25,7 +26,7 @@ export class AuthMiddleware implements NestMiddleware {
       });
     } catch (error) {
       //Logout user in DB
-      await this.#userLogoutIfJwtExpired(token);
+      await this.#userLogoutIfJwtExpired({ request, token });
 
       //Logged error and throw
       Logger.error(`Error in token: ${error?.message}`);
@@ -40,8 +41,12 @@ export class AuthMiddleware implements NestMiddleware {
     return type === 'Bearer' ? token : undefined;
   }
 
-  #userLogoutIfJwtExpired = async (token: string) => {
+  #userLogoutIfJwtExpired = async ({ request, token }: { request: Request; token: string }) => {
     const decoded = await this.jwtService.decode(token, { complete: true, json: true });
-    await this.usersService.updateUser(decoded?.payload?.id, { isLogin: false });
+    await this.usersService.updateUser({
+      request: request?.['user'] as AuthUserPayload,
+      id: decoded?.payload?.id,
+      updateUserData: { isLogin: false },
+    });
   };
 }

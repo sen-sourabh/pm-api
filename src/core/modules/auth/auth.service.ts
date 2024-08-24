@@ -22,16 +22,31 @@ export class AuthService {
     return data;
   }
 
-  async login(loginRequestDto: LoginRequestDto): Promise<ApiResponseModel<LoginResponseModel>> {
-    const { email, password } = loginRequestDto;
-    const data = await this.usersService.findUser({ email, password });
+  async login({
+    request,
+    loginRequestData,
+  }: {
+    request: Request;
+    loginRequestData: LoginRequestDto;
+  }): Promise<ApiResponseModel<LoginResponseModel>> {
+    const { email, password } = loginRequestData;
+    const data = await this.usersService.findUser({
+      email,
+      password,
+      isDeleted: false,
+      isEnabled: true,
+    });
 
-    if (!data) throw new NotFoundException(`User not found`);
+    if (!data) throw new NotFoundException(`Invalid email or password`);
 
     //Update login datetime
-    await this.usersService.updateUser(data?.id, {
-      lastLogin: getLocalDateTime(),
-      isLogin: true,
+    await this.usersService.updateUser({
+      request,
+      id: data?.id,
+      updateUserData: {
+        lastLogin: getLocalDateTime(),
+        isLogin: true,
+      },
     });
 
     return {
@@ -44,7 +59,13 @@ export class AuthService {
     };
   }
 
-  async register(createUserData: CreateUserDto): Promise<ApiResponseModel<User>> {
-    return await this.usersService.createUser({ createUserData });
+  async register({
+    request,
+    createUserData,
+  }: {
+    request: Request;
+    createUserData: CreateUserDto;
+  }): Promise<ApiResponseModel<User>> {
+    return await this.usersService.createUser({ request, createUserData });
   }
 }

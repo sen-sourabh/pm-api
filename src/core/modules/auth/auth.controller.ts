@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Post, UsePipes } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, Request, UsePipes } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '../../../modules/users/dto/create-user.dto';
 import { User } from '../../../modules/users/entities/user.entity';
@@ -23,8 +23,11 @@ export class AuthController {
   @ApiXResponses(ApiXResponsesEnum.NotFound, ApiXResponsesEnum.BadRequest)
   @HttpCode(200)
   @Post('login')
-  login(@Body() loginRequestDto: LoginRequestDto): Promise<ApiResponseModel<LoginResponseModel>> {
-    return this.authService.login(loginRequestDto);
+  login(
+    @Request() request: Request,
+    @Body() loginRequestData: LoginRequestDto,
+  ): Promise<ApiResponseModel<LoginResponseModel>> {
+    return this.authService.login({ request, loginRequestData });
   }
 
   @ApiResponse({ status: 201, type: User })
@@ -36,7 +39,10 @@ export class AuthController {
   @UsePipes(ValidateUserPipe)
   @HttpCode(201)
   @Post('register')
-  register(@Body() createUserData: CreateUserDto): Promise<ApiResponseModel<User>> {
-    return this.authService.register(createUserData);
+  register(
+    @Request() request: Request,
+    @Body() createUserData: CreateUserDto,
+  ): Promise<ApiResponseModel<User>> {
+    return this.authService.register({ request, createUserData });
   }
 }

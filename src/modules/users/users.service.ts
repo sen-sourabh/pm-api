@@ -10,6 +10,7 @@ import { Repository } from 'typeorm';
 import { generateSecretKey } from '../../core/helpers/security';
 import { getPagination } from '../../core/helpers/serializers';
 import { isMissing, validateEmail } from '../../core/helpers/validations';
+import { AuthUserPayload } from '../../core/modules/auth/types';
 import { EmailPurposeEnum } from '../../core/modules/messenger/enums';
 import { MessengerService } from '../../core/modules/messenger/messenger.service';
 import { WebhookEventEnum } from '../../core/modules/webhooks/enums';
@@ -54,6 +55,7 @@ export class UsersService {
         purpose: EmailPurposeEnum.AccountVerification,
       });
 
+      // INFO: Initiate webhook sender on `user:created` event
       this.webhooksService.prepareToSendWebhooks({
         user: request?.['user']?.id,
         event: WebhookEventEnum.UserCreated,
@@ -111,9 +113,17 @@ export class UsersService {
     return { data, metadata: { params: { id } } };
   }
 
-  async updateUser(id: string, updateUserDto: UpdateUserDto): Promise<ApiResponseModel<User>> {
+  async updateUser({
+    request,
+    id,
+    updateUserData,
+  }: {
+    request: Request | AuthUserPayload;
+    id: string;
+    updateUserData: UpdateUserDto;
+  }): Promise<ApiResponseModel<User>> {
     //Actual user update
-    const updated = await this.usersRepository.update(id, updateUserDto);
+    const updated = await this.usersRepository.update(id, updateUserData);
     if (!updated?.affected) {
       throw new BadRequestException(`Not updated`);
     }
@@ -121,17 +131,31 @@ export class UsersService {
     const data = await this.usersRepository.findOneBy({
       id,
     });
+
+    // INFO: Initiate webhook sender on `user:updated` event
+    this.webhooksService.prepareToSendWebhooks({
+      user: request?.['user']?.id,
+      event: WebhookEventEnum.UserUpdated,
+      payload: data,
+    });
+
     return {
       data,
       metadata: {
         params: { id },
-        body: updateUserDto,
+        body: updateUserData,
       },
       message: 'User updated successfully',
     };
   }
 
-  async removeUser(id: string): Promise<ApiResponseModel<User>> {
+  async removeUser({
+    request,
+    id,
+  }: {
+    request: Request;
+    id: string;
+  }): Promise<ApiResponseModel<User>> {
     const deleted = await this.usersRepository.update(id, {
       isDeleted: true,
       isEnabled: false,
@@ -143,6 +167,14 @@ export class UsersService {
     const data = await this.usersRepository.findOneBy({
       id,
     });
+
+    // INFO: Initiate webhook sender on `user:deleted` event
+    this.webhooksService.prepareToSendWebhooks({
+      user: request?.['user']?.id,
+      event: WebhookEventEnum.UserDeleted,
+      payload: data,
+    });
+
     return {
       data,
       metadata: { params: { id } },
@@ -180,7 +212,13 @@ export class UsersService {
     }
   }
 
-  async findOrCreateUserByEmail(createUserData: Partial<CreateUserDto>): Promise<string> {
+  async findOrCreateUserByEmail({
+    request,
+    createUserData,
+  }: {
+    request: Request;
+    createUserData: Partial<CreateUserDto>;
+  }): Promise<string> {
     //Validate Email
     if (!validateEmail(createUserData?.email)) throw new BadRequestException(`Email is invalid`);
 
@@ -188,6 +226,12 @@ export class UsersService {
     let user = await this.usersRepository.findOneBy(createUserData);
     if (!user) {
       user = await this.usersRepository.save({ ...createUserData, secretKey: generateSecretKey() });
+      // INFO: Initiate to Webhook Sender
+      this.webhooksService.prepareToSendWebhooks({
+        user: request?.['user']?.id,
+        event: WebhookEventEnum.UserCreated,
+        payload: user,
+      });
     }
     return user?.id;
   }
