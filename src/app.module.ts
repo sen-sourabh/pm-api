@@ -38,6 +38,7 @@ import { VaultsController } from './modules/vaults/vaults.controller';
 import { VaultsModule } from './modules/vaults/vaults.module';
 import { VaultsCollaboratorsController } from './modules/vaults_collaborators/vaults_collaborators.controller';
 import { VaultsCollaboratorsModule } from './modules/vaults_collaborators/vaults_collaborators.module';
+import { CacheManagerModule } from './core/modules/cache-manager/cache-manager.module';
 
 @Module({
   imports: [
@@ -66,6 +67,7 @@ import { VaultsCollaboratorsModule } from './modules/vaults_collaborators/vaults
     CustomFieldsModule,
     ProviderFieldAssociationsModule,
     SubscriptionModule,
+    CacheManagerModule,
   ],
   controllers: [AppController],
   providers: [
