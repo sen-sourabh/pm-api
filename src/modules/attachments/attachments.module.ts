@@ -2,6 +2,7 @@ import { Logger, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ActivityLogsModule } from '../../core/modules/activity-logs/activity-logs.module';
 import { FilesModule } from '../../core/modules/files/files.module';
+import { WebhooksModule } from '../../core/modules/webhooks/webhooks.module';
 import { UsersModule } from '../users/users.module';
 import { VaultsModule } from '../vaults/vaults.module';
 import { AttachmentsController } from './attachments.controller';
@@ -15,6 +16,7 @@ import { Attachment } from './entities/attachment.entity';
     UsersModule,
     VaultsModule,
     ActivityLogsModule,
+    WebhooksModule,
   ],
   controllers: [AttachmentsController],
   providers: [AttachmentsService, Logger],
