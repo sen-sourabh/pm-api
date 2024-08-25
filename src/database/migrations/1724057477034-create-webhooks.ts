@@ -1,6 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 import { printMigrationErrorLogs } from '../../core/helpers/file-operations';
+import { WebhookEventEnum } from '../../core/modules/webhooks/enums';
 
 export class CreateWebhooks1724057477034 implements MigrationInterface {
   private readonly logger = new Logger(CreateWebhooks1724057477034.name);
@@ -27,6 +28,29 @@ export class CreateWebhooks1724057477034 implements MigrationInterface {
             {
               name: 'event',
               type: 'varchar',
+              enum: [
+                WebhookEventEnum.UserCreated,
+                WebhookEventEnum.UserUpdated,
+                WebhookEventEnum.UserDeleted,
+                WebhookEventEnum.VaultCreated,
+                WebhookEventEnum.VaultUpdated,
+                WebhookEventEnum.VaultDeleted,
+                WebhookEventEnum.CollaboratorCreated,
+                WebhookEventEnum.CollaboratorUpdated,
+                WebhookEventEnum.CollaboratorDeleted,
+                WebhookEventEnum.ProviderCreated,
+                WebhookEventEnum.ProviderUpdated,
+                WebhookEventEnum.ProviderDeleted,
+                WebhookEventEnum.FieldAssociationCreated,
+                WebhookEventEnum.FieldAssociationUpdated,
+                WebhookEventEnum.FieldAssociationDeleted,
+                WebhookEventEnum.CustomFieldCreated,
+                WebhookEventEnum.CustomFieldUpdated,
+                WebhookEventEnum.CustomFieldDeleted,
+                WebhookEventEnum.AttachmentCreated,
+                WebhookEventEnum.AttachmentUpdated,
+                WebhookEventEnum.AttachmentDeleted,
+              ],
               isNullable: false,
             },
             {

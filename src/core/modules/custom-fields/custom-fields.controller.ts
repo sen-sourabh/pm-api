@@ -121,7 +121,7 @@ export class CustomFieldsController {
   @UsePipes(new PathParamsPipe(), ValidateCustomFieldPipe)
   @HttpCode(200)
   @Delete(':id')
-  removeCustomField(@Param('id') id: string) {
-    return this.customFieldsService.removeCustomField(id);
+  removeCustomField(@Req() request: Request, @Param('id') id: string) {
+    return this.customFieldsService.removeCustomField({ request, id });
   }
 }

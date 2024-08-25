@@ -16,9 +16,9 @@ export enum WebhookEventEnum {
   ProviderUpdated = 'provider:updated',
   ProviderDeleted = 'provider:deleted',
   //ProviderFieldAssociation event
-  ProviderFieldAssociationCreated = 'providerFieldAssociation:created',
-  ProviderFieldAssociationUpdated = 'providerFieldAssociation:updated',
-  ProviderFieldAssociationDeleted = 'providerFieldAssociation:deleted',
+  FieldAssociationCreated = 'fieldAssociation:created',
+  FieldAssociationUpdated = 'fieldAssociation:updated',
+  FieldAssociationDeleted = 'fieldAssociation:deleted',
   //CustomField event
   CustomFieldCreated = 'customField:created',
   CustomFieldUpdated = 'customField:updated',
