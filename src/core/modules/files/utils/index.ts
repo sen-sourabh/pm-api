@@ -46,13 +46,13 @@ export const getS3ObjectUrl = (bucket: string, fileKey: string): string => {
 };
 
 export const getUsersS3Path = ({ category }: CreateAttachmentInternalDto): string => {
-  return category?.trim().toString() === CategoryEnum.PROFILE
-    ? UpoadFileS3PathEnum.USERS_PROFILES
-    : UpoadFileS3PathEnum.USERS_ADDITIONALS;
+  return category?.trim().toString() === CategoryEnum.Profile
+    ? UpoadFileS3PathEnum.UsersProfiles
+    : UpoadFileS3PathEnum.UsersAdditionals;
 };
 
 export const getVaultsS3Path = ({ category }: CreateAttachmentInternalDto): string => {
-  return category?.trim().toString() === CategoryEnum.PROFILE
-    ? UpoadFileS3PathEnum.VAULTS_PROFILES
-    : UpoadFileS3PathEnum.VAULTS_ADDITIONALS;
+  return category?.trim().toString() === CategoryEnum.Profile
+    ? UpoadFileS3PathEnum.VaultsProfiles
+    : UpoadFileS3PathEnum.VaultsAdditionals;
 };

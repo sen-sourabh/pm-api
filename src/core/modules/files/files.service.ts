@@ -39,7 +39,7 @@ export class FilesService {
       if (keyExists) {
         const deleteCommand = this.#getDeleteObjectCommand(keyExists);
         await this.s3Client.send(deleteCommand);
-        Logger.debug(`File has been deleted from S3 with keyEsists: ${keyExists}`);
+        Logger.debug(`File has been deleted from S3 with keyExists: ${keyExists}`);
       }
 
       const key = getS3FileKey(identifier, file, s3Path);

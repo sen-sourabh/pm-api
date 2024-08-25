@@ -18,6 +18,8 @@ import {
   getUsersS3Path,
   getVaultsS3Path,
 } from '../../core/modules/files/utils';
+import { WebhookEventEnum } from '../../core/modules/webhooks/enums';
+import { WebhooksService } from '../../core/modules/webhooks/webhooks.service';
 import { OrderEnum } from '../../core/shared/enums';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
 import { ApiQueryParamUnifiedModel } from '../../core/shared/models/api-query.model';
@@ -33,6 +35,7 @@ export class AttachmentsService {
     private readonly attachmentsRepository: Repository<Attachment>,
     private readonly filesService: FilesService,
     private readonly vaultsService: VaultsService,
+    private readonly webhooksService: WebhooksService,
   ) {}
 
   async uploadAttachments({
@@ -77,8 +80,22 @@ export class AttachmentsService {
           updateAttachmentData: newAttachment,
         });
         data = await this.attachmentsRepository.findOne({ where: { id } });
+
+        // INFO: Initiate webhook sender on `attachment:updated` event
+        this.webhooksService.prepareToSendWebhooks({
+          user: request?.['user']?.id,
+          event: WebhookEventEnum.AttachmentUpdated,
+          payload: data,
+        });
       } else {
         data = await this.attachmentsRepository.save(newAttachment);
+
+        // INFO: Initiate webhook sender on `attachment:created` event
+        this.webhooksService.prepareToSendWebhooks({
+          user: request?.['user']?.id,
+          event: WebhookEventEnum.AttachmentCreated,
+          payload: data,
+        });
       }
 
       return {
