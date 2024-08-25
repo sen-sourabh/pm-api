@@ -108,13 +108,15 @@ export class ProviderFieldAssociationsController {
   @HttpCode(200)
   @Patch(':id')
   updateProviderFieldAssociation(
+    @Req() request: Request,
     @Param('id') id: string,
-    @Body() updateProviderFieldAssociationDto: UpdateProviderFieldAssociationDto,
+    @Body() updateProviderFieldAssociationData: UpdateProviderFieldAssociationDto,
   ) {
-    return this.providerFieldAssociationsService.updateProviderFieldAssociation(
+    return this.providerFieldAssociationsService.updateProviderFieldAssociation({
+      request,
       id,
-      updateProviderFieldAssociationDto,
-    );
+      updateProviderFieldAssociationData,
+    });
   }
 
   @ApiResponse({
@@ -130,7 +132,7 @@ export class ProviderFieldAssociationsController {
   @UsePipes(new PathParamsPipe())
   @HttpCode(200)
   @Delete(':id')
-  removeProviderFieldAssociation(@Param('id') id: string) {
-    return this.providerFieldAssociationsService.removeProviderFieldAssociation(id);
+  removeProviderFieldAssociation(@Req() request: Request, @Param('id') id: string) {
+    return this.providerFieldAssociationsService.removeProviderFieldAssociation({ request, id });
   }
 }

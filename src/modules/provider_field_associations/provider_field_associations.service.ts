@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../core/helpers/serializers';
 import { isMissing } from '../../core/helpers/validations';
+import { WebhookEventEnum } from '../../core/modules/webhooks/enums';
+import { WebhooksService } from '../../core/modules/webhooks/webhooks.service';
 import { OrderEnum } from '../../core/shared/enums';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
 import { ApiQueryParamUnifiedModel } from '../../core/shared/models/api-query.model';
@@ -16,6 +18,7 @@ export class ProviderFieldAssociationsService {
   constructor(
     @InjectRepository(ProviderFieldAssociation)
     private readonly providerFieldAssociationsRepository: Repository<ProviderFieldAssociation>,
+    private readonly webhooksService: WebhooksService,
   ) {}
 
   async createProviderFieldAssociation({
@@ -31,6 +34,14 @@ export class ProviderFieldAssociationsService {
         addedBy: request?.['user']?.id,
       });
       const data = await this.providerFieldAssociationsRepository.save(newProviderFieldAssociation);
+
+      // INFO: Initiate webhook sender on `fieldAssociation:created` event
+      this.webhooksService.prepareToSendWebhooks({
+        user: request?.['user']?.id,
+        event: WebhookEventEnum.FieldAssociationCreated,
+        payload: data,
+      });
+
       return {
         data,
         metadata: { body: createProviderFieldAssociationData },
@@ -82,14 +93,19 @@ export class ProviderFieldAssociationsService {
     return { data, metadata: { params: { id } } };
   }
 
-  async updateProviderFieldAssociation(
-    id: string,
-    updateProviderFieldAssociationDto: UpdateProviderFieldAssociationDto,
-  ): Promise<ApiResponseModel<ProviderFieldAssociation>> {
+  async updateProviderFieldAssociation({
+    request,
+    id,
+    updateProviderFieldAssociationData,
+  }: {
+    request: Request;
+    id: string;
+    updateProviderFieldAssociationData: UpdateProviderFieldAssociationDto;
+  }): Promise<ApiResponseModel<ProviderFieldAssociation>> {
     //Actual user update
     const updated = await this.providerFieldAssociationsRepository.update(
       id,
-      updateProviderFieldAssociationDto,
+      updateProviderFieldAssociationData,
     );
     if (!updated?.affected) {
       throw new BadRequestException(`Not updated`);
@@ -98,21 +114,41 @@ export class ProviderFieldAssociationsService {
     const data = await this.providerFieldAssociationsRepository.findOneBy({
       id,
     });
+
+    // INFO: Initiate webhook sender on `fieldAssociation:updated` event
+    this.webhooksService.prepareToSendWebhooks({
+      user: request?.['user']?.id,
+      event: WebhookEventEnum.FieldAssociationUpdated,
+      payload: data,
+    });
+
     return {
       data,
       metadata: {
         params: { id },
-        body: updateProviderFieldAssociationDto,
+        body: updateProviderFieldAssociationData,
       },
       message: 'ProviderFieldAssociation updated successfully',
     };
   }
 
-  async removeProviderFieldAssociation(
-    id: string,
-  ): Promise<ApiResponseModel<ProviderFieldAssociation>> {
+  async removeProviderFieldAssociation({
+    request,
+    id,
+  }: {
+    request: Request;
+    id: string;
+  }): Promise<ApiResponseModel<ProviderFieldAssociation>> {
     const deleted = await this.providerFieldAssociationsRepository.delete(id);
     if (!deleted?.affected) throw new BadRequestException(`Not deleted`);
+
+    // INFO: Initiate webhook sender on `fieldAssociation:deleted` event
+    this.webhooksService.prepareToSendWebhooks({
+      user: request?.['user']?.id,
+      event: WebhookEventEnum.FieldAssociationDeleted,
+      payload: { id },
+    });
+
     return {
       message: 'ProviderFieldAssociation deleted successfully',
     };

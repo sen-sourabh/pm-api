@@ -12,6 +12,8 @@ import { isMissing } from '../../helpers/validations';
 import { OrderEnum } from '../../shared/enums';
 import { ApiResponseModel } from '../../shared/interfaces/api-response.interface';
 import { ApiQueryParamUnifiedModel } from '../../shared/models/api-query.model';
+import { WebhookEventEnum } from '../webhooks/enums';
+import { WebhooksService } from '../webhooks/webhooks.service';
 import { CreateCustomFieldDto } from './dto/create-custom-field.dto';
 import { ListQueryCustomFieldsDto } from './dto/list-custom-field.dto';
 import { UpdateCustomFieldDto } from './dto/update-custom-field.dto';
@@ -22,6 +24,7 @@ export class CustomFieldsService {
   constructor(
     @InjectRepository(CustomField)
     private readonly customFieldsRepository: Repository<CustomField>,
+    private readonly webhooksService: WebhooksService,
   ) {}
 
   async createCustomField({
@@ -43,6 +46,14 @@ export class CustomFieldsService {
         addedBy: request?.['user']?.id,
       });
       const data = await this.customFieldsRepository.save(newCustomField);
+
+      // INFO: Initiate webhook sender on `customField:created` event
+      this.webhooksService.prepareToSendWebhooks({
+        user: request?.['user']?.id,
+        event: WebhookEventEnum.CustomFieldCreated,
+        payload: data,
+      });
+
       return {
         data,
         metadata: { body: createCustomFieldData },
@@ -120,6 +131,14 @@ export class CustomFieldsService {
     const data = await this.customFieldsRepository.findOneBy({
       id,
     });
+
+    // INFO: Initiate webhook sender on `customField:updated` event
+    this.webhooksService.prepareToSendWebhooks({
+      user: request?.['user']?.id,
+      event: WebhookEventEnum.CustomFieldUpdated,
+      payload: data,
+    });
+
     return {
       data,
       metadata: {
@@ -130,7 +149,13 @@ export class CustomFieldsService {
     };
   }
 
-  async removeCustomField(id: string): Promise<ApiResponseModel<CustomField>> {
+  async removeCustomField({
+    request,
+    id,
+  }: {
+    request: Request;
+    id: string;
+  }): Promise<ApiResponseModel<CustomField>> {
     const deleted = await this.customFieldsRepository.update(id, {
       isDeleted: true,
       isEnabled: false,
@@ -142,6 +167,14 @@ export class CustomFieldsService {
     const data = await this.customFieldsRepository.findOneBy({
       id,
     });
+
+    // INFO: Initiate webhook sender on `customField:deleted` event
+    this.webhooksService.prepareToSendWebhooks({
+      user: request?.['user']?.id,
+      event: WebhookEventEnum.CustomFieldDeleted,
+      payload: data,
+    });
+
     return {
       data,
       metadata: { params: { id } },

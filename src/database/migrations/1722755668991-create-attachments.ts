@@ -29,13 +29,13 @@ export class CreateAttachments1722755668991 implements MigrationInterface {
             {
               name: 'fileFormat',
               type: 'enum',
-              enum: [FileFormatEnum.JPEG, FileFormatEnum.JPG, FileFormatEnum.PNG],
+              enum: [FileFormatEnum.Jpeg, FileFormatEnum.Jpg, FileFormatEnum.Png],
               isNullable: false,
             },
             {
               name: 'category',
               type: 'enum',
-              enum: [CategoryEnum.PROFILE, CategoryEnum.ADDITIONAL],
+              enum: [CategoryEnum.Profile, CategoryEnum.Additional],
               isNullable: false,
             },
             {

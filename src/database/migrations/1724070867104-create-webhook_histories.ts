@@ -1,6 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 import { printMigrationErrorLogs } from '../../core/helpers/file-operations';
+import { WebhookStatusEnum } from '../../core/modules/webhooks/enums';
 
 export class CreateWebhookHistories1724070867104 implements MigrationInterface {
   private readonly logger = new Logger(CreateWebhookHistories1724070867104.name);
@@ -33,6 +34,7 @@ export class CreateWebhookHistories1724070867104 implements MigrationInterface {
             {
               name: 'status',
               type: 'varchar',
+              enum: [WebhookStatusEnum.Success, WebhookStatusEnum.Failed],
               isNullable: false,
               default: 'success',
             },
