@@ -11,6 +11,7 @@ import { generateSecretKey } from '../../core/helpers/security';
 import { getPagination } from '../../core/helpers/serializers';
 import { isMissing, validateEmail } from '../../core/helpers/validations';
 import { AuthUserPayload } from '../../core/modules/auth/types';
+import { CacheManagerService } from '../../core/modules/cache-manager/cache-manager.service';
 import { EmailPurposeEnum } from '../../core/modules/messenger/enums';
 import { MessengerService } from '../../core/modules/messenger/messenger.service';
 import { WebhookEventEnum } from '../../core/modules/webhooks/enums';
@@ -31,6 +32,7 @@ export class UsersService {
     private readonly usersRepository: Repository<User>,
     private readonly messengerService: MessengerService,
     private readonly webhooksService: WebhooksService,
+    private readonly cacheManagerService: CacheManagerService,
   ) {}
 
   async createUser({
@@ -75,8 +77,15 @@ export class UsersService {
     }
   }
 
-  async findAllUsers(query?: ListQueryUsersDto): Promise<ApiResponseModel<User[]>> {
+  async findAllUsers({
+    request,
+    listQueryUsersData,
+  }: {
+    request: Request;
+    listQueryUsersData?: ListQueryUsersDto;
+  }): Promise<ApiResponseModel<User[]>> {
     try {
+      const query = listQueryUsersData;
       const { skip, take, relations } = getPagination(query);
 
       const data = await this.usersRepository.find({
@@ -86,6 +95,17 @@ export class UsersService {
         take,
         order: { updatedAt: OrderEnum.DESC },
       });
+
+      this.cacheManagerService.cacheSetData({
+        request,
+        data,
+      });
+
+      this.cacheManagerService.cacheGetData({ request: 'key123' });
+
+      this.cacheManagerService.cacheDeleteData({ request: 'key123' });
+
+      this.cacheManagerService.cacheGetData({ request: 'key123' });
 
       return {
         data,

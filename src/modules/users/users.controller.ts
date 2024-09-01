@@ -63,10 +63,11 @@ export class UsersController {
   @HttpCode(200)
   @Get()
   findAllUsers(
+    @Req() request: Request,
     @Query()
-    listQueryUsersDto?: ListQueryUsersDto,
+    listQueryUsersData?: ListQueryUsersDto,
   ): Promise<ApiResponseModel<User[]>> {
-    return this.usersService.findAllUsers(listQueryUsersDto);
+    return this.usersService.findAllUsers({ request, listQueryUsersData });
   }
 
   @ApiResponse({

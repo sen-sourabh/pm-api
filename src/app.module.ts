@@ -10,6 +10,7 @@ import { DataSourcesOptions } from './configs/typeorm';
 import { ActivityLogsController } from './core/modules/activity-logs/activity-logs.controller';
 import { ActivityLogsModule } from './core/modules/activity-logs/activity-logs.module';
 import { AuthModule } from './core/modules/auth/auth.module';
+import { CacheManagerModule } from './core/modules/cache-manager/cache-manager.module';
 import { CustomFieldsController } from './core/modules/custom-fields/custom-fields.controller';
 import { CustomFieldsModule } from './core/modules/custom-fields/custom-fields.module';
 import { FilesModule } from './core/modules/files/files.module';
@@ -38,7 +39,6 @@ import { VaultsController } from './modules/vaults/vaults.controller';
 import { VaultsModule } from './modules/vaults/vaults.module';
 import { VaultsCollaboratorsController } from './modules/vaults_collaborators/vaults_collaborators.controller';
 import { VaultsCollaboratorsModule } from './modules/vaults_collaborators/vaults_collaborators.module';
-import { CacheManagerModule } from './core/modules/cache-manager/cache-manager.module';
 
 @Module({
   imports: [
