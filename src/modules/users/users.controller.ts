@@ -63,10 +63,11 @@ export class UsersController {
   @HttpCode(200)
   @Get()
   findAllUsers(
+    @Req() request: Request,
     @Query()
-    listQueryUsersDto?: ListQueryUsersDto,
+    listQueryUsersData?: ListQueryUsersDto,
   ): Promise<ApiResponseModel<User[]>> {
-    return this.usersService.findAllUsers(listQueryUsersDto);
+    return this.usersService.findAllUsers({ request, listQueryUsersData });
   }
 
   @ApiResponse({
@@ -82,8 +83,12 @@ export class UsersController {
   @UsePipes(new PathParamsPipe())
   @HttpCode(200)
   @Get(':id')
-  findOneUser(@Param('id') id: string, @Query() query?: ApiQueryParamUnifiedModel) {
-    return this.usersService.findOneUser(id, query);
+  findOneUser(
+    @Req() request: Request,
+    @Param('id') id: string,
+    @Query() query?: ApiQueryParamUnifiedModel,
+  ) {
+    return this.usersService.findOneUser({ request, id, query });
   }
 
   @ApiResponse({

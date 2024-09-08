@@ -11,6 +11,7 @@ import { generateSecretKey } from '../../core/helpers/security';
 import { getPagination } from '../../core/helpers/serializers';
 import { isMissing, validateEmail } from '../../core/helpers/validations';
 import { AuthUserPayload } from '../../core/modules/auth/types';
+import { CacheManagerService } from '../../core/modules/cache-manager/cache-manager.service';
 import { EmailPurposeEnum } from '../../core/modules/messenger/enums';
 import { MessengerService } from '../../core/modules/messenger/messenger.service';
 import { WebhookEventEnum } from '../../core/modules/webhooks/enums';
@@ -31,6 +32,7 @@ export class UsersService {
     private readonly usersRepository: Repository<User>,
     private readonly messengerService: MessengerService,
     private readonly webhooksService: WebhooksService,
+    private readonly cacheManagerService: CacheManagerService,
   ) {}
 
   async createUser({
@@ -75,16 +77,39 @@ export class UsersService {
     }
   }
 
-  async findAllUsers(query?: ListQueryUsersDto): Promise<ApiResponseModel<User[]>> {
+  async findAllUsers({
+    request,
+    listQueryUsersData,
+  }: {
+    request: Request;
+    listQueryUsersData?: ListQueryUsersDto;
+  }): Promise<ApiResponseModel<User[]>> {
     try {
+      const query = listQueryUsersData;
+
+      // From Cache
+      let data = await this.cacheManagerService.cacheGetData(request);
+      if (!isMissing(data)) {
+        return {
+          data,
+          metadata: { query },
+        };
+      }
+
+      // Not From Cache
       const { skip, take, relations } = getPagination(query);
 
-      const data = await this.usersRepository.find({
+      data = await this.usersRepository.find({
         where: query,
         relations: relations && ['role', 'accountType'],
         skip,
         take,
         order: { updatedAt: OrderEnum.DESC },
+      });
+
+      await this.cacheManagerService.cacheSetData({
+        request,
+        data,
       });
 
       return {
@@ -97,20 +122,41 @@ export class UsersService {
     }
   }
 
-  async findOneUser(
-    id: string,
-    query?: ApiQueryParamUnifiedModel,
-  ): Promise<ApiResponseModel<User>> {
+  async findOneUser({
+    request,
+    id,
+    query,
+  }: {
+    request: Request;
+    id: string;
+    query?: ApiQueryParamUnifiedModel;
+  }): Promise<ApiResponseModel<User>> {
+    // From Cache
+    let data = await this.cacheManagerService.cacheGetData(request);
+    if (!isMissing(data)) {
+      return {
+        data,
+        metadata: { query },
+      };
+    }
+
+    // Not From Cache
     const { relations } = getPagination(query);
 
-    const data = await this.usersRepository.findOne({
+    data = await this.usersRepository.findOne({
       where: { id },
       relations: relations && ['role', 'accountType'],
     });
     if (isMissing(data)) {
       throw new NotFoundException(`Record not found with id: ${id}`);
     }
-    return { data, metadata: { params: { id } } };
+
+    await this.cacheManagerService.cacheSetData({
+      request,
+      data,
+    });
+
+    return { data, metadata: { query } };
   }
 
   async updateUser({

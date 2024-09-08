@@ -10,6 +10,7 @@ import { DataSourcesOptions } from './configs/typeorm';
 import { ActivityLogsController } from './core/modules/activity-logs/activity-logs.controller';
 import { ActivityLogsModule } from './core/modules/activity-logs/activity-logs.module';
 import { AuthModule } from './core/modules/auth/auth.module';
+import { CacheManagerModule } from './core/modules/cache-manager/cache-manager.module';
 import { CustomFieldsController } from './core/modules/custom-fields/custom-fields.controller';
 import { CustomFieldsModule } from './core/modules/custom-fields/custom-fields.module';
 import { FilesModule } from './core/modules/files/files.module';
@@ -51,6 +52,7 @@ import { VaultsCollaboratorsModule } from './modules/vaults_collaborators/vaults
     TypeOrmModule.forRootAsync({
       useFactory: () => DataSourcesOptions,
     }),
+    CacheManagerModule,
     AuthModule,
     MessengerModule,
     WebhooksModule,
