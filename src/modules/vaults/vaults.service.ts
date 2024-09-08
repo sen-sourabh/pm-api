@@ -143,7 +143,7 @@ export class VaultsService {
       data,
     });
 
-    return { data, metadata: { params: { id } } };
+    return { data, metadata: { query } };
   }
 
   async updateVault({
