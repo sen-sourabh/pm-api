@@ -83,8 +83,12 @@ export class UsersController {
   @UsePipes(new PathParamsPipe())
   @HttpCode(200)
   @Get(':id')
-  findOneUser(@Param('id') id: string, @Query() query?: ApiQueryParamUnifiedModel) {
-    return this.usersService.findOneUser(id, query);
+  findOneUser(
+    @Req() request: Request,
+    @Param('id') id: string,
+    @Query() query?: ApiQueryParamUnifiedModel,
+  ) {
+    return this.usersService.findOneUser({ request, id, query });
   }
 
   @ApiResponse({

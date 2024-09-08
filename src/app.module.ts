@@ -52,6 +52,7 @@ import { VaultsCollaboratorsModule } from './modules/vaults_collaborators/vaults
     TypeOrmModule.forRootAsync({
       useFactory: () => DataSourcesOptions,
     }),
+    CacheManagerModule,
     AuthModule,
     MessengerModule,
     WebhooksModule,
@@ -67,7 +68,6 @@ import { VaultsCollaboratorsModule } from './modules/vaults_collaborators/vaults
     CustomFieldsModule,
     ProviderFieldAssociationsModule,
     SubscriptionModule,
-    CacheManagerModule,
   ],
   controllers: [AppController],
   providers: [

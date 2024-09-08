@@ -7,33 +7,39 @@ export class CacheManagerService {
 
   async cacheSetData({ request, data }: { request: Request; data: any }) {
     try {
-      console.log('request: ', request?.headers);
-      console.log('request: ', request?.['param']);
-      console.log('request: ', request?.['query']);
-      console.log('request: ', request.body);
-
-      await this.cacheManager.set('key123', data);
-      Logger.debug(`Cache added with key: 123`);
+      const key = this.#generateCacheKey(request);
+      await this.cacheManager.set(key, data);
+      Logger.debug(`Cache added with key ${key}`);
     } catch (error) {
       Logger.error(`Error from cacheSetData: ${error?.message}`);
     }
   }
 
-  async cacheGetData({ request }: { request: string }) {
+  async cacheGetData(request: Request) {
     try {
-      const res = await this.cacheManager.get('key123');
-      Logger.debug(`Cache found with key: ${res}`);
+      const key = this.#generateCacheKey(request);
+      const res = await this.cacheManager.get(key);
+      if (res) {
+        Logger.debug(`Cache found with key ${key}`);
+      }
+      return res;
     } catch (error) {
       Logger.error(`Error from cacheGetData: ${error?.message}`);
     }
   }
 
-  async cacheDeleteData({ request }: { request: string }) {
+  async cacheDeleteData(request: Request) {
     try {
-      const res = await this.cacheManager.del('key123');
-      Logger.debug(`Cache deleted with key: ${res}`);
+      const key = this.#generateCacheKey(request);
+      await this.cacheManager.del(key);
+      Logger.debug(`Cache deleted with key ${key}`);
     } catch (error) {
       Logger.error(`Error from cacheDelData: ${error?.message}`);
     }
   }
+
+  #generateCacheKey = (request: Request): string => {
+    const { url, method, query, params } = request;
+    return JSON.stringify({ url, method, query, params });
+  };
 }

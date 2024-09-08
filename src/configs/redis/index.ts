@@ -9,8 +9,8 @@ export const CustomCacheOptions: CacheModuleAsyncOptions = {
   isGlobal: true,
   useFactory() {
     return {
-      max: 100,
-      ttl: 60,
+      max: +configService.getOrThrow('CACHE_MAX'),
+      ttl: +configService.getOrThrow('CACHE_TTL'),
     };
   },
 };
