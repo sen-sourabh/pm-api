@@ -1,6 +1,7 @@
 import { Logger, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ActivityLogsModule } from '../../core/modules/activity-logs/activity-logs.module';
+import { CacheManagerModule } from '../../core/modules/cache-manager/cache-manager.module';
 import { WebhooksModule } from '../../core/modules/webhooks/webhooks.module';
 import { UsersModule } from '../users/users.module';
 import { VaultsCollaborator } from './entities/vaults_collaborator.entity';
@@ -13,6 +14,7 @@ import { VaultsCollaboratorsService } from './vaults_collaborators.service';
     ActivityLogsModule,
     UsersModule,
     WebhooksModule,
+    CacheManagerModule,
   ],
   controllers: [VaultsCollaboratorsController],
   providers: [VaultsCollaboratorsService, Logger],

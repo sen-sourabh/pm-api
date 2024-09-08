@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../core/helpers/serializers';
 import { isMissing } from '../../core/helpers/validations';
+import { CacheManagerService } from '../../core/modules/cache-manager/cache-manager.service';
 import { WebhookEventEnum } from '../../core/modules/webhooks/enums';
 import { WebhooksService } from '../../core/modules/webhooks/webhooks.service';
 import { OrderEnum } from '../../core/shared/enums';
@@ -21,6 +22,7 @@ export class VaultsCollaboratorsService {
     private readonly vaultsCollaboratorsRepository: Repository<VaultsCollaborator>,
     private readonly usersService: UsersService,
     private readonly webhooksService: WebhooksService,
+    private readonly cacheManagerService: CacheManagerService,
   ) {}
 
   async createVaultsCollaborator({
@@ -63,23 +65,43 @@ export class VaultsCollaboratorsService {
     }
   }
 
-  async findAllVaultsCollaborators(
-    query?: ListQueryVaultsCollaboratorDto,
-  ): Promise<ApiResponseModel<VaultsCollaborator[]>> {
+  async findAllVaultsCollaborators({
+    request,
+    listQueryVaultsCollaboratorData,
+  }: {
+    request: Request;
+    listQueryVaultsCollaboratorData?: ListQueryVaultsCollaboratorDto;
+  }): Promise<ApiResponseModel<VaultsCollaborator[]>> {
     try {
-      const { skip, take, relations } = getPagination(query);
+      // From Cache
+      let data = await this.cacheManagerService.cacheGetData(request);
+      if (!isMissing(data)) {
+        return {
+          data,
+          metadata: { query: listQueryVaultsCollaboratorData },
+        };
+      }
 
-      const data = await this.vaultsCollaboratorsRepository.find({
-        where: query,
+      // Not From Cache
+      const { skip, take, relations } = getPagination(listQueryVaultsCollaboratorData);
+
+      data = await this.vaultsCollaboratorsRepository.find({
+        where: listQueryVaultsCollaboratorData,
         relations: relations && ['user', 'vault', 'role', 'updatedBy'],
         skip,
         take,
         order: { updatedAt: OrderEnum.DESC },
       });
 
+      // Set in Cache
+      await this.cacheManagerService.cacheSetData({
+        request,
+        data,
+      });
+
       return {
         data,
-        metadata: { query },
+        metadata: { query: listQueryVaultsCollaboratorData },
       };
     } catch (error) {
       Logger.error(`Error in list vaults collaborator: ${error.message}`);
@@ -87,19 +109,41 @@ export class VaultsCollaboratorsService {
     }
   }
 
-  async findOneVaultsCollaborator(
-    id: string,
-    query?: ApiQueryParamUnifiedModel,
-  ): Promise<ApiResponseModel<VaultsCollaborator>> {
+  async findOneVaultsCollaborator({
+    request,
+    id,
+    query,
+  }: {
+    request: Request;
+    id: string;
+    query?: ApiQueryParamUnifiedModel;
+  }): Promise<ApiResponseModel<VaultsCollaborator>> {
+    // From Cache
+    let data = await this.cacheManagerService.cacheGetData(request);
+    if (!isMissing(data)) {
+      return {
+        data,
+        metadata: { query },
+      };
+    }
+
+    // Not From Cache
     const { relations } = getPagination(query);
 
-    const data = await this.vaultsCollaboratorsRepository.findOne({
+    data = await this.vaultsCollaboratorsRepository.findOne({
       where: { id },
       relations: relations && ['user', 'vault', 'role', 'updatedBy'],
     });
     if (isMissing(data)) {
       throw new NotFoundException(`Record not found with id: ${id}`);
     }
+
+    // Set in Cache
+    await this.cacheManagerService.cacheSetData({
+      request,
+      data,
+    });
+
     return { data, metadata: { params: { id } } };
   }
 

@@ -64,12 +64,14 @@ export class VaultsCollaboratorsController {
   @HttpCode(200)
   @Get()
   findAllVaultsCollaborators(
+    @Req() request: Request,
     @Query()
-    listQueryVaultsCollaboratorDto?: ListQueryVaultsCollaboratorDto,
+    listQueryVaultsCollaboratorData?: ListQueryVaultsCollaboratorDto,
   ): Promise<ApiResponseModel<VaultsCollaborator[]>> {
-    return this.vaultsCollaboratorsService.findAllVaultsCollaborators(
-      listQueryVaultsCollaboratorDto,
-    );
+    return this.vaultsCollaboratorsService.findAllVaultsCollaborators({
+      request,
+      listQueryVaultsCollaboratorData,
+    });
   }
 
   @ApiResponse({
@@ -85,8 +87,12 @@ export class VaultsCollaboratorsController {
   @UsePipes(new PathParamsPipe())
   @HttpCode(200)
   @Get(':id')
-  findOneVaultsCollaborator(@Param('id') id: string, @Query() query?: ApiQueryParamUnifiedModel) {
-    return this.vaultsCollaboratorsService.findOneVaultsCollaborator(id, query);
+  findOneVaultsCollaborator(
+    @Req() request: Request,
+    @Param('id') id: string,
+    @Query() query?: ApiQueryParamUnifiedModel,
+  ) {
+    return this.vaultsCollaboratorsService.findOneVaultsCollaborator({ request, id, query });
   }
 
   @ApiResponse({
