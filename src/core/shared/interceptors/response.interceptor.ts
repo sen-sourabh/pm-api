@@ -8,8 +8,10 @@ import { ApiResponseUnifiedModel } from '../models/api-response.model';
 export class ResponseInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
-      map((data: ApiResponseUnifiedModel) => {
+      map(async (data: ApiResponseUnifiedModel) => {
         const response = context.switchToHttp().getResponse();
+
+        // Retrun final response
         return this.#serializeResponse(data, response);
       }),
     );

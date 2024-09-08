@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../core/helpers/serializers';
 import { isMissing } from '../../core/helpers/validations';
+import { CacheManagerService } from '../../core/modules/cache-manager/cache-manager.service';
 import { WebhookEventEnum } from '../../core/modules/webhooks/enums';
 import { WebhooksService } from '../../core/modules/webhooks/webhooks.service';
 import { OrderEnum } from '../../core/shared/enums';
@@ -25,6 +26,7 @@ export class VaultsService {
     @InjectRepository(Vault)
     private readonly vaultsRepository: Repository<Vault>,
     private readonly webhooksService: WebhooksService,
+    private readonly cacheManagerService: CacheManagerService,
   ) {}
 
   async createVault({
@@ -62,21 +64,43 @@ export class VaultsService {
     }
   }
 
-  async findAllVaults(query?: ListQueryVaultsDto): Promise<ApiResponseModel<Vault[]>> {
+  async findAllVaults({
+    request,
+    listQueryVaultsData,
+  }: {
+    request: Request;
+    listQueryVaultsData?: ListQueryVaultsDto;
+  }): Promise<ApiResponseModel<Vault[]>> {
     try {
-      const { skip, take, relations } = getPagination(query);
+      // From Cache
+      let data = await this.cacheManagerService.cacheGetData(request);
+      if (!isMissing(data)) {
+        return {
+          data,
+          metadata: { query: listQueryVaultsData },
+        };
+      }
 
-      const data = await this.vaultsRepository.find({
-        where: query,
+      // Not From Cache
+      const { skip, take, relations } = getPagination(listQueryVaultsData);
+
+      data = await this.vaultsRepository.find({
+        where: listQueryVaultsData,
         relations: relations && ['user'],
         skip,
         take,
         order: { updatedAt: OrderEnum.DESC },
       });
 
+      // Set in Cache
+      await this.cacheManagerService.cacheSetData({
+        request,
+        data,
+      });
+
       return {
         data,
-        metadata: { query },
+        metadata: { query: listQueryVaultsData },
       };
     } catch (error) {
       Logger.error(`Error in list vault: ${error.message}`);
@@ -84,19 +108,41 @@ export class VaultsService {
     }
   }
 
-  async findOneVault(
-    id: string,
-    query?: ApiQueryParamUnifiedModel,
-  ): Promise<ApiResponseModel<Vault>> {
+  async findOneVault({
+    request,
+    id,
+    query,
+  }: {
+    request: Request;
+    id: string;
+    query?: ApiQueryParamUnifiedModel;
+  }): Promise<ApiResponseModel<Vault>> {
+    // From Cache
+    let data = await this.cacheManagerService.cacheGetData(request);
+    if (!isMissing(data)) {
+      return {
+        data,
+        metadata: { query },
+      };
+    }
+
+    // Not From Cache
     const { relations } = getPagination(query);
 
-    const data = await this.vaultsRepository.findOne({
+    data = await this.vaultsRepository.findOne({
       where: { id },
       relations: relations && ['user'],
     });
     if (isMissing(data)) {
       throw new NotFoundException(`Record not found with id: ${id}`);
     }
+
+    // Set in Cache
+    await this.cacheManagerService.cacheSetData({
+      request,
+      data,
+    });
+
     return { data, metadata: { params: { id } } };
   }
 
