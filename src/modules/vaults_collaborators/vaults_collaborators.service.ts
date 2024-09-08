@@ -144,7 +144,7 @@ export class VaultsCollaboratorsService {
       data,
     });
 
-    return { data, metadata: { params: { id } } };
+    return { data, metadata: { query } };
   }
 
   async updateVaultsCollaborator({

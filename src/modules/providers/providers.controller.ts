@@ -62,10 +62,11 @@ export class ProvidersController {
   @HttpCode(200)
   @Get()
   findAllProviders(
+    @Req() request: Request,
     @Query()
-    listQueryProvidersDto?: ListQueryProvidersDto,
+    listQueryProvidersData?: ListQueryProvidersDto,
   ): Promise<ApiResponseModel<Provider[]>> {
-    return this.providersService.findAllProviders(listQueryProvidersDto);
+    return this.providersService.findAllProviders({ request, listQueryProvidersData });
   }
 
   @ApiResponse({
@@ -81,8 +82,12 @@ export class ProvidersController {
   @UsePipes(new PathParamsPipe())
   @HttpCode(200)
   @Get(':id')
-  findOneProvider(@Param('id') id: string, @Query() query?: ApiQueryParamUnifiedModel) {
-    return this.providersService.findOneProvider(id, query);
+  findOneProvider(
+    @Req() request: Request,
+    @Param('id') id: string,
+    @Query() query?: ApiQueryParamUnifiedModel,
+  ) {
+    return this.providersService.findOneProvider({ request, id, query });
   }
 
   @ApiResponse({
@@ -120,7 +125,7 @@ export class ProvidersController {
   @UsePipes(new PathParamsPipe(), ValidateProviderPipe)
   @HttpCode(200)
   @Delete(':id')
-  removeProvider(request: Request, @Param('id') id: string) {
+  removeProvider(@Req() request: Request, @Param('id') id: string) {
     return this.providersService.removeProvider({ request, id });
   }
 }
