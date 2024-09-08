@@ -85,28 +85,27 @@ export class UsersService {
     listQueryUsersData?: ListQueryUsersDto;
   }): Promise<ApiResponseModel<User[]>> {
     try {
-      const query = listQueryUsersData;
-
       // From Cache
       let data = await this.cacheManagerService.cacheGetData(request);
       if (!isMissing(data)) {
         return {
           data,
-          metadata: { query },
+          metadata: { query: listQueryUsersData },
         };
       }
 
       // Not From Cache
-      const { skip, take, relations } = getPagination(query);
+      const { skip, take, relations } = getPagination(listQueryUsersData);
 
       data = await this.usersRepository.find({
-        where: query,
+        where: listQueryUsersData,
         relations: relations && ['role', 'accountType'],
         skip,
         take,
         order: { updatedAt: OrderEnum.DESC },
       });
 
+      // Set in Cache
       await this.cacheManagerService.cacheSetData({
         request,
         data,
@@ -114,7 +113,7 @@ export class UsersService {
 
       return {
         data,
-        metadata: { query },
+        metadata: { query: listQueryUsersData },
       };
     } catch (error) {
       Logger.error(`Error in list user: ${error.message}`);
@@ -151,6 +150,7 @@ export class UsersService {
       throw new NotFoundException(`Record not found with id: ${id}`);
     }
 
+    // Set in Cache
     await this.cacheManagerService.cacheSetData({
       request,
       data,

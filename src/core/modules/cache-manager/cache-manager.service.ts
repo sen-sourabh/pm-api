@@ -1,5 +1,6 @@
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable, Logger } from '@nestjs/common';
+import { generateCacheKey } from './utils';
 
 @Injectable()
 export class CacheManagerService {
@@ -7,7 +8,7 @@ export class CacheManagerService {
 
   async cacheSetData({ request, data }: { request: Request; data: any }) {
     try {
-      const key = this.#generateCacheKey(request);
+      const key = generateCacheKey(request);
       await this.cacheManager.set(key, data);
       Logger.debug(`Cache added with key ${key}`);
     } catch (error) {
@@ -17,7 +18,7 @@ export class CacheManagerService {
 
   async cacheGetData(request: Request) {
     try {
-      const key = this.#generateCacheKey(request);
+      const key = generateCacheKey(request);
       const res = await this.cacheManager.get(key);
       if (res) {
         Logger.debug(`Cache found with key ${key}`);
@@ -30,16 +31,11 @@ export class CacheManagerService {
 
   async cacheDeleteData(request: Request) {
     try {
-      const key = this.#generateCacheKey(request);
+      const key = generateCacheKey(request);
       await this.cacheManager.del(key);
       Logger.debug(`Cache deleted with key ${key}`);
     } catch (error) {
       Logger.error(`Error from cacheDelData: ${error?.message}`);
     }
   }
-
-  #generateCacheKey = (request: Request): string => {
-    const { url, method, query, params } = request;
-    return JSON.stringify({ url, method, query, params });
-  };
 }

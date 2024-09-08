@@ -10,6 +10,8 @@ export class ResponseInterceptor implements NestInterceptor {
     return next.handle().pipe(
       map((data: ApiResponseUnifiedModel) => {
         const response = context.switchToHttp().getResponse();
+
+        // Retrun final response
         return this.#serializeResponse(data, response);
       }),
     );

@@ -61,10 +61,11 @@ export class VaultsController {
   @HttpCode(200)
   @Get()
   findAllVaults(
+    @Req() request: Request,
     @Query()
-    listQueryVaultsDto?: ListQueryVaultsDto,
+    listQueryVaultsData?: ListQueryVaultsDto,
   ): Promise<ApiResponseModel<Vault[]>> {
-    return this.vaultsService.findAllVaults(listQueryVaultsDto);
+    return this.vaultsService.findAllVaults({ request, listQueryVaultsData });
   }
 
   @ApiResponse({
@@ -80,8 +81,12 @@ export class VaultsController {
   @UsePipes(new PathParamsPipe())
   @HttpCode(200)
   @Get(':id')
-  findOneVault(@Param('id') id: string, @Query() query?: ApiQueryParamUnifiedModel) {
-    return this.vaultsService.findOneVault(id, query);
+  findOneVault(
+    @Req() request: Request,
+    @Param('id') id: string,
+    @Query() query?: ApiQueryParamUnifiedModel,
+  ) {
+    return this.vaultsService.findOneVault({ request, id, query });
   }
 
   @ApiResponse({
