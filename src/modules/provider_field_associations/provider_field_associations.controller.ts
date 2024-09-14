@@ -65,12 +65,14 @@ export class ProviderFieldAssociationsController {
   @HttpCode(200)
   @Get()
   findAllProviderFieldAssociations(
+    @Req() request: Request,
     @Query()
-    listQueryProviderFieldAssociationsDto?: ListQueryProviderFieldAssociationsDto,
+    listQueryProviderFieldAssociationsData?: ListQueryProviderFieldAssociationsDto,
   ): Promise<ApiResponseModel<ProviderFieldAssociation[]>> {
-    return this.providerFieldAssociationsService.findAllProviderFieldAssociations(
-      listQueryProviderFieldAssociationsDto,
-    );
+    return this.providerFieldAssociationsService.findAllProviderFieldAssociations({
+      request,
+      listQueryProviderFieldAssociationsData,
+    });
   }
 
   @ApiResponse({
@@ -87,10 +89,15 @@ export class ProviderFieldAssociationsController {
   @HttpCode(200)
   @Get(':id')
   findOneProviderFieldAssociation(
+    @Req() request: Request,
     @Param('id') id: string,
     @Query() query?: ApiQueryParamUnifiedModel,
   ) {
-    return this.providerFieldAssociationsService.findOneProviderFieldAssociation(id, query);
+    return this.providerFieldAssociationsService.findOneProviderFieldAssociation({
+      request,
+      id,
+      query,
+    });
   }
 
   @ApiResponse({
