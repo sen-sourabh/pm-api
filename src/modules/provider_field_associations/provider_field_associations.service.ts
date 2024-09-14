@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../core/helpers/serializers';
 import { isMissing } from '../../core/helpers/validations';
+import { CacheManagerService } from '../../core/modules/cache-manager/cache-manager.service';
 import { WebhookEventEnum } from '../../core/modules/webhooks/enums';
 import { WebhooksService } from '../../core/modules/webhooks/webhooks.service';
 import { OrderEnum } from '../../core/shared/enums';
@@ -19,6 +20,7 @@ export class ProviderFieldAssociationsService {
     @InjectRepository(ProviderFieldAssociation)
     private readonly providerFieldAssociationsRepository: Repository<ProviderFieldAssociation>,
     private readonly webhooksService: WebhooksService,
+    private readonly cacheManagerService: CacheManagerService,
   ) {}
 
   async createProviderFieldAssociation({
@@ -53,23 +55,43 @@ export class ProviderFieldAssociationsService {
     }
   }
 
-  async findAllProviderFieldAssociations(
-    query?: ListQueryProviderFieldAssociationsDto,
-  ): Promise<ApiResponseModel<ProviderFieldAssociation[]>> {
+  async findAllProviderFieldAssociations({
+    request,
+    listQueryProviderFieldAssociationsData,
+  }: {
+    request: Request;
+    listQueryProviderFieldAssociationsData?: ListQueryProviderFieldAssociationsDto;
+  }): Promise<ApiResponseModel<ProviderFieldAssociation[]>> {
     try {
-      const { skip, take, relations } = getPagination(query);
+      // From Cache
+      let data = await this.cacheManagerService.cacheGetData(request);
+      if (!isMissing(data)) {
+        return {
+          data,
+          metadata: { query: listQueryProviderFieldAssociationsData },
+        };
+      }
 
-      const data = await this.providerFieldAssociationsRepository.find({
-        where: query,
+      // Not From Cache
+      const { skip, take, relations } = getPagination(listQueryProviderFieldAssociationsData);
+
+      data = await this.providerFieldAssociationsRepository.find({
+        where: listQueryProviderFieldAssociationsData,
         relations: relations && ['provider', 'customField', 'addedBy'],
         skip,
         take,
         order: { updatedAt: OrderEnum.DESC },
       });
 
+      // Set in Cache
+      await this.cacheManagerService.cacheSetData({
+        request,
+        data,
+      });
+
       return {
         data,
-        metadata: { query },
+        metadata: { query: listQueryProviderFieldAssociationsData },
       };
     } catch (error) {
       Logger.error(`Error in list provider field association: ${error.message}`);
@@ -77,19 +99,41 @@ export class ProviderFieldAssociationsService {
     }
   }
 
-  async findOneProviderFieldAssociation(
-    id: string,
-    query?: ApiQueryParamUnifiedModel,
-  ): Promise<ApiResponseModel<ProviderFieldAssociation>> {
+  async findOneProviderFieldAssociation({
+    request,
+    id,
+    query,
+  }: {
+    request: Request;
+    id: string;
+    query?: ApiQueryParamUnifiedModel;
+  }): Promise<ApiResponseModel<ProviderFieldAssociation>> {
+    // From Cache
+    let data = await this.cacheManagerService.cacheGetData(request);
+    if (!isMissing(data)) {
+      return {
+        data,
+        metadata: { query },
+      };
+    }
+
+    // Not From Cache
     const { relations } = getPagination(query);
 
-    const data = await this.providerFieldAssociationsRepository.findOne({
+    data = await this.providerFieldAssociationsRepository.findOne({
       where: { id },
       relations: relations && ['provider', 'customField', 'addedBy'],
     });
     if (isMissing(data)) {
       throw new NotFoundException(`Record not found with id: ${id}`);
     }
+
+    // Set in Cache
+    await this.cacheManagerService.cacheSetData({
+      request,
+      data,
+    });
+
     return { data, metadata: { params: { id } } };
   }
 
@@ -102,7 +146,7 @@ export class ProviderFieldAssociationsService {
     id: string;
     updateProviderFieldAssociationData: UpdateProviderFieldAssociationDto;
   }): Promise<ApiResponseModel<ProviderFieldAssociation>> {
-    //Actual user update
+    //Actual provider field association update
     const updated = await this.providerFieldAssociationsRepository.update(
       id,
       updateProviderFieldAssociationData,
@@ -110,7 +154,7 @@ export class ProviderFieldAssociationsService {
     if (!updated?.affected) {
       throw new BadRequestException(`Not updated`);
     }
-    //Get updated user
+    //Get updated provider field association
     const data = await this.providerFieldAssociationsRepository.findOneBy({
       id,
     });
