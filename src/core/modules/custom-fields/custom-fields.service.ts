@@ -12,6 +12,7 @@ import { isMissing } from '../../helpers/validations';
 import { OrderEnum } from '../../shared/enums';
 import { ApiResponseModel } from '../../shared/interfaces/api-response.interface';
 import { ApiQueryParamUnifiedModel } from '../../shared/models/api-query.model';
+import { CacheManagerService } from '../cache-manager/cache-manager.service';
 import { WebhookEventEnum } from '../webhooks/enums';
 import { WebhooksService } from '../webhooks/webhooks.service';
 import { CreateCustomFieldDto } from './dto/create-custom-field.dto';
@@ -25,6 +26,7 @@ export class CustomFieldsService {
     @InjectRepository(CustomField)
     private readonly customFieldsRepository: Repository<CustomField>,
     private readonly webhooksService: WebhooksService,
+    private readonly cacheManagerService: CacheManagerService,
   ) {}
 
   async createCustomField({
@@ -65,23 +67,43 @@ export class CustomFieldsService {
     }
   }
 
-  async findAllCustomFields(
-    query?: ListQueryCustomFieldsDto,
-  ): Promise<ApiResponseModel<CustomField[]>> {
+  async findAllCustomFields({
+    request,
+    listQueryCustomFieldsData,
+  }: {
+    request: Request;
+    listQueryCustomFieldsData?: ListQueryCustomFieldsDto;
+  }): Promise<ApiResponseModel<CustomField[]>> {
     try {
-      const { skip, take, relations } = getPagination(query);
+      // From Cache
+      let data = await this.cacheManagerService.cacheGetData(request);
+      if (!isMissing(data)) {
+        return {
+          data,
+          metadata: { query: listQueryCustomFieldsData },
+        };
+      }
 
-      const data = await this.customFieldsRepository.find({
-        where: query,
+      // Not From Cache
+      const { skip, take, relations } = getPagination(listQueryCustomFieldsData);
+
+      data = await this.customFieldsRepository.find({
+        where: listQueryCustomFieldsData,
         relations: relations && ['addedBy'],
         skip,
         take,
         order: { updatedAt: OrderEnum.DESC },
       });
 
+      // Set in Cache
+      await this.cacheManagerService.cacheSetData({
+        request,
+        data,
+      });
+
       return {
         data,
-        metadata: { query },
+        metadata: { query: listQueryCustomFieldsData },
       };
     } catch (error) {
       Logger.error(`Error in list custom field: ${error.message}`);
@@ -89,19 +111,41 @@ export class CustomFieldsService {
     }
   }
 
-  async findOneCustomField(
-    id: string,
-    query?: ApiQueryParamUnifiedModel,
-  ): Promise<ApiResponseModel<CustomField>> {
+  async findOneCustomField({
+    request,
+    id,
+    query,
+  }: {
+    request: Request;
+    id: string;
+    query?: ApiQueryParamUnifiedModel;
+  }): Promise<ApiResponseModel<CustomField>> {
+    // From Cache
+    let data = await this.cacheManagerService.cacheGetData(request);
+    if (!isMissing(data)) {
+      return {
+        data,
+        metadata: { query },
+      };
+    }
+
+    // Not From Cache
     const { relations } = getPagination(query);
 
-    const data = await this.customFieldsRepository.findOne({
+    data = await this.customFieldsRepository.findOne({
       where: { id },
       relations: relations && ['addedBy'],
     });
     if (isMissing(data)) {
       throw new NotFoundException(`Record not found with id: ${id}`);
     }
+
+    // Set in Cache
+    await this.cacheManagerService.cacheSetData({
+      request,
+      data,
+    });
+
     return { data, metadata: { params: { id } } };
   }
 
