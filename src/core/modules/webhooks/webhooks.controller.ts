@@ -61,10 +61,11 @@ export class WebhooksController {
   @HttpCode(200)
   @Get()
   findAllWebhooks(
+    @Req() request: Request,
     @Query()
-    listQueryWebhooksDto?: ListQueryWebhooksDto,
+    listQueryWebhooksData?: ListQueryWebhooksDto,
   ): Promise<ApiResponseModel<Webhook[]>> {
-    return this.webhooksService.findAllWebhooks(listQueryWebhooksDto);
+    return this.webhooksService.findAllWebhooks({ request, listQueryWebhooksData });
   }
 
   @ApiResponse({
@@ -80,8 +81,12 @@ export class WebhooksController {
   @UsePipes(new PathParamsPipe())
   @HttpCode(200)
   @Get(':id')
-  findOneWebhook(@Param('id') id: string, @Query() query?: ApiQueryParamUnifiedModel) {
-    return this.webhooksService.findOneWebhook(id, query);
+  findOneWebhook(
+    @Req() request: Request,
+    @Param('id') id: string,
+    @Query() query?: ApiQueryParamUnifiedModel,
+  ) {
+    return this.webhooksService.findOneWebhook({ request, id, query });
   }
 
   @ApiResponse({
@@ -122,17 +127,4 @@ export class WebhooksController {
   removeWebhook(@Param('id') id: string) {
     return this.webhooksService.removeWebhook(id);
   }
-
-  // @HttpCode(200)
-  // @Post()
-  // async handleWebhook(@Body() webhookRequest: WebhookRequestDto) {
-  //   try {
-  //     await this.webhookService.handleWebhook(webhookRequest);
-  //   } catch (err) {
-  //     console.error('Webhook service error:', err.message);
-  //     return 'Webhook service Error';
-  //   }
-
-  //   return 'Webhook received successfully';
-  // }
 }
