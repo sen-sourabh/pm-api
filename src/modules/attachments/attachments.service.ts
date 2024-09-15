@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../core/helpers/serializers';
 import { containsKey, isMissing } from '../../core/helpers/validations';
+import { CacheManagerService } from '../../core/modules/cache-manager/cache-manager.service';
 import { CategoryEnum } from '../../core/modules/files/enums';
 import { FilesService } from '../../core/modules/files/files.service';
 import {
@@ -36,6 +37,7 @@ export class AttachmentsService {
     private readonly filesService: FilesService,
     private readonly vaultsService: VaultsService,
     private readonly webhooksService: WebhooksService,
+    private readonly cacheManagerService: CacheManagerService,
   ) {}
 
   async uploadAttachments({
@@ -109,23 +111,43 @@ export class AttachmentsService {
     }
   }
 
-  async findAllAttachments(
-    query?: ListQueryAttachmentsDto,
-  ): Promise<ApiResponseModel<Attachment[]>> {
+  async findAllAttachments({
+    request,
+    listQueryAttachmentsData,
+  }: {
+    request: Request;
+    listQueryAttachmentsData?: ListQueryAttachmentsDto;
+  }): Promise<ApiResponseModel<Attachment[]>> {
     try {
-      const { skip, take, relations } = getPagination(query);
+      // From Cache
+      let data = await this.cacheManagerService.cacheGetData(request);
+      if (!isMissing(data)) {
+        return {
+          data,
+          metadata: { query: listQueryAttachmentsData },
+        };
+      }
 
-      const data = await this.attachmentsRepository.find({
-        where: query,
+      // Not From Cache
+      const { skip, take, relations } = getPagination(listQueryAttachmentsData);
+
+      data = await this.attachmentsRepository.find({
+        where: listQueryAttachmentsData,
         relations: relations && ['user', 'vault'],
         skip,
         take,
         order: { updatedAt: OrderEnum.DESC },
       });
 
+      // Set in Cache
+      await this.cacheManagerService.cacheSetData({
+        request,
+        data,
+      });
+
       return {
         data,
-        metadata: { query },
+        metadata: { query: listQueryAttachmentsData },
       };
     } catch (error) {
       Logger.error(`Error in list attachment: ${error.message}`);
@@ -134,21 +156,40 @@ export class AttachmentsService {
   }
 
   async findOneAttachment({
+    request,
     id,
     query,
   }: {
+    request: Request;
     id: string;
     query?: ApiQueryParamUnifiedModel;
   }): Promise<ApiResponseModel<Attachment>> {
+    // From Cache
+    let data = await this.cacheManagerService.cacheGetData(request);
+    if (!isMissing(data)) {
+      return {
+        data,
+        metadata: { query },
+      };
+    }
+
+    // Not From Cache
     const { relations } = getPagination(query);
 
-    const data = await this.attachmentsRepository.findOne({
+    data = await this.attachmentsRepository.findOne({
       where: { id },
       relations: relations && ['user', 'vault'],
     });
     if (isMissing(data)) {
       throw new NotFoundException(`Record not found with id: ${id}`);
     }
+
+    // Set in Cache
+    await this.cacheManagerService.cacheSetData({
+      request,
+      data,
+    });
+
     return { data, metadata: { params: { id } } };
   }
 
