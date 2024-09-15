@@ -72,10 +72,11 @@ export class AttachmentsController {
   @HttpCode(200)
   @Get()
   findAllAttachments(
+    @Req() request: Request,
     @Query()
-    listQueryAttachmentsDto?: ListQueryAttachmentsDto,
+    listQueryAttachmentsData?: ListQueryAttachmentsDto,
   ): Promise<ApiResponseModel<Attachment[]>> {
-    return this.attachmentsService.findAllAttachments(listQueryAttachmentsDto);
+    return this.attachmentsService.findAllAttachments({ request, listQueryAttachmentsData });
   }
 
   @ApiResponse({
@@ -91,7 +92,11 @@ export class AttachmentsController {
   @UsePipes(new PathParamsPipe())
   @HttpCode(200)
   @Get(':id')
-  findOneAttachment(@Param('id') id: string, @Query() query?: ApiQueryParamUnifiedModel) {
-    return this.attachmentsService.findOneAttachment({ id, query });
+  findOneAttachment(
+    @Req() request: Request,
+    @Param('id') id: string,
+    @Query() query?: ApiQueryParamUnifiedModel,
+  ) {
+    return this.attachmentsService.findOneAttachment({ request, id, query });
   }
 }
