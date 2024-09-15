@@ -12,6 +12,7 @@ import { isMissing } from '../../helpers/validations';
 import { OrderEnum } from '../../shared/enums';
 import { ApiResponseModel } from '../../shared/interfaces/api-response.interface';
 import { ApiQueryParamUnifiedModel } from '../../shared/models/api-query.model';
+import { CacheManagerService } from '../cache-manager/cache-manager.service';
 import { CreateWebhookDto } from './dtos/create-webhook.dto';
 import { ListQueryWebhooksDto } from './dtos/list-webhook.dto';
 import { UpdateWebhookDto } from './dtos/update-webhook.dto';
@@ -26,6 +27,7 @@ export class WebhooksService {
     @InjectRepository(Webhook)
     private readonly webhooksRepository: Repository<Webhook>,
     private readonly webhookHistoriesService: WebhookHistoriesService,
+    private readonly cacheManagerService: CacheManagerService,
   ) {}
 
   async createWebhook({
@@ -58,21 +60,43 @@ export class WebhooksService {
     }
   }
 
-  async findAllWebhooks(query?: ListQueryWebhooksDto): Promise<ApiResponseModel<Webhook[]>> {
+  async findAllWebhooks({
+    request,
+    listQueryWebhooksData,
+  }: {
+    request: Request;
+    listQueryWebhooksData?: ListQueryWebhooksDto;
+  }): Promise<ApiResponseModel<Webhook[]>> {
     try {
-      const { skip, take, relations } = getPagination(query);
+      // From Cache
+      let data = await this.cacheManagerService.cacheGetData(request);
+      if (!isMissing(data)) {
+        return {
+          data,
+          metadata: { query: listQueryWebhooksData },
+        };
+      }
 
-      const data = await this.webhooksRepository.find({
-        where: query,
+      // Not From Cache
+      const { skip, take, relations } = getPagination(listQueryWebhooksData);
+
+      data = await this.webhooksRepository.find({
+        where: listQueryWebhooksData,
         relations: relations && ['user'],
         skip,
         take,
         order: { updatedAt: OrderEnum.DESC },
       });
 
+      // Set in Cache
+      await this.cacheManagerService.cacheSetData({
+        request,
+        data,
+      });
+
       return {
         data,
-        metadata: { query },
+        metadata: { query: listQueryWebhooksData },
       };
     } catch (error) {
       Logger.error(`Error in list webhook: ${error.message}`);
@@ -80,19 +104,41 @@ export class WebhooksService {
     }
   }
 
-  async findOneWebhook(
-    id: string,
-    query?: ApiQueryParamUnifiedModel,
-  ): Promise<ApiResponseModel<Webhook>> {
+  async findOneWebhook({
+    request,
+    id,
+    query,
+  }: {
+    request: Request;
+    id: string;
+    query?: ApiQueryParamUnifiedModel;
+  }): Promise<ApiResponseModel<Webhook>> {
+    // From Cache
+    let data = await this.cacheManagerService.cacheGetData(request);
+    if (!isMissing(data)) {
+      return {
+        data,
+        metadata: { query },
+      };
+    }
+
+    // Not From Cache
     const { relations } = getPagination(query);
 
-    const data = await this.webhooksRepository.findOne({
+    data = await this.webhooksRepository.findOne({
       where: { id },
       relations: relations && ['user'],
     });
     if (isMissing(data)) {
       throw new NotFoundException(`Record not found with id: ${id}`);
     }
+
+    // Set in Cache
+    await this.cacheManagerService.cacheSetData({
+      request,
+      data,
+    });
+
     return { data, metadata: { params: { id } } };
   }
 
