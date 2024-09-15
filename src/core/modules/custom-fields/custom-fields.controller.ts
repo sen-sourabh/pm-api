@@ -63,10 +63,11 @@ export class CustomFieldsController {
   @HttpCode(200)
   @Get()
   findAllCustomFields(
+    @Req() request: Request,
     @Query()
-    listQueryCustomFieldsDto?: ListQueryCustomFieldsDto,
+    listQueryCustomFieldsData?: ListQueryCustomFieldsDto,
   ): Promise<ApiResponseModel<CustomField[]>> {
-    return this.customFieldsService.findAllCustomFields(listQueryCustomFieldsDto);
+    return this.customFieldsService.findAllCustomFields({ request, listQueryCustomFieldsData });
   }
 
   @ApiResponse({
@@ -82,8 +83,12 @@ export class CustomFieldsController {
   @UsePipes(new PathParamsPipe())
   @HttpCode(200)
   @Get(':id')
-  findOneCustomField(@Param('id') id: string, @Query() query?: ApiQueryParamUnifiedModel) {
-    return this.customFieldsService.findOneCustomField(id, query);
+  findOneCustomField(
+    @Req() request: Request,
+    @Param('id') id: string,
+    @Query() query?: ApiQueryParamUnifiedModel,
+  ) {
+    return this.customFieldsService.findOneCustomField({ request, id, query });
   }
 
   @ApiResponse({
