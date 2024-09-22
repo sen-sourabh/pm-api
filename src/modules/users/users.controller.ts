@@ -36,8 +36,14 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @ApiOperation({ summary: 'returns all the users' })
-  @ApiResponse({ status: 201, type: User })
+  @ApiOperation({
+    summary: 'Create an user',
+  })
+  @ApiResponse({
+    description: 'Return the created user',
+    type: User,
+    status: 201,
+  })
   @ApiXResponses(
     ApiXResponsesEnum.Unauthorized,
     ApiXResponsesEnum.BadRequest,
@@ -53,8 +59,11 @@ export class UsersController {
     return this.usersService.createUser({ request, createUserData });
   }
 
+  @ApiOperation({
+    summary: 'Get all the users',
+  })
   @ApiResponse({
-    description: 'returns list of users',
+    description: 'Return the list of users',
     type: [User],
     status: 200,
   })
@@ -70,8 +79,11 @@ export class UsersController {
     return this.usersService.findAllUsers({ request, listQueryUsersData });
   }
 
+  @ApiOperation({
+    summary: 'Get an user',
+  })
   @ApiResponse({
-    description: 'return user as per the identifier',
+    description: 'Return the user with the given identifier',
     type: User,
     status: 200,
   })
@@ -91,8 +103,11 @@ export class UsersController {
     return this.usersService.findOneUser({ request, id, query });
   }
 
+  @ApiOperation({
+    summary: 'Update an user',
+  })
   @ApiResponse({
-    description: 'return update user as per the identifier',
+    description: 'Return the updated user with the payload',
     type: User,
     status: 200,
   })
@@ -113,8 +128,11 @@ export class UsersController {
     return this.usersService.updateUser({ request, id, updateUserData });
   }
 
+  @ApiOperation({
+    summary: 'Delete an user',
+  })
   @ApiResponse({
-    description: 'return deleted user as per the identifier',
+    description: 'Return the deleted user with the given identifier',
     type: User,
     status: 200,
   })

@@ -49,11 +49,11 @@ export class ActivityLogsController {
   @UsePipes(new PathParamsPipe())
   @HttpCode(200)
   @Get(':id')
-  findOneUser(
+  findOneActivityLog(
     @Req() request: Request,
     @Param('id') id: string,
     @Query() query?: ApiQueryParamUnifiedModel,
   ) {
-    return this.activityLogService.findOneUser({ request, id, query });
+    return this.activityLogService.findOneActivityLog({ request, id, query });
   }
 }

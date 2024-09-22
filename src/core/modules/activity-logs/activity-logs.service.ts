@@ -79,7 +79,7 @@ export class ActivityLogsService {
     }
   }
 
-  async findOneUser({
+  async findOneActivityLog({
     request,
     id,
     query,
