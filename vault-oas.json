@@ -443,6 +443,7 @@
     "/api/v1/roles": {
       "get": {
         "operationId": "findAllRoles",
+        "summary": "Get all the roles",
         "parameters": [
           {
             "name": "name",
@@ -505,7 +506,7 @@
         ],
         "responses": {
           "200": {
-            "description": "returns list of roles",
+            "description": "Return the list of roles",
             "content": {
               "application/json": {
                 "schema": {
@@ -537,6 +538,7 @@
     "/api/v1/roles/{id}": {
       "get": {
         "operationId": "findOneRole",
+        "summary": "Get a role",
         "parameters": [
           {
             "name": "id",
@@ -549,7 +551,7 @@
         ],
         "responses": {
           "200": {
-            "description": "return role as per the identifier",
+            "description": "Return the role with the given identifier",
             "content": {
               "application/json": {
                 "schema": {
@@ -581,6 +583,7 @@
     "/api/v1/account-types": {
       "get": {
         "operationId": "findAllAccountTypes",
+        "summary": "Get all the account_types",
         "parameters": [
           {
             "name": "name",
@@ -643,7 +646,7 @@
         ],
         "responses": {
           "200": {
-            "description": "returns list of account types",
+            "description": "Return the list of account_types",
             "content": {
               "application/json": {
                 "schema": {
@@ -675,6 +678,7 @@
     "/api/v1/account-types/{id}": {
       "get": {
         "operationId": "findOneUsertype",
+        "summary": "Get an account_type",
         "parameters": [
           {
             "name": "id",
@@ -687,7 +691,7 @@
         ],
         "responses": {
           "200": {
-            "description": "return account type as per the identifier",
+            "description": "Return the account_type with the given identifier",
             "content": {
               "application/json": {
                 "schema": {
@@ -719,7 +723,7 @@
     "/api/v1/users": {
       "post": {
         "operationId": "createUser",
-        "summary": "returns all the users",
+        "summary": "Create an user",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -733,7 +737,7 @@
         },
         "responses": {
           "201": {
-            "description": "",
+            "description": "Return the created user",
             "content": {
               "application/json": {
                 "schema": {
@@ -763,6 +767,7 @@
       },
       "get": {
         "operationId": "findAllUsers",
+        "summary": "Get all the users",
         "parameters": [
           {
             "name": "email",
@@ -854,7 +859,7 @@
         ],
         "responses": {
           "200": {
-            "description": "returns list of users",
+            "description": "Return the list of users",
             "content": {
               "application/json": {
                 "schema": {
@@ -886,6 +891,7 @@
     "/api/v1/users/{id}": {
       "get": {
         "operationId": "findOneUser",
+        "summary": "Get an user",
         "parameters": [
           {
             "name": "id",
@@ -908,7 +914,7 @@
         ],
         "responses": {
           "200": {
-            "description": "return user as per the identifier",
+            "description": "Return the user with the given identifier",
             "content": {
               "application/json": {
                 "schema": {
@@ -938,6 +944,7 @@
       },
       "patch": {
         "operationId": "updateUser",
+        "summary": "Update an user",
         "parameters": [
           {
             "name": "id",
@@ -960,7 +967,7 @@
         },
         "responses": {
           "200": {
-            "description": "return update user as per the identifier",
+            "description": "Return the updated user with the payload",
             "content": {
               "application/json": {
                 "schema": {
@@ -993,6 +1000,7 @@
       },
       "delete": {
         "operationId": "removeUser",
+        "summary": "Delete an user",
         "parameters": [
           {
             "name": "id",
@@ -1005,7 +1013,7 @@
         ],
         "responses": {
           "200": {
-            "description": "return deleted user as per the identifier",
+            "description": "Return the deleted user with the given identifier",
             "content": {
               "application/json": {
                 "schema": {
@@ -1141,7 +1149,7 @@
     },
     "/api/v1/activity-logs/{id}": {
       "get": {
-        "operationId": "findOneUser",
+        "operationId": "findOneActivityLog",
         "parameters": [
           {
             "name": "id",
@@ -1196,6 +1204,7 @@
     "/api/v1/vaults": {
       "post": {
         "operationId": "createVault",
+        "summary": "Create a vault",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -1209,7 +1218,7 @@
         },
         "responses": {
           "201": {
-            "description": "",
+            "description": "Return the created vault",
             "content": {
               "application/json": {
                 "schema": {
@@ -1239,6 +1248,7 @@
       },
       "get": {
         "operationId": "findAllVaults",
+        "summary": "Get all the vaults",
         "parameters": [
           {
             "name": "name",
@@ -1320,7 +1330,7 @@
         ],
         "responses": {
           "200": {
-            "description": "returns list of vaults",
+            "description": "Return the list of vaults",
             "content": {
               "application/json": {
                 "schema": {
@@ -1352,6 +1362,7 @@
     "/api/v1/vaults/{id}": {
       "get": {
         "operationId": "findOneVault",
+        "summary": "Get a vault",
         "parameters": [
           {
             "name": "id",
@@ -1374,7 +1385,7 @@
         ],
         "responses": {
           "200": {
-            "description": "return vault as per the identifier",
+            "description": "Return the vault with the given identifier",
             "content": {
               "application/json": {
                 "schema": {
@@ -1404,6 +1415,7 @@
       },
       "patch": {
         "operationId": "updateVault",
+        "summary": "Update a vault",
         "parameters": [
           {
             "name": "id",
@@ -1426,7 +1438,7 @@
         },
         "responses": {
           "200": {
-            "description": "return updated vault as per the identifier",
+            "description": "Return the updated vault with the payload",
             "content": {
               "application/json": {
                 "schema": {
@@ -1459,6 +1471,7 @@
       },
       "delete": {
         "operationId": "removeVault",
+        "summary": "Delete a vault",
         "parameters": [
           {
             "name": "id",
@@ -1471,7 +1484,7 @@
         ],
         "responses": {
           "200": {
-            "description": "return deleted vault as per the identifier",
+            "description": "Return the deleted vault with the given identifier",
             "content": {
               "application/json": {
                 "schema": {

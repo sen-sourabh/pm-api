@@ -13,7 +13,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiXResponses } from '../../core/shared/decorators/apply-filters/apply-filters.decorator';
 import { ApiXResponsesEnum } from '../../core/shared/enums';
 import { JwtAuthGuard } from '../../core/shared/guards/jwt-auth.guard';
@@ -36,7 +36,14 @@ import { VaultsService } from './vaults.service';
 export class VaultsController {
   constructor(private readonly vaultsService: VaultsService) {}
 
-  @ApiResponse({ status: 201, type: Vault })
+  @ApiOperation({
+    summary: 'Create a vault',
+  })
+  @ApiResponse({
+    description: 'Return the created vault',
+    status: 201,
+    type: Vault,
+  })
   @ApiXResponses(
     ApiXResponsesEnum.Unauthorized,
     ApiXResponsesEnum.BadRequest,
@@ -51,8 +58,11 @@ export class VaultsController {
     return this.vaultsService.createVault({ request, CreateVaultData });
   }
 
+  @ApiOperation({
+    summary: 'Get all the vaults',
+  })
   @ApiResponse({
-    description: 'returns list of vaults',
+    description: 'Return the list of vaults',
     type: [Vault],
     status: 200,
   })
@@ -68,8 +78,11 @@ export class VaultsController {
     return this.vaultsService.findAllVaults({ request, listQueryVaultsData });
   }
 
+  @ApiOperation({
+    summary: 'Get a vault',
+  })
   @ApiResponse({
-    description: 'return vault as per the identifier',
+    description: 'Return the vault with the given identifier',
     type: Vault,
     status: 200,
   })
@@ -89,8 +102,11 @@ export class VaultsController {
     return this.vaultsService.findOneVault({ request, id, query });
   }
 
+  @ApiOperation({
+    summary: 'Update a vault',
+  })
   @ApiResponse({
-    description: 'return updated vault as per the identifier',
+    description: 'Return the updated vault with the payload',
     type: Vault,
     status: 200,
   })
@@ -111,8 +127,11 @@ export class VaultsController {
     return this.vaultsService.updateVault({ request, id, updateVaultData });
   }
 
+  @ApiOperation({
+    summary: 'Delete a vault',
+  })
   @ApiResponse({
-    description: 'return deleted vault as per the identifier',
+    description: 'Return the deleted vault with the given identifier',
     type: Vault,
     status: 200,
   })

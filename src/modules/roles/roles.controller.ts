@@ -1,5 +1,5 @@
 import { Controller, Get, HttpCode, Param, Query, UseGuards, UsePipes } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiXResponses } from '../../core/shared/decorators/apply-filters/apply-filters.decorator';
 import { ApiXResponsesEnum } from '../../core/shared/enums';
 import { JwtAuthGuard } from '../../core/shared/guards/jwt-auth.guard';
@@ -18,8 +18,11 @@ import { RolesService } from './roles.service';
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
+  @ApiOperation({
+    summary: 'Get all the roles',
+  })
   @ApiResponse({
-    description: 'returns list of roles',
+    description: 'Return the list of roles',
     type: [Role],
     status: 200,
   })
@@ -34,8 +37,11 @@ export class RolesController {
     return this.rolesService.findAllRoles(listQueryRolesDto);
   }
 
+  @ApiOperation({
+    summary: 'Get a role',
+  })
   @ApiResponse({
-    description: 'return role as per the identifier',
+    description: 'Return the role with the given identifier',
     type: Role,
     status: 200,
   })

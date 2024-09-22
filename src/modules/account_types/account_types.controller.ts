@@ -1,5 +1,5 @@
 import { Controller, Get, HttpCode, Param, Query, UseGuards, UsePipes } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiXResponses } from '../../core/shared/decorators/apply-filters/apply-filters.decorator';
 import { ApiXResponsesEnum } from '../../core/shared/enums';
 import { JwtAuthGuard } from '../../core/shared/guards/jwt-auth.guard';
@@ -18,8 +18,11 @@ import { AccountType } from './entities/account_type.entity';
 export class AccountTypesController {
   constructor(private readonly accountTypesService: AccountTypesService) {}
 
+  @ApiOperation({
+    summary: 'Get all the account_types',
+  })
   @ApiResponse({
-    description: 'returns list of account types',
+    description: 'Return the list of account_types',
     type: [AccountType],
     status: 200,
   })
@@ -34,8 +37,11 @@ export class AccountTypesController {
     return this.accountTypesService.findAllAccountTypes(listQueryAccountTypesDto);
   }
 
+  @ApiOperation({
+    summary: 'Get an account_type',
+  })
   @ApiResponse({
-    description: 'return account type as per the identifier',
+    description: 'Return the account_type with the given identifier',
     type: AccountType,
     status: 200,
   })
