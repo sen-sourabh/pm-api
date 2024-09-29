@@ -13,7 +13,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiXResponses } from '../../shared/decorators/apply-filters/apply-filters.decorator';
 import { ApiXResponsesEnum } from '../../shared/enums';
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
@@ -37,7 +37,14 @@ import { ValidateCustomFieldPipe } from './pipes/validate-custom-field.pipe';
 export class CustomFieldsController {
   constructor(private readonly customFieldsService: CustomFieldsService) {}
 
-  @ApiResponse({ status: 201, type: CustomField })
+  @ApiOperation({
+    summary: 'Create a custom_fields',
+  })
+  @ApiResponse({
+    description: 'Return the created custom_fields',
+    status: 201,
+    type: CustomField,
+  })
   @ApiXResponses(
     ApiXResponsesEnum.Unauthorized,
     ApiXResponsesEnum.BadRequest,
@@ -53,8 +60,11 @@ export class CustomFieldsController {
     return this.customFieldsService.createCustomField({ request, createCustomFieldData });
   }
 
+  @ApiOperation({
+    summary: 'Get all the custom_fields',
+  })
   @ApiResponse({
-    description: 'returns list of custom fields',
+    description: 'Return the list of custom_fields',
     type: [CustomField],
     status: 200,
   })
@@ -70,8 +80,11 @@ export class CustomFieldsController {
     return this.customFieldsService.findAllCustomFields({ request, listQueryCustomFieldsData });
   }
 
+  @ApiOperation({
+    summary: 'Get a custom_field',
+  })
   @ApiResponse({
-    description: 'return custom field as per the identifier',
+    description: 'Return the custom_field with the given identifier',
     type: CustomField,
     status: 200,
   })
@@ -91,8 +104,11 @@ export class CustomFieldsController {
     return this.customFieldsService.findOneCustomField({ request, id, query });
   }
 
+  @ApiOperation({
+    summary: 'Update a custom_field',
+  })
   @ApiResponse({
-    description: 'return updated custom field as per the identifier',
+    description: 'Return the updated custom_field with the payload',
     type: CustomField,
     status: 200,
   })
@@ -113,8 +129,11 @@ export class CustomFieldsController {
     return this.customFieldsService.updateCustomField({ request, id, updateCustomFieldData });
   }
 
+  @ApiOperation({
+    summary: 'Delete a custom_field',
+  })
   @ApiResponse({
-    description: 'return deleted custom field as per the identifier',
+    description: 'Return the deleted custom_field with the given identifier',
     type: CustomField,
     status: 200,
   })

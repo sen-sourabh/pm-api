@@ -13,7 +13,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiXResponses } from '../../core/shared/decorators/apply-filters/apply-filters.decorator';
 import { ApiXResponsesEnum } from '../../core/shared/enums';
 import { JwtAuthGuard } from '../../core/shared/guards/jwt-auth.guard';
@@ -36,7 +36,14 @@ import { VaultsCollaboratorsService } from './vaults_collaborators.service';
 export class VaultsCollaboratorsController {
   constructor(private readonly vaultsCollaboratorsService: VaultsCollaboratorsService) {}
 
-  @ApiResponse({ status: 201, type: VaultsCollaborator })
+  @ApiOperation({
+    summary: 'Create a vaults_collaborator',
+  })
+  @ApiResponse({
+    description: 'Return the created vaults_collaborator',
+    status: 201,
+    type: VaultsCollaborator,
+  })
   @ApiXResponses(
     ApiXResponsesEnum.Unauthorized,
     ApiXResponsesEnum.BadRequest,
@@ -54,8 +61,11 @@ export class VaultsCollaboratorsController {
     });
   }
 
+  @ApiOperation({
+    summary: 'Get all the vaults_collaborators',
+  })
   @ApiResponse({
-    description: 'returns list of vaults collaborators',
+    description: 'Return the list of vaults_collaborators',
     type: [VaultsCollaborator],
     status: 200,
   })
@@ -74,8 +84,11 @@ export class VaultsCollaboratorsController {
     });
   }
 
+  @ApiOperation({
+    summary: 'Get a vaults_collaborator',
+  })
   @ApiResponse({
-    description: 'return vaults collaborator as per the identifier',
+    description: 'Return the vaults_collaborator with the given identifier',
     type: VaultsCollaborator,
     status: 200,
   })
@@ -95,8 +108,11 @@ export class VaultsCollaboratorsController {
     return this.vaultsCollaboratorsService.findOneVaultsCollaborator({ request, id, query });
   }
 
+  @ApiOperation({
+    summary: 'Update a vaults_collaborator',
+  })
   @ApiResponse({
-    description: 'return updated vaults collaborator as per the identifier',
+    description: 'Return the updated vaults_collaborator with the payload',
     type: VaultsCollaborator,
     status: 200,
   })
@@ -125,8 +141,11 @@ export class VaultsCollaboratorsController {
     });
   }
 
+  @ApiOperation({
+    summary: 'Delete a vaults_collaborator',
+  })
   @ApiResponse({
-    description: 'return success after deleting vaults collaborator as per the identifier',
+    description: 'Return the deleted vaults_collaborator with the given identifier',
     type: VaultsCollaborator,
     status: 200,
   })

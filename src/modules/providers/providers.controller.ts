@@ -13,7 +13,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiXResponses } from '../../core/shared/decorators/apply-filters/apply-filters.decorator';
 import { ApiXResponsesEnum } from '../../core/shared/enums';
 import { JwtAuthGuard } from '../../core/shared/guards/jwt-auth.guard';
@@ -36,7 +36,14 @@ import { ProvidersService } from './providers.service';
 export class ProvidersController {
   constructor(private readonly providersService: ProvidersService) {}
 
-  @ApiResponse({ status: 201, type: Provider })
+  @ApiOperation({
+    summary: 'Create a provider',
+  })
+  @ApiResponse({
+    description: 'Return the created provider',
+    status: 201,
+    type: Provider,
+  })
   @ApiXResponses(
     ApiXResponsesEnum.Unauthorized,
     ApiXResponsesEnum.BadRequest,
@@ -52,8 +59,11 @@ export class ProvidersController {
     return this.providersService.createProvider({ request, createProviderData });
   }
 
+  @ApiOperation({
+    summary: 'Get all the providers',
+  })
   @ApiResponse({
-    description: 'returns list of providers',
+    description: 'Return the list of providers',
     type: [Provider],
     status: 200,
   })
@@ -69,8 +79,11 @@ export class ProvidersController {
     return this.providersService.findAllProviders({ request, listQueryProvidersData });
   }
 
+  @ApiOperation({
+    summary: 'Get a provider',
+  })
   @ApiResponse({
-    description: 'return provider as per the identifier',
+    description: 'Return the provider with the given identifier',
     type: Provider,
     status: 200,
   })
@@ -90,8 +103,11 @@ export class ProvidersController {
     return this.providersService.findOneProvider({ request, id, query });
   }
 
+  @ApiOperation({
+    summary: 'Update a provider',
+  })
   @ApiResponse({
-    description: 'return update provider as per the identifier',
+    description: 'Return the updated provider with the payload',
     type: Provider,
     status: 200,
   })
@@ -112,8 +128,11 @@ export class ProvidersController {
     return this.providersService.updateProvider({ request, id, updateProviderData });
   }
 
+  @ApiOperation({
+    summary: 'Delete a provider',
+  })
   @ApiResponse({
-    description: 'return deleted provider as per the identifier',
+    description: 'Return the deleted provider with the given identifier',
     type: Provider,
     status: 200,
   })

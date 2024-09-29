@@ -13,7 +13,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiXResponses } from '../../shared/decorators/apply-filters/apply-filters.decorator';
 import { ApiXResponsesEnum } from '../../shared/enums';
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
@@ -36,7 +36,14 @@ import { WebhooksService } from './webhooks.service';
 export class WebhooksController {
   constructor(private readonly webhooksService: WebhooksService) {}
 
-  @ApiResponse({ status: 201, type: Webhook })
+  @ApiOperation({
+    summary: 'Create a webhook',
+  })
+  @ApiResponse({
+    description: 'Return the created webhook',
+    status: 201,
+    type: Webhook,
+  })
   @ApiXResponses(
     ApiXResponsesEnum.Unauthorized,
     ApiXResponsesEnum.BadRequest,
@@ -51,8 +58,11 @@ export class WebhooksController {
     return this.webhooksService.createWebhook({ request, CreateWebhookData });
   }
 
+  @ApiOperation({
+    summary: 'Get all the webhooks',
+  })
   @ApiResponse({
-    description: 'returns list of webhooks',
+    description: 'Return the list of webhooks',
     type: [Webhook],
     status: 200,
   })
@@ -68,8 +78,11 @@ export class WebhooksController {
     return this.webhooksService.findAllWebhooks({ request, listQueryWebhooksData });
   }
 
+  @ApiOperation({
+    summary: 'Get a webhook',
+  })
   @ApiResponse({
-    description: 'return webhook as per the identifier',
+    description: 'Return the webhook with the given identifier',
     type: Webhook,
     status: 200,
   })
@@ -89,8 +102,11 @@ export class WebhooksController {
     return this.webhooksService.findOneWebhook({ request, id, query });
   }
 
+  @ApiOperation({
+    summary: 'Update a webhook',
+  })
   @ApiResponse({
-    description: 'return updated webhook as per the identifier',
+    description: 'Return the updated webhook with the payload',
     type: Webhook,
     status: 200,
   })
@@ -111,8 +127,11 @@ export class WebhooksController {
     return this.webhooksService.updateWebhook({ request, id, updateWebhookData });
   }
 
+  @ApiOperation({
+    summary: 'Delete a webhook',
+  })
   @ApiResponse({
-    description: 'return deleted webhook as per the identifier',
+    description: 'Return the deleted webhook with the given identifier',
     type: Webhook,
     status: 200,
   })
