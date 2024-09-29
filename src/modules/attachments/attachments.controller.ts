@@ -14,7 +14,14 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { FILE_VALIDATORS } from '../../core/modules/files/constants';
 import { ApiXResponses } from '../../core/shared/decorators/apply-filters/apply-filters.decorator';
 import { ApiXResponsesEnum } from '../../core/shared/enums';
@@ -36,7 +43,14 @@ import { Attachment } from './entities/attachment.entity';
 export class AttachmentsController {
   constructor(private readonly attachmentsService: AttachmentsService) {}
 
-  @ApiResponse({ status: 201, type: Attachment })
+  @ApiOperation({
+    summary: 'Create/Update an attachment',
+  })
+  @ApiResponse({
+    description: 'Return the created attachment',
+    type: Attachment,
+    status: 200,
+  })
   @ApiXResponses(
     ApiXResponsesEnum.Unauthorized,
     ApiXResponsesEnum.BadRequest,
@@ -47,7 +61,7 @@ export class AttachmentsController {
     type: CreateAttachmentDto,
   })
   @UseInterceptors(FileInterceptor('file'))
-  @HttpCode(201)
+  @HttpCode(200)
   @Post()
   upsertAttachment(
     @Req() request: Request,
@@ -62,8 +76,11 @@ export class AttachmentsController {
     });
   }
 
+  @ApiOperation({
+    summary: 'Get all the attachments',
+  })
   @ApiResponse({
-    description: 'returns list of attachments',
+    description: 'Return the list of attachments',
     type: [Attachment],
     status: 200,
   })
@@ -79,8 +96,11 @@ export class AttachmentsController {
     return this.attachmentsService.findAllAttachments({ request, listQueryAttachmentsData });
   }
 
+  @ApiOperation({
+    summary: 'Get a attachment',
+  })
   @ApiResponse({
-    description: 'return attachment as per the identifier',
+    description: 'Return the attachment with the given identifier',
     type: Attachment,
     status: 200,
   })

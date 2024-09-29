@@ -4,6 +4,7 @@
     "/api/v1/auth/login": {
       "post": {
         "operationId": "login",
+        "summary": "Login",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -17,7 +18,7 @@
         },
         "responses": {
           "200": {
-            "description": "returns the access_token for logged in user",
+            "description": "Return the access_token for logged in user",
             "content": {
               "application/json": {
                 "schema": {
@@ -41,6 +42,7 @@
     "/api/v1/auth/register": {
       "post": {
         "operationId": "register",
+        "summary": "Register",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -54,7 +56,7 @@
         },
         "responses": {
           "201": {
-            "description": "",
+            "description": "Return the registered user",
             "content": {
               "application/json": {
                 "schema": {
@@ -81,6 +83,7 @@
     "/api/v1/messenger/send-otp": {
       "post": {
         "operationId": "sendOTP",
+        "summary": "Send an email",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -119,6 +122,7 @@
     "/api/v1/webhooks": {
       "post": {
         "operationId": "createWebhook",
+        "summary": "Create a webhook",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -132,7 +136,7 @@
         },
         "responses": {
           "201": {
-            "description": "",
+            "description": "Return the created webhook",
             "content": {
               "application/json": {
                 "schema": {
@@ -162,6 +166,7 @@
       },
       "get": {
         "operationId": "findAllWebhooks",
+        "summary": "Get all the webhooks",
         "parameters": [
           {
             "name": "event",
@@ -260,7 +265,7 @@
         ],
         "responses": {
           "200": {
-            "description": "returns list of webhooks",
+            "description": "Return the list of webhooks",
             "content": {
               "application/json": {
                 "schema": {
@@ -292,6 +297,7 @@
     "/api/v1/webhooks/{id}": {
       "get": {
         "operationId": "findOneWebhook",
+        "summary": "Get a webhook",
         "parameters": [
           {
             "name": "id",
@@ -314,7 +320,7 @@
         ],
         "responses": {
           "200": {
-            "description": "return webhook as per the identifier",
+            "description": "Return the webhook with the given identifier",
             "content": {
               "application/json": {
                 "schema": {
@@ -344,6 +350,7 @@
       },
       "patch": {
         "operationId": "updateWebhook",
+        "summary": "Update a webhook",
         "parameters": [
           {
             "name": "id",
@@ -366,7 +373,7 @@
         },
         "responses": {
           "200": {
-            "description": "return updated webhook as per the identifier",
+            "description": "Return the updated webhook with the payload",
             "content": {
               "application/json": {
                 "schema": {
@@ -399,6 +406,7 @@
       },
       "delete": {
         "operationId": "removeWebhook",
+        "summary": "Delete a webhook",
         "parameters": [
           {
             "name": "id",
@@ -411,7 +419,7 @@
         ],
         "responses": {
           "200": {
-            "description": "return deleted webhook as per the identifier",
+            "description": "Return the deleted webhook with the given identifier",
             "content": {
               "application/json": {
                 "schema": {
@@ -1045,6 +1053,7 @@
     "/api/v1/activity-logs": {
       "get": {
         "operationId": "findAllActivityLogs",
+        "summary": "Get all the activity_logs",
         "parameters": [
           {
             "name": "handler",
@@ -1118,7 +1127,7 @@
         ],
         "responses": {
           "200": {
-            "description": "returns list of activity logs",
+            "description": "Return the list of activity_logs",
             "content": {
               "application/json": {
                 "schema": {
@@ -1150,6 +1159,7 @@
     "/api/v1/activity-logs/{id}": {
       "get": {
         "operationId": "findOneActivityLog",
+        "summary": "Get a activity_logs",
         "parameters": [
           {
             "name": "id",
@@ -1172,7 +1182,7 @@
         ],
         "responses": {
           "200": {
-            "description": "return activity log as per the identifier",
+            "description": "Return the activity_logs with the given identifier",
             "content": {
               "application/json": {
                 "schema": {
@@ -1516,6 +1526,7 @@
     "/api/v1/vaults-collaborators": {
       "post": {
         "operationId": "createVaultsCollaborator",
+        "summary": "Create a vaults_collaborator",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -1529,7 +1540,7 @@
         },
         "responses": {
           "201": {
-            "description": "",
+            "description": "Return the created vaults_collaborator",
             "content": {
               "application/json": {
                 "schema": {
@@ -1559,6 +1570,7 @@
       },
       "get": {
         "operationId": "findAllVaultsCollaborators",
+        "summary": "Get all the vaults_collaborators",
         "parameters": [
           {
             "name": "user",
@@ -1643,7 +1655,7 @@
         ],
         "responses": {
           "200": {
-            "description": "returns list of vaults collaborators",
+            "description": "Return the list of vaults_collaborators",
             "content": {
               "application/json": {
                 "schema": {
@@ -1675,6 +1687,7 @@
     "/api/v1/vaults-collaborators/{id}": {
       "get": {
         "operationId": "findOneVaultsCollaborator",
+        "summary": "Get a vaults_collaborator",
         "parameters": [
           {
             "name": "id",
@@ -1697,7 +1710,7 @@
         ],
         "responses": {
           "200": {
-            "description": "return vaults collaborator as per the identifier",
+            "description": "Return the vaults_collaborator with the given identifier",
             "content": {
               "application/json": {
                 "schema": {
@@ -1727,6 +1740,7 @@
       },
       "patch": {
         "operationId": "updateVaultsCollaborator",
+        "summary": "Update a vaults_collaborator",
         "parameters": [
           {
             "name": "id",
@@ -1749,7 +1763,7 @@
         },
         "responses": {
           "200": {
-            "description": "return updated vaults collaborator as per the identifier",
+            "description": "Return the updated vaults_collaborator with the payload",
             "content": {
               "application/json": {
                 "schema": {
@@ -1782,6 +1796,7 @@
       },
       "delete": {
         "operationId": "removeVaultsCollaborator",
+        "summary": "Delete a vaults_collaborator",
         "parameters": [
           {
             "name": "id",
@@ -1794,7 +1809,7 @@
         ],
         "responses": {
           "200": {
-            "description": "return success after deleting vaults collaborator as per the identifier",
+            "description": "Return the deleted vaults_collaborator with the given identifier",
             "content": {
               "application/json": {
                 "schema": {
@@ -1826,6 +1841,7 @@
     "/api/v1/attachments": {
       "post": {
         "operationId": "upsertAttachment",
+        "summary": "Create/Update an attachment",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -1838,8 +1854,8 @@
           }
         },
         "responses": {
-          "201": {
-            "description": "",
+          "200": {
+            "description": "Return the created attachment",
             "content": {
               "application/json": {
                 "schema": {
@@ -1869,6 +1885,7 @@
       },
       "get": {
         "operationId": "findAllAttachments",
+        "summary": "Get all the attachments",
         "parameters": [
           {
             "name": "category",
@@ -1945,7 +1962,7 @@
         ],
         "responses": {
           "200": {
-            "description": "returns list of attachments",
+            "description": "Return the list of attachments",
             "content": {
               "application/json": {
                 "schema": {
@@ -1977,6 +1994,7 @@
     "/api/v1/attachments/{id}": {
       "get": {
         "operationId": "findOneAttachment",
+        "summary": "Get a attachment",
         "parameters": [
           {
             "name": "id",
@@ -1999,7 +2017,7 @@
         ],
         "responses": {
           "200": {
-            "description": "return attachment as per the identifier",
+            "description": "Return the attachment with the given identifier",
             "content": {
               "application/json": {
                 "schema": {
@@ -2031,6 +2049,7 @@
     "/api/v1/providers": {
       "post": {
         "operationId": "createProvider",
+        "summary": "Create a provider",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -2044,7 +2063,7 @@
         },
         "responses": {
           "201": {
-            "description": "",
+            "description": "Return the created provider",
             "content": {
               "application/json": {
                 "schema": {
@@ -2074,6 +2093,7 @@
       },
       "get": {
         "operationId": "findAllProviders",
+        "summary": "Get all the providers",
         "parameters": [
           {
             "name": "vault",
@@ -2157,7 +2177,7 @@
         ],
         "responses": {
           "200": {
-            "description": "returns list of providers",
+            "description": "Return the list of providers",
             "content": {
               "application/json": {
                 "schema": {
@@ -2189,6 +2209,7 @@
     "/api/v1/providers/{id}": {
       "get": {
         "operationId": "findOneProvider",
+        "summary": "Get a provider",
         "parameters": [
           {
             "name": "id",
@@ -2211,7 +2232,7 @@
         ],
         "responses": {
           "200": {
-            "description": "return provider as per the identifier",
+            "description": "Return the provider with the given identifier",
             "content": {
               "application/json": {
                 "schema": {
@@ -2241,6 +2262,7 @@
       },
       "patch": {
         "operationId": "updateProvider",
+        "summary": "Update a provider",
         "parameters": [
           {
             "name": "id",
@@ -2263,7 +2285,7 @@
         },
         "responses": {
           "200": {
-            "description": "return update provider as per the identifier",
+            "description": "Return the updated provider with the payload",
             "content": {
               "application/json": {
                 "schema": {
@@ -2296,6 +2318,7 @@
       },
       "delete": {
         "operationId": "removeProvider",
+        "summary": "Delete a provider",
         "parameters": [
           {
             "name": "id",
@@ -2308,7 +2331,7 @@
         ],
         "responses": {
           "200": {
-            "description": "return deleted provider as per the identifier",
+            "description": "Return the deleted provider with the given identifier",
             "content": {
               "application/json": {
                 "schema": {
@@ -2340,6 +2363,7 @@
     "/api/v1/custom-fields": {
       "post": {
         "operationId": "createCustomField",
+        "summary": "Create a custom_fields",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -2353,7 +2377,7 @@
         },
         "responses": {
           "201": {
-            "description": "",
+            "description": "Return the created custom_fields",
             "content": {
               "application/json": {
                 "schema": {
@@ -2383,6 +2407,7 @@
       },
       "get": {
         "operationId": "findAllCustomFields",
+        "summary": "Get all the custom_fields",
         "parameters": [
           {
             "name": "key",
@@ -2483,7 +2508,7 @@
         ],
         "responses": {
           "200": {
-            "description": "returns list of custom fields",
+            "description": "Return the list of custom_fields",
             "content": {
               "application/json": {
                 "schema": {
@@ -2515,6 +2540,7 @@
     "/api/v1/custom-fields/{id}": {
       "get": {
         "operationId": "findOneCustomField",
+        "summary": "Get a custom_field",
         "parameters": [
           {
             "name": "id",
@@ -2537,7 +2563,7 @@
         ],
         "responses": {
           "200": {
-            "description": "return custom field as per the identifier",
+            "description": "Return the custom_field with the given identifier",
             "content": {
               "application/json": {
                 "schema": {
@@ -2567,6 +2593,7 @@
       },
       "patch": {
         "operationId": "updateCustomField",
+        "summary": "Update a custom_field",
         "parameters": [
           {
             "name": "id",
@@ -2589,7 +2616,7 @@
         },
         "responses": {
           "200": {
-            "description": "return updated custom field as per the identifier",
+            "description": "Return the updated custom_field with the payload",
             "content": {
               "application/json": {
                 "schema": {
@@ -2622,6 +2649,7 @@
       },
       "delete": {
         "operationId": "removeCustomField",
+        "summary": "Delete a custom_field",
         "parameters": [
           {
             "name": "id",
@@ -2634,7 +2662,7 @@
         ],
         "responses": {
           "200": {
-            "description": "return deleted custom field as per the identifier",
+            "description": "Return the deleted custom_field with the given identifier",
             "content": {
               "application/json": {
                 "schema": {
@@ -2666,6 +2694,7 @@
     "/api/v1/provider-field-associations": {
       "post": {
         "operationId": "createProviderFieldAssociation",
+        "summary": "Create a provider_field_association",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -2679,7 +2708,7 @@
         },
         "responses": {
           "201": {
-            "description": "",
+            "description": "Return the created provider_field_association",
             "content": {
               "application/json": {
                 "schema": {
@@ -2709,6 +2738,7 @@
       },
       "get": {
         "operationId": "findAllProviderFieldAssociations",
+        "summary": "Get all the provider_field_associations",
         "parameters": [
           {
             "name": "provider",
@@ -2763,7 +2793,7 @@
         ],
         "responses": {
           "200": {
-            "description": "returns list of provider field associations",
+            "description": "Return the list of provider_field_associations",
             "content": {
               "application/json": {
                 "schema": {
@@ -2795,6 +2825,7 @@
     "/api/v1/provider-field-associations/{id}": {
       "get": {
         "operationId": "findOneProviderFieldAssociation",
+        "summary": "Get a provider_field_association",
         "parameters": [
           {
             "name": "id",
@@ -2817,7 +2848,7 @@
         ],
         "responses": {
           "200": {
-            "description": "return provider field association as per the identifier",
+            "description": "Return the provider_field_association with the given identifier",
             "content": {
               "application/json": {
                 "schema": {
@@ -2847,6 +2878,7 @@
       },
       "patch": {
         "operationId": "updateProviderFieldAssociation",
+        "summary": "Update a provider_field_association",
         "parameters": [
           {
             "name": "id",
@@ -2869,7 +2901,7 @@
         },
         "responses": {
           "200": {
-            "description": "return updated provider field association as per the identifier",
+            "description": "Return the updated provider_field_association with the payload",
             "content": {
               "application/json": {
                 "schema": {
@@ -2902,6 +2934,7 @@
       },
       "delete": {
         "operationId": "removeProviderFieldAssociation",
+        "summary": "Delete a provider_field_association",
         "parameters": [
           {
             "name": "id",
@@ -2914,7 +2947,7 @@
         ],
         "responses": {
           "200": {
-            "description": "return deleted provider field association as per the identifier",
+            "description": "Return the deleted provider_field_association with the given identifier",
             "content": {
               "application/json": {
                 "schema": {
@@ -3107,7 +3140,7 @@
   "tags": [],
   "servers": [
     {
-      "url": "http://localhost:4000"
+      "url": "https://2436-27-7-241-126.ngrok-free.app"
     }
   ],
   "components": {

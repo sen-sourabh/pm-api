@@ -5,6 +5,7 @@ import {
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
+  ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
@@ -18,6 +19,9 @@ import { MessengerService } from './messenger.service';
 export class MessengerController {
   constructor(private readonly messengerService: MessengerService) {}
 
+  @ApiOperation({
+    summary: 'Send an email',
+  })
   @ApiOkResponse({
     status: 200,
     description: 'Email sent successfully',
@@ -37,6 +41,6 @@ export class MessengerController {
   @HttpCode(200)
   @Post('send-otp')
   sendOTP(@Body() body: VerificationEmailRequestDto) {
-    return this.messengerService.sendEmail(body);
+    return this.messengerService.sendAccountVerificationEmail(body);
   }
 }

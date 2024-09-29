@@ -1,5 +1,5 @@
 import { Controller, Get, HttpCode, Param, Query, Req, UseGuards, UsePipes } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiXResponses } from '../../shared/decorators/apply-filters/apply-filters.decorator';
 import { ApiXResponsesEnum } from '../../shared/enums';
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
@@ -19,8 +19,11 @@ import { ActivityLog } from './entities/activity-log.entity';
 export class ActivityLogsController {
   constructor(private readonly activityLogService: ActivityLogsService) {}
 
+  @ApiOperation({
+    summary: 'Get all the activity_logs',
+  })
   @ApiResponse({
-    description: 'returns list of activity logs',
+    description: 'Return the list of activity_logs',
     type: [ActivityLog],
     status: 200,
   })
@@ -36,8 +39,11 @@ export class ActivityLogsController {
     return this.activityLogService.findAllActivityLogs({ request, listQueryActivityLogsData });
   }
 
+  @ApiOperation({
+    summary: 'Get a activity_logs',
+  })
   @ApiResponse({
-    description: 'return activity log as per the identifier',
+    description: 'Return the activity_logs with the given identifier',
     type: ActivityLog,
     status: 200,
   })

@@ -1,5 +1,5 @@
 import { Body, Controller, HttpCode, Post, Request, UsePipes } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '../../../modules/users/dto/create-user.dto';
 import { User } from '../../../modules/users/entities/user.entity';
 import { ValidateUserPipe } from '../../../modules/users/pipes/validate-user.pipe';
@@ -15,8 +15,11 @@ import { LoginResponseModel } from './models';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @ApiOperation({
+    summary: 'Login',
+  })
   @ApiResponse({
-    description: 'returns the access_token for logged in user',
+    description: 'Return the access_token for logged in user',
     type: LoginResponseModel,
     status: 200,
   })
@@ -30,7 +33,14 @@ export class AuthController {
     return this.authService.login({ request, loginRequestData });
   }
 
-  @ApiResponse({ status: 201, type: User })
+  @ApiOperation({
+    summary: 'Register',
+  })
+  @ApiResponse({
+    description: 'Return the registered user',
+    status: 201,
+    type: User,
+  })
   @ApiXResponses(
     ApiXResponsesEnum.Unauthorized,
     ApiXResponsesEnum.BadRequest,

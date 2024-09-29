@@ -13,7 +13,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiXResponses } from '../../core/shared/decorators/apply-filters/apply-filters.decorator';
 import { ApiXResponsesEnum } from '../../core/shared/enums';
 import { JwtAuthGuard } from '../../core/shared/guards/jwt-auth.guard';
@@ -37,7 +37,14 @@ export class ProviderFieldAssociationsController {
     private readonly providerFieldAssociationsService: ProviderFieldAssociationsService,
   ) {}
 
-  @ApiResponse({ status: 201, type: ProviderFieldAssociation })
+  @ApiOperation({
+    summary: 'Create a provider_field_association',
+  })
+  @ApiResponse({
+    description: 'Return the created provider_field_association',
+    status: 201,
+    type: ProviderFieldAssociation,
+  })
   @ApiXResponses(
     ApiXResponsesEnum.Unauthorized,
     ApiXResponsesEnum.BadRequest,
@@ -55,8 +62,11 @@ export class ProviderFieldAssociationsController {
     });
   }
 
+  @ApiOperation({
+    summary: 'Get all the provider_field_associations',
+  })
   @ApiResponse({
-    description: 'returns list of provider field associations',
+    description: 'Return the list of provider_field_associations',
     type: [ProviderFieldAssociation],
     status: 200,
   })
@@ -75,8 +85,11 @@ export class ProviderFieldAssociationsController {
     });
   }
 
+  @ApiOperation({
+    summary: 'Get a provider_field_association',
+  })
   @ApiResponse({
-    description: 'return provider field association as per the identifier',
+    description: 'Return the provider_field_association with the given identifier',
     type: ProviderFieldAssociation,
     status: 200,
   })
@@ -100,8 +113,11 @@ export class ProviderFieldAssociationsController {
     });
   }
 
+  @ApiOperation({
+    summary: 'Update a provider_field_association',
+  })
   @ApiResponse({
-    description: 'return updated provider field association as per the identifier',
+    description: 'Return the updated provider_field_association with the payload',
     type: ProviderFieldAssociation,
     status: 200,
   })
@@ -126,8 +142,11 @@ export class ProviderFieldAssociationsController {
     });
   }
 
+  @ApiOperation({
+    summary: 'Delete a provider_field_association',
+  })
   @ApiResponse({
-    description: 'return deleted provider field association as per the identifier',
+    description: 'Return the deleted provider_field_association with the given identifier',
     type: ProviderFieldAssociation,
     status: 200,
   })
