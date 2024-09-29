@@ -1,8 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
-import { CreateSubscriptionDto } from './dto/create-subscription.dto';
-import { UpdateSubscriptionDto } from './dto/update-subscription.dto';
 import { SubscriptionService } from './subscription.service';
 
 @ApiBearerAuth()
@@ -13,8 +11,8 @@ export class SubscriptionController {
   constructor(private readonly subscriptionService: SubscriptionService) {}
 
   @Post()
-  create(@Body() createSubscriptionDto: CreateSubscriptionDto) {
-    return this.subscriptionService.create(createSubscriptionDto);
+  create() {
+    // return this.subscriptionService.create(createSubscriptionDto);
   }
 
   @Get()
@@ -28,8 +26,8 @@ export class SubscriptionController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSubscriptionDto: UpdateSubscriptionDto) {
-    return this.subscriptionService.update(+id, updateSubscriptionDto);
+  update() {
+    // return this.subscriptionService.update(+id, updateSubscriptionDto);
   }
 
   @Delete(':id')
