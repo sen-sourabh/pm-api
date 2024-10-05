@@ -1,6 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 import { printMigrationErrorLogs } from '../../core/helpers/file-operations';
+import { ApiErrorResponse } from '../../core/modules/activity-logs/utils/types';
 
 export class CreateVaults1721486255876 implements MigrationInterface {
   private readonly logger = new Logger(CreateVaults1721486255876.name);
@@ -92,7 +93,7 @@ export class CreateVaults1721486255876 implements MigrationInterface {
       );
       this.logger.log(`Up: Create vaults executed`);
     } catch (error) {
-      printMigrationErrorLogs(this.logger, 'vaults', error?.message);
+      printMigrationErrorLogs(this.logger, 'vaults', (error as ApiErrorResponse)?.message);
     }
   }
 
@@ -101,7 +102,7 @@ export class CreateVaults1721486255876 implements MigrationInterface {
       await queryRunner.dropTable('vaults');
       this.logger.log(`Down: Drop vaults executed`);
     } catch (error) {
-      this.logger.error(`Down: Drop vaults has an error: `, error?.message);
+      this.logger.error(`Down: Drop vaults has an error: `, (error as ApiErrorResponse)?.message);
     }
   }
 }

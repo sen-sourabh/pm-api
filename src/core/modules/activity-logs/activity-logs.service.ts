@@ -15,6 +15,7 @@ import { CacheManagerService } from '../cache-manager/cache-manager.service';
 import { CreateActivityLogDto } from './dtos/create-log.dto';
 import { ListQueryActivityLogsDto } from './dtos/list-log.dto';
 import { ActivityLog } from './entities/activity-log.entity';
+import { ApiErrorResponse } from './utils/types';
 
 @Injectable()
 export class ActivityLogsService {
@@ -31,7 +32,7 @@ export class ActivityLogsService {
 
       logErrorOnTerminal(createActivityLogDto);
     } catch (error) {
-      Logger.error(`Error from create activity log: ${error?.message}`);
+      Logger.error(`Error from create activity log: ${(error as ApiErrorResponse)?.message}`);
       Logger.fatal(`Unable to Logged: ${JSON.stringify(createActivityLogDto).toString()}`);
     }
   }
@@ -50,18 +51,18 @@ export class ActivityLogsService {
         return {
           data,
           metadata: { query: listQueryActivityLogsData },
-        };
+        } as ApiResponseModel<ActivityLog[]>;
       }
 
       // Not From Cache
       const { skip, take } = getPagination(listQueryActivityLogsData);
 
-      data = await this.activityLogRepository.find({
+      data = (await this.activityLogRepository.find({
         where: listQueryActivityLogsData,
         skip,
         take,
         order: { updatedAt: OrderEnum.DESC },
-      });
+      })) as Record<string, unknown>[];
 
       // Set in Cache
       await this.cacheManagerService.cacheSetData({
@@ -72,10 +73,12 @@ export class ActivityLogsService {
       return {
         data,
         metadata: { query: listQueryActivityLogsData },
-      };
+      } as ApiResponseModel<ActivityLog[]>;
     } catch (error) {
-      Logger.error(`Error in list activity log: ${error?.message}`);
-      throw new InternalServerErrorException(`Error in list activity log: ${error?.message}`);
+      Logger.error(`Error in list activity log: ${(error as ApiErrorResponse)?.message}`);
+      throw new InternalServerErrorException(
+        `Error in list activity log: ${(error as ApiErrorResponse)?.message}`,
+      );
     }
   }
 
@@ -94,13 +97,14 @@ export class ActivityLogsService {
       return {
         data,
         metadata: { query },
-      };
+      } as ApiResponseModel<ActivityLog>;
     }
 
     // Not From Cache
-    data = await this.activityLogRepository.findOne({
+    data = (await this.activityLogRepository.findOne({
       where: { id },
-    });
+    })) as Record<string, unknown>;
+
     if (isMissing(data)) {
       throw new NotFoundException(`Record not found with id: ${id}`);
     }

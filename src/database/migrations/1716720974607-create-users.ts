@@ -1,6 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 import { printMigrationErrorLogs } from '../../core/helpers/file-operations';
+import { ApiErrorResponse } from '../../core/modules/activity-logs/utils/types';
 
 export class CreateUsers1716720974607 implements MigrationInterface {
   private readonly logger = new Logger(CreateUsers1716720974607.name);
@@ -158,7 +159,7 @@ export class CreateUsers1716720974607 implements MigrationInterface {
       );
       this.logger.log(`Up: Create users executed`);
     } catch (error) {
-      printMigrationErrorLogs(this.logger, 'users', error?.message);
+      printMigrationErrorLogs(this.logger, 'users', (error as ApiErrorResponse)?.message);
     }
   }
 
@@ -167,7 +168,7 @@ export class CreateUsers1716720974607 implements MigrationInterface {
       await queryRunner.dropTable('users');
       this.logger.log(`Down: Drop users executed`);
     } catch (error) {
-      this.logger.error(`Down: Drop users has an error: `, error?.message);
+      this.logger.error(`Down: Drop users has an error: `, (error as ApiErrorResponse)?.message);
     }
   }
 }

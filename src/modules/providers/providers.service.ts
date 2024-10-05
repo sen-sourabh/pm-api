@@ -9,6 +9,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../core/helpers/serializers';
 import { isMissing } from '../../core/helpers/validations';
+import { ApiErrorResponse } from '../../core/modules/activity-logs/utils/types';
+import { AuthUserPayload } from '../../core/modules/auth/types';
 import { CacheManagerService } from '../../core/modules/cache-manager/cache-manager.service';
 import { WebhookEventEnum } from '../../core/modules/webhooks/enums';
 import { WebhooksService } from '../../core/modules/webhooks/webhooks.service';
@@ -45,15 +47,15 @@ export class ProvidersService {
 
       const newProvider = this.providersRepository.create({
         ...createProviderData,
-        addedBy: request?.['user']?.id,
+        addedBy: (request?.['user'] as AuthUserPayload)?.id,
       });
       const data = await this.providersRepository.save(newProvider);
 
       // INFO: Initiate webhook sender on `provider:created` event
       this.webhooksService.prepareToSendWebhooks({
-        user: request?.['user']?.id,
+        user: (request?.['user'] as AuthUserPayload)?.id,
         event: WebhookEventEnum.ProviderCreated,
-        payload: data,
+        payload: data as Record<string, unknown>,
       });
 
       return {
@@ -62,8 +64,8 @@ export class ProvidersService {
         message: 'Provider created successfully',
       };
     } catch (error) {
-      Logger.error(`Error in create provider: ${error.message}`);
-      throw error;
+      Logger.error(`Error in create provider: ${(error as ApiErrorResponse).message}`);
+      throw (error as ApiErrorResponse).message;
     }
   }
 
@@ -81,19 +83,19 @@ export class ProvidersService {
         return {
           data,
           metadata: { query: listQueryProvidersData },
-        };
+        } as ApiResponseModel<Provider[]>;
       }
 
       // Not From Cache
       const { skip, take, relations } = getPagination(listQueryProvidersData);
 
-      data = await this.providersRepository.find({
+      data = (await this.providersRepository.find({
         where: listQueryProvidersData,
         relations: relations && ['vault', 'addedBy'],
         skip,
         take,
         order: { updatedAt: OrderEnum.DESC },
-      });
+      })) as Record<string, unknown>[];
 
       // Set in Cache
       await this.cacheManagerService.cacheSetData({
@@ -106,8 +108,8 @@ export class ProvidersService {
         metadata: { query: listQueryProvidersData },
       };
     } catch (error) {
-      Logger.error(`Error in list provider: ${error.message}`);
-      throw error;
+      Logger.error(`Error in list provider: ${(error as ApiErrorResponse).message}`);
+      throw (error as ApiErrorResponse).message;
     }
   }
 
@@ -126,16 +128,17 @@ export class ProvidersService {
       return {
         data,
         metadata: { query },
-      };
+      } as ApiResponseModel<Provider>;
     }
 
     // Not From Cache
     const { relations } = getPagination(query);
 
-    data = await this.providersRepository.findOne({
+    data = (await this.providersRepository.findOne({
       where: { id },
       relations: relations && ['vault', 'addedBy'],
-    });
+    })) as Record<string, unknown>;
+
     if (isMissing(data)) {
       throw new NotFoundException(`Record not found with id: ${id}`);
     }
@@ -178,9 +181,9 @@ export class ProvidersService {
 
     // INFO: Initiate webhook sender on `provider:updated` event
     this.webhooksService.prepareToSendWebhooks({
-      user: request?.['user']?.id,
+      user: (request?.['user'] as AuthUserPayload)?.id,
       event: WebhookEventEnum.ProviderUpdated,
-      payload: data,
+      payload: data as Record<string, unknown>,
     });
 
     return {
@@ -215,9 +218,9 @@ export class ProvidersService {
 
     // INFO: Initiate webhook sender on `provider:deleted` event
     this.webhooksService.prepareToSendWebhooks({
-      user: request?.['user']?.id,
+      user: (request?.['user'] as AuthUserPayload)?.id,
       event: WebhookEventEnum.ProviderDeleted,
-      payload: data,
+      payload: data as Record<string, unknown>,
     });
 
     return {
@@ -237,7 +240,7 @@ export class ProvidersService {
       }
       return true;
     } catch (error) {
-      Logger.error(`Error in provider operation: ${error.message}`);
+      Logger.error(`Error in provider operation: ${(error as ApiErrorResponse).message}`);
       return false;
     }
   }

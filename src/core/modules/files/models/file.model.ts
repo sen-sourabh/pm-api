@@ -8,6 +8,7 @@ export class FileUploadModel {
   file: Express.Multer.File;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 export class CoreFileModel implements Express.Multer.File {
   fieldname: string;
   originalname: string;

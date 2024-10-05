@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { MigrationInterface, QueryRunner } from 'typeorm';
+import { ApiErrorResponse } from '../../core/modules/activity-logs/utils/types';
 
 export class AlterPlans1727611597636 implements MigrationInterface {
   private readonly logger = new Logger(AlterPlans1727611597636.name);
@@ -11,7 +12,10 @@ export class AlterPlans1727611597636 implements MigrationInterface {
       );
       this.logger.log(`Up: Alter for uuid plans executed`);
     } catch (error) {
-      this.logger.error(`Up: Alter for uuid plans have an error: `, error?.message);
+      this.logger.error(
+        `Up: Alter for uuid plans have an error: `,
+        (error as ApiErrorResponse)?.message,
+      );
     }
   }
 

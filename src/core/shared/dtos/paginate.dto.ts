@@ -1,3 +1,3 @@
-import { ApiPaginateUnifiedModel } from '../models/api-paginate.model';
+import { ApiQueryUnifiedModel } from '../models/api-paginate.model';
 
-export class ApiPaginateDto extends ApiPaginateUnifiedModel {}
+export class ApiPaginateDto extends ApiQueryUnifiedModel {}

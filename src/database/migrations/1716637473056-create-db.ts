@@ -1,6 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { DataSourcesOptions } from '../../configs/typeorm';
+import { ApiErrorResponse } from '../../core/modules/activity-logs/utils/types';
 
 export class CreateDb1716637473056 implements MigrationInterface {
   private readonly logger = new Logger(CreateDb1716637473056.name);
@@ -12,7 +13,7 @@ export class CreateDb1716637473056 implements MigrationInterface {
       );
       this.logger.log(`Up: Create database executed`);
     } catch (error) {
-      this.logger.error(`Up: Create database has an error: `, error?.message);
+      this.logger.error(`Up: Create database has an error: `, (error as ApiErrorResponse).message);
     }
   }
 
@@ -21,7 +22,7 @@ export class CreateDb1716637473056 implements MigrationInterface {
       await queryRunner.dropDatabase(`${DataSourcesOptions?.database ?? 'vault_db'}`, true);
       this.logger.log(`Down: Drop database executed`);
     } catch (error) {
-      this.logger.error(`Down: Drop database has an error: `, error?.message);
+      this.logger.error(`Down: Drop database has an error: `, (error as ApiErrorResponse).message);
     }
   }
 }

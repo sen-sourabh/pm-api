@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../core/helpers/serializers';
 import { isMissing } from '../../core/helpers/validations';
+import { ApiErrorResponse } from '../../core/modules/activity-logs/utils/types';
+import { AuthUserPayload } from '../../core/modules/auth/types';
 import { CacheManagerService } from '../../core/modules/cache-manager/cache-manager.service';
 import { WebhookEventEnum } from '../../core/modules/webhooks/enums';
 import { WebhooksService } from '../../core/modules/webhooks/webhooks.service';
@@ -33,15 +35,15 @@ export class ProviderFieldAssociationsService {
     try {
       const newProviderFieldAssociation = this.providerFieldAssociationsRepository.create({
         ...createProviderFieldAssociationData,
-        addedBy: request?.['user']?.id,
+        addedBy: (request?.['user'] as AuthUserPayload)?.id,
       });
       const data = await this.providerFieldAssociationsRepository.save(newProviderFieldAssociation);
 
       // INFO: Initiate webhook sender on `fieldAssociation:created` event
       this.webhooksService.prepareToSendWebhooks({
-        user: request?.['user']?.id,
+        user: (request?.['user'] as AuthUserPayload)?.id,
         event: WebhookEventEnum.FieldAssociationCreated,
-        payload: data,
+        payload: data as Record<string, unknown>,
       });
 
       return {
@@ -50,8 +52,10 @@ export class ProviderFieldAssociationsService {
         message: 'ProviderFieldAssociation created successfully',
       };
     } catch (error) {
-      Logger.error(`Error in create provider field association: ${error.message}`);
-      throw error;
+      Logger.error(
+        `Error in create provider field association: ${(error as ApiErrorResponse).message}`,
+      );
+      throw (error as ApiErrorResponse).message;
     }
   }
 
@@ -69,19 +73,19 @@ export class ProviderFieldAssociationsService {
         return {
           data,
           metadata: { query: listQueryProviderFieldAssociationsData },
-        };
+        } as ApiResponseModel<ProviderFieldAssociation[]>;
       }
 
       // Not From Cache
       const { skip, take, relations } = getPagination(listQueryProviderFieldAssociationsData);
 
-      data = await this.providerFieldAssociationsRepository.find({
+      data = (await this.providerFieldAssociationsRepository.find({
         where: listQueryProviderFieldAssociationsData,
         relations: relations && ['provider', 'customField', 'addedBy'],
         skip,
         take,
         order: { updatedAt: OrderEnum.DESC },
-      });
+      })) as Record<string, unknown>[];
 
       // Set in Cache
       await this.cacheManagerService.cacheSetData({
@@ -94,8 +98,10 @@ export class ProviderFieldAssociationsService {
         metadata: { query: listQueryProviderFieldAssociationsData },
       };
     } catch (error) {
-      Logger.error(`Error in list provider field association: ${error.message}`);
-      throw error;
+      Logger.error(
+        `Error in list provider field association: ${(error as ApiErrorResponse).message}`,
+      );
+      throw (error as ApiErrorResponse).message;
     }
   }
 
@@ -114,16 +120,17 @@ export class ProviderFieldAssociationsService {
       return {
         data,
         metadata: { query },
-      };
+      } as ApiResponseModel<ProviderFieldAssociation>;
     }
 
     // Not From Cache
     const { relations } = getPagination(query);
 
-    data = await this.providerFieldAssociationsRepository.findOne({
+    data = (await this.providerFieldAssociationsRepository.findOne({
       where: { id },
       relations: relations && ['provider', 'customField', 'addedBy'],
-    });
+    })) as Record<string, unknown>;
+
     if (isMissing(data)) {
       throw new NotFoundException(`Record not found with id: ${id}`);
     }
@@ -161,9 +168,9 @@ export class ProviderFieldAssociationsService {
 
     // INFO: Initiate webhook sender on `fieldAssociation:updated` event
     this.webhooksService.prepareToSendWebhooks({
-      user: request?.['user']?.id,
+      user: (request?.['user'] as AuthUserPayload)?.id,
       event: WebhookEventEnum.FieldAssociationUpdated,
-      payload: data,
+      payload: data as Record<string, unknown>,
     });
 
     return {
@@ -188,7 +195,7 @@ export class ProviderFieldAssociationsService {
 
     // INFO: Initiate webhook sender on `fieldAssociation:deleted` event
     this.webhooksService.prepareToSendWebhooks({
-      user: request?.['user']?.id,
+      user: (request?.['user'] as AuthUserPayload)?.id,
       event: WebhookEventEnum.FieldAssociationDeleted,
       payload: { id },
     });
@@ -208,7 +215,9 @@ export class ProviderFieldAssociationsService {
       }
       return true;
     } catch (error) {
-      Logger.error(`Error in provider field association operation: ${error.message}`);
+      Logger.error(
+        `Error in provider field association operation: ${(error as ApiErrorResponse).message}`,
+      );
       return false;
     }
   }

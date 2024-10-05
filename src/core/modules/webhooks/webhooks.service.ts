@@ -12,6 +12,8 @@ import { isMissing } from '../../helpers/validations';
 import { OrderEnum } from '../../shared/enums';
 import { ApiResponseModel } from '../../shared/interfaces/api-response.interface';
 import { ApiQueryParamUnifiedModel } from '../../shared/models/api-query.model';
+import { ApiErrorResponse } from '../activity-logs/utils/types';
+import { AuthUserPayload } from '../auth/types';
 import { CacheManagerService } from '../cache-manager/cache-manager.service';
 import { CreateWebhookDto } from './dtos/create-webhook.dto';
 import { ListQueryWebhooksDto } from './dtos/list-webhook.dto';
@@ -41,12 +43,12 @@ export class WebhooksService {
       //Verified Uniquness of webhook within the user
       await this.#isWebhookIsUnique({
         event: CreateWebhookData?.event,
-        user: request?.['user']?.id,
+        user: (request?.['user'] as AuthUserPayload as AuthUserPayload)?.id,
       });
 
       const newWebhook = this.webhooksRepository.create({
         ...CreateWebhookData,
-        user: request?.['user']?.id,
+        user: (request?.['user'] as AuthUserPayload as AuthUserPayload)?.id,
       });
       const data = await this.webhooksRepository.save(newWebhook);
       return {
@@ -55,8 +57,8 @@ export class WebhooksService {
         message: 'Webhook created successfully',
       };
     } catch (error) {
-      Logger.error(`Error in create webhook: ${error.message}`);
-      throw error;
+      Logger.error(`Error in create webhook: ${(error as ApiErrorResponse).message}`);
+      throw (error as ApiErrorResponse)?.message;
     }
   }
 
@@ -74,19 +76,19 @@ export class WebhooksService {
         return {
           data,
           metadata: { query: listQueryWebhooksData },
-        };
+        } as ApiResponseModel<Webhook[]>;
       }
 
       // Not From Cache
       const { skip, take, relations } = getPagination(listQueryWebhooksData);
 
-      data = await this.webhooksRepository.find({
+      data = (await this.webhooksRepository.find({
         where: listQueryWebhooksData,
         relations: relations && ['user'],
         skip,
         take,
         order: { updatedAt: OrderEnum.DESC },
-      });
+      })) as Record<string, unknown>[];
 
       // Set in Cache
       await this.cacheManagerService.cacheSetData({
@@ -99,8 +101,8 @@ export class WebhooksService {
         metadata: { query: listQueryWebhooksData },
       };
     } catch (error) {
-      Logger.error(`Error in list webhook: ${error.message}`);
-      throw error;
+      Logger.error(`Error in list webhook: ${(error as ApiErrorResponse).message}`);
+      throw (error as ApiErrorResponse).message;
     }
   }
 
@@ -119,16 +121,17 @@ export class WebhooksService {
       return {
         data,
         metadata: { query },
-      };
+      } as ApiResponseModel<Webhook>;
     }
 
     // Not From Cache
     const { relations } = getPagination(query);
 
-    data = await this.webhooksRepository.findOne({
+    data = (await this.webhooksRepository.findOne({
       where: { id },
       relations: relations && ['user'],
-    });
+    })) as Record<string, unknown>;
+
     if (isMissing(data)) {
       throw new NotFoundException(`Record not found with id: ${id}`);
     }
@@ -154,7 +157,7 @@ export class WebhooksService {
     //Actual user update
     const updated = await this.webhooksRepository.update(id, {
       ...updateWebhookData,
-      user: request?.['user']?.id,
+      user: (request?.['user'] as AuthUserPayload as AuthUserPayload)?.id,
     });
     if (!updated?.affected) {
       throw new BadRequestException(`Not updated`);
@@ -209,8 +212,8 @@ export class WebhooksService {
       }
       return true;
     } catch (error) {
-      Logger.error(`Error in webhook operation: ${error.message}`);
-      throw error;
+      Logger.error(`Error in webhook operation: ${(error as ApiErrorResponse).message}`);
+      throw (error as ApiErrorResponse).message;
     }
   }
 
@@ -221,7 +224,7 @@ export class WebhooksService {
   }: {
     webhookTargetDetails: Webhook;
     webhookResponse: Response;
-    payload: any;
+    payload: Record<string, unknown>;
   }) {
     // INFO: Create Webhook History on Success or Failure
     const webhookHistoryResponse = await this.webhookHistoriesService.createWebhookHistory({
@@ -244,7 +247,7 @@ export class WebhooksService {
   }: {
     user: string;
     event: string;
-    payload: any;
+    payload: Record<string, unknown>;
   }): Promise<void> => {
     try {
       // INFO: Fetch webhook data to send payload
@@ -271,8 +274,7 @@ export class WebhooksService {
         await this.#createWebhookhistory({ webhookTargetDetails, webhookResponse, payload });
       }
     } catch (error) {
-      Logger.error(`Error prepare webhook: `, error?.message);
-      return error;
+      Logger.error(`Error prepare webhook: `, (error as ApiErrorResponse).message);
     }
   };
 
@@ -309,8 +311,10 @@ export class WebhooksService {
         );
       return response;
     } catch (error) {
-      Logger.error(`Error sending webhook to ${webhookTargetDetails.targetUrl}:`, error?.message);
-      return error;
+      Logger.error(
+        `Error sending webhook to ${webhookTargetDetails.targetUrl}:`,
+        (error as ApiErrorResponse)?.message,
+      );
     }
   };
 

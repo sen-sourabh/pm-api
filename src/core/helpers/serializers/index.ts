@@ -1,9 +1,15 @@
 import { Logger } from '@nestjs/common';
 import { HttpStatusViaCodeEnum } from '../../shared/enums';
+import { CustomRequest, CustomResponse } from '../../shared/interfaces/types';
+import { ApiQueryUnifiedModel } from '../../shared/models/api-paginate.model';
 import { ApiResponseUnifiedModel } from '../../shared/models/api-response.model';
 import { isMissing } from '../validations';
+import { ActivityLogResponse, IApiPagination } from './types';
 
-export const getHttpStatusViaCode = (data: ApiResponseUnifiedModel, response: any) => {
+export const getHttpStatusViaCode = (
+  data: ApiResponseUnifiedModel,
+  response: CustomResponse,
+): HttpStatusViaCodeEnum => {
   let statusCode = data?.statusCode;
   if (isMissing(statusCode)) {
     statusCode = response?.statusCode;
@@ -24,7 +30,7 @@ export const getHttpStatusViaCode = (data: ApiResponseUnifiedModel, response: an
   return HttpStatusViaCodeEnum.ServerError;
 };
 
-export const getPagination = (query?: any) => {
+export const getPagination = (query: ApiQueryUnifiedModel): IApiPagination => {
   const { pageNumber: skip, pageSize: take, relation: relations } = query;
   delete query?.pageNumber;
   delete query?.pageSize;
@@ -36,7 +42,11 @@ export const getPagination = (query?: any) => {
   };
 };
 
-export const buildActivityLog = (handler: string | null, request: any, response: any) => {
+export const buildActivityLog = (
+  handler: string | null,
+  request: CustomRequest,
+  response: CustomResponse,
+) => {
   return {
     handler,
     method: request?.method,
@@ -52,10 +62,10 @@ export const buildActivityLog = (handler: string | null, request: any, response:
     responseCode: +response?.statusCode,
     ipAddress: request?.ip,
     location: null,
-  };
+  } as ActivityLogResponse;
 };
 
-export const logErrorOnTerminal = (data: any) => {
+export const logErrorOnTerminal = (data: ActivityLogResponse): void => {
   delete data?.handler;
   delete data?.method;
   delete data?.headers;

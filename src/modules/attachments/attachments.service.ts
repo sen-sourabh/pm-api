@@ -9,6 +9,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../core/helpers/serializers';
 import { containsKey, isMissing } from '../../core/helpers/validations';
+import { ApiErrorResponse } from '../../core/modules/activity-logs/utils/types';
+import { AuthUserPayload } from '../../core/modules/auth/types';
 import { CacheManagerService } from '../../core/modules/cache-manager/cache-manager.service';
 import { CategoryEnum } from '../../core/modules/files/enums';
 import { FilesService } from '../../core/modules/files/files.service';
@@ -60,7 +62,7 @@ export class AttachmentsService {
       if (createAttachmentData?.category === CategoryEnum.Profile) {
         isExists = await this.attachmentsRepository.findOne({
           where: {
-            user: request?.['user']?.id,
+            user: (request?.['user'] as AuthUserPayload as AuthUserPayload)?.id,
             category: CategoryEnum.Profile,
           },
         });
@@ -68,7 +70,7 @@ export class AttachmentsService {
 
       //Upload on AWS S3 and in DB
       const newAttachment = await this.#getAttachmentPayload({
-        keyExists: isExists?.['key'],
+        keyExists: isExists?.['key'] as string,
         request,
         file,
         createAttachmentData,
@@ -78,25 +80,25 @@ export class AttachmentsService {
       let data: Promise<Attachment> | Attachment;
       if (!isMissing(isExists)) {
         const id = await this.#updateAttachment({
-          id: isExists?.['id'],
+          id: isExists?.['id'] as string,
           updateAttachmentData: newAttachment,
         });
         data = await this.attachmentsRepository.findOne({ where: { id } });
 
         // INFO: Initiate webhook sender on `attachment:updated` event
         this.webhooksService.prepareToSendWebhooks({
-          user: request?.['user']?.id,
+          user: (request?.['user'] as AuthUserPayload)?.id,
           event: WebhookEventEnum.AttachmentUpdated,
-          payload: data,
+          payload: data as Record<string, unknown>,
         });
       } else {
         data = await this.attachmentsRepository.save(newAttachment);
 
         // INFO: Initiate webhook sender on `attachment:created` event
         this.webhooksService.prepareToSendWebhooks({
-          user: request?.['user']?.id,
+          user: (request?.['user'] as AuthUserPayload)?.id,
           event: WebhookEventEnum.AttachmentCreated,
-          payload: data,
+          payload: data as Record<string, unknown>,
         });
       }
 
@@ -106,8 +108,8 @@ export class AttachmentsService {
         message: 'Attachment created successfully',
       };
     } catch (error) {
-      Logger.error(`Error in create attachment: ${error.message}`);
-      throw error;
+      Logger.error(`Error in create attachment: ${(error as ApiErrorResponse).message}`);
+      throw (error as ApiErrorResponse).message;
     }
   }
 
@@ -125,19 +127,19 @@ export class AttachmentsService {
         return {
           data,
           metadata: { query: listQueryAttachmentsData },
-        };
+        } as ApiResponseModel<Attachment[]>;
       }
 
       // Not From Cache
       const { skip, take, relations } = getPagination(listQueryAttachmentsData);
 
-      data = await this.attachmentsRepository.find({
+      data = (await this.attachmentsRepository.find({
         where: listQueryAttachmentsData,
         relations: relations && ['user', 'vault'],
         skip,
         take,
         order: { updatedAt: OrderEnum.DESC },
-      });
+      })) as Record<string, unknown>[];
 
       // Set in Cache
       await this.cacheManagerService.cacheSetData({
@@ -150,8 +152,8 @@ export class AttachmentsService {
         metadata: { query: listQueryAttachmentsData },
       };
     } catch (error) {
-      Logger.error(`Error in list attachment: ${error.message}`);
-      throw error;
+      Logger.error(`Error in list attachment: ${(error as ApiErrorResponse).message}`);
+      throw (error as ApiErrorResponse).message;
     }
   }
 
@@ -170,16 +172,17 @@ export class AttachmentsService {
       return {
         data,
         metadata: { query },
-      };
+      } as ApiResponseModel<Attachment>;
     }
 
     // Not From Cache
     const { relations } = getPagination(query);
 
-    data = await this.attachmentsRepository.findOne({
+    data = (await this.attachmentsRepository.findOne({
       where: { id },
       relations: relations && ['user', 'vault'],
-    });
+    })) as Record<string, unknown>;
+
     if (isMissing(data)) {
       throw new NotFoundException(`Record not found with id: ${id}`);
     }
@@ -227,25 +230,27 @@ export class AttachmentsService {
       key: getS3FileKey(identifier, file, s3Path),
       url: (await this.filesService.uplaodFileToS3({ keyExists, file, s3Path, identifier }))?.data
         ?.url,
-      user: request?.['user']?.id,
+      user: (request?.['user'] as AuthUserPayload)?.id,
       ...createAttachmentData,
     } as CreateAttachmentDto;
   }
 
-  #getIdentifier = (request: Request) => {
-    const identifier = containsKey({ ...request?.['user'] }, 'id') && request?.['user']?.id;
+  #getIdentifier = (request: Request): string => {
+    const identifier =
+      containsKey({ ...(request?.['user'] as AuthUserPayload) }, 'id') &&
+      (request?.['user'] as AuthUserPayload)?.id;
     if (isMissing(identifier))
       throw new InternalServerErrorException(`Something went wrong. Please login with valid user.`);
     return identifier;
   };
 
-  #getS3Path = (createAttachmentData: CreateAttachmentDto) => {
+  #getS3Path = (createAttachmentData: CreateAttachmentDto): string => {
     return containsKey({ ...createAttachmentData }, 'vault')
       ? getVaultsS3Path(createAttachmentData)
       : getUsersS3Path(createAttachmentData);
   };
 
-  #isVaultValid = async ({ vault }: CreateAttachmentDto) => {
+  #isVaultValid = async ({ vault }: CreateAttachmentDto): Promise<boolean> => {
     const isVaultExist = await this.vaultsService.findVaultByValue({ id: vault });
     if (!isVaultExist) throw new NotFoundException(`Vault is invalid with id: ${vault}`);
     return true;

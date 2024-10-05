@@ -1,6 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 import { printMigrationErrorLogs } from '../../core/helpers/file-operations';
+import { ApiErrorResponse } from '../../core/modules/activity-logs/utils/types';
 import { WebhookStatusEnum } from '../../core/modules/webhooks/enums';
 
 export class CreateWebhookHistories1724070867104 implements MigrationInterface {
@@ -72,7 +73,11 @@ export class CreateWebhookHistories1724070867104 implements MigrationInterface {
       );
       this.logger.log(`Up: Create webhook_histories executed`);
     } catch (error) {
-      printMigrationErrorLogs(this.logger, 'webhook_histories', error?.message);
+      printMigrationErrorLogs(
+        this.logger,
+        'webhook_histories',
+        (error as ApiErrorResponse)?.message,
+      );
     }
   }
 
@@ -81,7 +86,10 @@ export class CreateWebhookHistories1724070867104 implements MigrationInterface {
       await queryRunner.dropTable('webhook_histories');
       this.logger.log(`Down: Drop webhook_histories executed`);
     } catch (error) {
-      this.logger.error(`Down: Drop webhook_histories has an error: `, error?.message);
+      this.logger.error(
+        `Down: Drop webhook_histories has an error: `,
+        (error as ApiErrorResponse)?.message,
+      );
     }
   }
 }

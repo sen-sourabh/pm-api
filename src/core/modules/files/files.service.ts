@@ -2,6 +2,7 @@ import { DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ApiResponseModel } from '../../shared/interfaces/api-response.interface';
+import { ApiErrorResponse } from '../activity-logs/utils/types';
 import { UpoadFileS3PathEnum } from './enums';
 import { CoreFileModel, FilesResponseModel } from './models/file.model';
 import { getS3FileKey, getS3ObjectUrl } from './utils';
@@ -12,12 +13,12 @@ export class FilesService {
   private readonly s3Client: S3Client;
 
   constructor(private readonly configService: ConfigService) {
-    this.bucket = this.configService.getOrThrow('AWS_S3_BUCKET_NAME');
+    this.bucket = this.configService.getOrThrow<string>('AWS_S3_BUCKET_NAME');
     this.s3Client = new S3Client({
-      region: this.configService.getOrThrow('AWS_REGION'),
+      region: this.configService.getOrThrow<string>('AWS_REGION'),
       credentials: {
-        accessKeyId: this.configService.getOrThrow('AWS_ACCESS_KEY_ID'),
-        secretAccessKey: this.configService.getOrThrow('AWS_SECRET_ACCESS_KEY'),
+        accessKeyId: this.configService.getOrThrow<string>('AWS_ACCESS_KEY_ID'),
+        secretAccessKey: this.configService.getOrThrow<string>('AWS_SECRET_ACCESS_KEY'),
       },
     });
   }
@@ -56,13 +57,13 @@ export class FilesService {
         message: 'File upload successfully',
       };
     } catch (error) {
-      Logger.error(`Error from file upload to S3 ${error?.message}`);
+      Logger.error(`Error from file upload to S3 ${(error as ApiErrorResponse)?.message}`);
       throw error;
     }
   }
 
   // INFO: Build deleteObjectCommand
-  #getDeleteObjectCommand(key: string) {
+  #getDeleteObjectCommand(key: string): DeleteObjectCommand {
     return new DeleteObjectCommand({
       Bucket: this.bucket,
       Key: key,
@@ -70,7 +71,7 @@ export class FilesService {
   }
 
   // INFO: Build putObjectCommand
-  #getPutObjectCommand(key: string, file: CoreFileModel) {
+  #getPutObjectCommand(key: string, file: CoreFileModel): PutObjectCommand {
     return new PutObjectCommand({
       BucketKeyEnabled: true,
       Bucket: this.bucket,

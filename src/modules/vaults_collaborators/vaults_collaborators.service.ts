@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../core/helpers/serializers';
 import { isMissing } from '../../core/helpers/validations';
+import { ApiErrorResponse } from '../../core/modules/activity-logs/utils/types';
+import { AuthUserPayload } from '../../core/modules/auth/types';
 import { CacheManagerService } from '../../core/modules/cache-manager/cache-manager.service';
 import { WebhookEventEnum } from '../../core/modules/webhooks/enums';
 import { WebhooksService } from '../../core/modules/webhooks/webhooks.service';
@@ -42,16 +44,16 @@ export class VaultsCollaboratorsService {
       const newVault = this.vaultsCollaboratorsRepository.create({
         ...createVaultsCollaboratorData,
         user: userId,
-        updatedBy: request?.['user']?.id,
+        updatedBy: (request?.['user'] as AuthUserPayload)?.id,
       });
 
       const data = await this.vaultsCollaboratorsRepository.save(newVault);
 
       // INFO: Initiate webhook sender on `collaborator:created` event
       this.webhooksService.prepareToSendWebhooks({
-        user: request?.['user']?.id,
+        user: (request?.['user'] as AuthUserPayload)?.id,
         event: WebhookEventEnum.CollaboratorCreated,
-        payload: data,
+        payload: data as unknown as Record<string, unknown>,
       });
 
       return {
@@ -60,8 +62,8 @@ export class VaultsCollaboratorsService {
         message: 'Vaults Collaborator created successfully',
       };
     } catch (error) {
-      Logger.error(`Error in create vaults collaborator: ${error.message}`);
-      throw error;
+      Logger.error(`Error in create vaults collaborator: ${(error as ApiErrorResponse).message}`);
+      throw (error as ApiErrorResponse).message;
     }
   }
 
@@ -79,19 +81,19 @@ export class VaultsCollaboratorsService {
         return {
           data,
           metadata: { query: listQueryVaultsCollaboratorData },
-        };
+        } as unknown as ApiResponseModel<VaultsCollaborator[]>;
       }
 
       // Not From Cache
       const { skip, take, relations } = getPagination(listQueryVaultsCollaboratorData);
 
-      data = await this.vaultsCollaboratorsRepository.find({
+      data = (await this.vaultsCollaboratorsRepository.find({
         where: listQueryVaultsCollaboratorData,
         relations: relations && ['user', 'vault', 'role', 'updatedBy'],
         skip,
         take,
         order: { updatedAt: OrderEnum.DESC },
-      });
+      })) as unknown as Record<string, unknown>[];
 
       // Set in Cache
       await this.cacheManagerService.cacheSetData({
@@ -102,10 +104,10 @@ export class VaultsCollaboratorsService {
       return {
         data,
         metadata: { query: listQueryVaultsCollaboratorData },
-      };
+      } as unknown as ApiResponseModel<VaultsCollaborator[]>;
     } catch (error) {
-      Logger.error(`Error in list vaults collaborator: ${error.message}`);
-      throw error;
+      Logger.error(`Error in list vaults collaborator: ${(error as ApiErrorResponse).message}`);
+      throw (error as ApiErrorResponse).message;
     }
   }
 
@@ -124,16 +126,17 @@ export class VaultsCollaboratorsService {
       return {
         data,
         metadata: { query },
-      };
+      } as unknown as ApiResponseModel<VaultsCollaborator>;
     }
 
     // Not From Cache
     const { relations } = getPagination(query);
 
-    data = await this.vaultsCollaboratorsRepository.findOne({
+    data = (await this.vaultsCollaboratorsRepository.findOne({
       where: { id },
       relations: relations && ['user', 'vault', 'role', 'updatedBy'],
-    });
+    })) as unknown as Record<string, unknown>;
+
     if (isMissing(data)) {
       throw new NotFoundException(`Record not found with id: ${id}`);
     }
@@ -144,7 +147,7 @@ export class VaultsCollaboratorsService {
       data,
     });
 
-    return { data, metadata: { query } };
+    return { data, metadata: { query } } as unknown as ApiResponseModel<VaultsCollaborator>;
   }
 
   async updateVaultsCollaborator({
@@ -168,7 +171,7 @@ export class VaultsCollaboratorsService {
     updateVaultsCollaboratorData = {
       ...updateVaultsCollaboratorData,
       user: userId,
-      updatedBy: request?.['user']?.id,
+      updatedBy: (request?.['user'] as AuthUserPayload)?.id,
     };
 
     //Actual collaborator update
@@ -186,9 +189,9 @@ export class VaultsCollaboratorsService {
 
     // INFO: Initiate webhook sender on `collaborator:updated` event
     this.webhooksService.prepareToSendWebhooks({
-      user: request?.['user']?.id,
+      user: (request?.['user'] as AuthUserPayload)?.id,
       event: WebhookEventEnum.CollaboratorUpdated,
-      payload: data,
+      payload: data as unknown as Record<string, unknown>,
     });
 
     return {
@@ -214,7 +217,7 @@ export class VaultsCollaboratorsService {
 
     // INFO: Initiate webhook sender on `collaborator:deleted` event
     this.webhooksService.prepareToSendWebhooks({
-      user: request?.['user']?.id,
+      user: (request?.['user'] as AuthUserPayload)?.id,
       event: WebhookEventEnum.CollaboratorDeleted,
       payload: { id },
     });
@@ -234,7 +237,9 @@ export class VaultsCollaboratorsService {
       }
       return true;
     } catch (error) {
-      Logger.error(`Error in vaults collaborator operation: ${error.message}`);
+      Logger.error(
+        `Error in vaults collaborator operation: ${(error as ApiErrorResponse).message}`,
+      );
       return false;
     }
   }

@@ -8,6 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../core/helpers/serializers';
 import { isMissing } from '../../core/helpers/validations';
+import { ApiErrorResponse } from '../../core/modules/activity-logs/utils/types';
 import { OrderEnum } from '../../core/shared/enums';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
 import { ListQueryAccountTypesDto } from './dto/list-account_type.dto';
@@ -35,8 +36,10 @@ export class AccountTypesService {
 
       return { data, metadata: { query } };
     } catch (error) {
-      Logger.debug(`Error in list account type: ${error?.message}`);
-      throw new InternalServerErrorException(`Error in list account type: ${error?.message}`);
+      Logger.debug(`Error in list account type: ${(error as ApiErrorResponse)?.message}`);
+      throw new InternalServerErrorException(
+        `Error in list account type: ${(error as ApiErrorResponse)?.message}`,
+      );
     }
   }
 
@@ -56,7 +59,7 @@ export class AccountTypesService {
       }
       return true;
     } catch (error) {
-      Logger.error(`Error in account type operation: ${error.message}`);
+      Logger.error(`Error in account type operation: ${(error as ApiErrorResponse).message}`);
       return false;
     }
   }

@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { MigrationInterface, QueryRunner } from 'typeorm';
+import { ApiErrorResponse } from '../../core/modules/activity-logs/utils/types';
 
 export class AlterAttachments1722757312911 implements MigrationInterface {
   private readonly logger = new Logger(AlterAttachments1722757312911.name);
@@ -11,7 +12,10 @@ export class AlterAttachments1722757312911 implements MigrationInterface {
       );
       this.logger.log(`Up: Alter for uuid attachments executed`);
     } catch (error) {
-      this.logger.error(`Up: Alter for uuid attachments have an error: `, error?.message);
+      this.logger.error(
+        `Up: Alter for uuid attachments have an error: `,
+        (error as ApiErrorResponse)?.message,
+      );
     }
   }
 

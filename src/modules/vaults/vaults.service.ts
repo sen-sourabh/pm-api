@@ -9,6 +9,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../core/helpers/serializers';
 import { isMissing } from '../../core/helpers/validations';
+import { ApiErrorResponse } from '../../core/modules/activity-logs/utils/types';
+import { AuthUserPayload } from '../../core/modules/auth/types';
 import { CacheManagerService } from '../../core/modules/cache-manager/cache-manager.service';
 import { WebhookEventEnum } from '../../core/modules/webhooks/enums';
 import { WebhooksService } from '../../core/modules/webhooks/webhooks.service';
@@ -38,19 +40,22 @@ export class VaultsService {
   }): Promise<ApiResponseModel<Vault>> {
     try {
       //Verified Uniquness of vault within the user
-      await this.#isVaultNameIsUnique({ name: CreateVaultData?.name, user: request?.['user']?.id });
+      await this.#isVaultNameIsUnique({
+        name: CreateVaultData?.name,
+        user: (request?.['user'] as AuthUserPayload)?.id,
+      });
 
       const newVault = this.vaultsRepository.create({
         ...CreateVaultData,
-        user: request?.['user']?.id,
+        user: (request?.['user'] as AuthUserPayload)?.id,
       });
       const data = await this.vaultsRepository.save(newVault);
 
       // INFO: Initiate webhook sender on `vault:created` event
       this.webhooksService.prepareToSendWebhooks({
-        user: request?.['user']?.id,
+        user: (request?.['user'] as AuthUserPayload)?.id,
         event: WebhookEventEnum.VaultCreated,
-        payload: data,
+        payload: data as Record<string, unknown>,
       });
 
       return {
@@ -59,8 +64,8 @@ export class VaultsService {
         message: 'Vault created successfully',
       };
     } catch (error) {
-      Logger.error(`Error in create vault: ${error.message}`);
-      throw error;
+      Logger.error(`Error in create vault: ${(error as ApiErrorResponse).message}`);
+      throw (error as ApiErrorResponse).message;
     }
   }
 
@@ -78,19 +83,19 @@ export class VaultsService {
         return {
           data,
           metadata: { query: listQueryVaultsData },
-        };
+        } as ApiResponseModel<Vault[]>;
       }
 
       // Not From Cache
       const { skip, take, relations } = getPagination(listQueryVaultsData);
 
-      data = await this.vaultsRepository.find({
+      data = (await this.vaultsRepository.find({
         where: listQueryVaultsData,
         relations: relations && ['user'],
         skip,
         take,
         order: { updatedAt: OrderEnum.DESC },
-      });
+      })) as Record<string, unknown>[];
 
       // Set in Cache
       await this.cacheManagerService.cacheSetData({
@@ -103,8 +108,8 @@ export class VaultsService {
         metadata: { query: listQueryVaultsData },
       };
     } catch (error) {
-      Logger.error(`Error in list vault: ${error.message}`);
-      throw error;
+      Logger.error(`Error in list vault: ${(error as ApiErrorResponse).message}`);
+      throw (error as ApiErrorResponse).message;
     }
   }
 
@@ -123,16 +128,17 @@ export class VaultsService {
       return {
         data,
         metadata: { query },
-      };
+      } as ApiResponseModel<Vault>;
     }
 
     // Not From Cache
     const { relations } = getPagination(query);
 
-    data = await this.vaultsRepository.findOne({
+    data = (await this.vaultsRepository.findOne({
       where: { id },
       relations: relations && ['user'],
-    });
+    })) as Record<string, unknown>;
+
     if (isMissing(data)) {
       throw new NotFoundException(`Record not found with id: ${id}`);
     }
@@ -157,13 +163,16 @@ export class VaultsService {
   }): Promise<ApiResponseModel<Vault>> {
     //Verified Uniquness of vault within the user
     if (!isMissing(updateVaultData?.name)) {
-      await this.#isVaultNameIsUnique({ name: updateVaultData?.name, user: request?.['user']?.id });
+      await this.#isVaultNameIsUnique({
+        name: updateVaultData?.name,
+        user: (request?.['user'] as AuthUserPayload)?.id,
+      });
     }
 
     //Actual user update
     const updated = await this.vaultsRepository.update(id, {
       ...updateVaultData,
-      user: request?.['user']?.id,
+      user: (request?.['user'] as AuthUserPayload)?.id,
     });
     if (!updated?.affected) {
       throw new BadRequestException(`Not updated`);
@@ -175,9 +184,9 @@ export class VaultsService {
 
     // INFO: Initiate webhook sender on `vault:updated` event
     this.webhooksService.prepareToSendWebhooks({
-      user: request?.['user']?.id,
+      user: (request?.['user'] as AuthUserPayload)?.id,
       event: WebhookEventEnum.VaultUpdated,
-      payload: data,
+      payload: data as Record<string, unknown>,
     });
 
     return {
@@ -211,9 +220,9 @@ export class VaultsService {
 
     // INFO: Initiate webhook sender on `vault:deleted` event
     this.webhooksService.prepareToSendWebhooks({
-      user: request?.['user']?.id,
+      user: (request?.['user'] as AuthUserPayload)?.id,
       event: WebhookEventEnum.VaultDeleted,
-      payload: data,
+      payload: data as Record<string, unknown>,
     });
 
     return {
@@ -233,8 +242,8 @@ export class VaultsService {
       }
       return true;
     } catch (error) {
-      Logger.error(`Error in vault operation: ${error.message}`);
-      throw error;
+      Logger.error(`Error in vault operation: ${(error as ApiErrorResponse).message}`);
+      throw (error as ApiErrorResponse).message;
     }
   }
 

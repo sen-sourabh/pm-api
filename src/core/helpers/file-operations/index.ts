@@ -1,10 +1,11 @@
 // src/utils/write-json-to-file.ts
 import { Logger } from '@nestjs/common';
+import { OpenAPIObject } from '@nestjs/swagger';
 import * as fs from 'fs';
 
 const logger = new Logger();
 
-export const writeJsonToFile = (data: any) => {
+export const writeJsonToFile = (data: OpenAPIObject) => {
   const filePath = 'vault-oas.json'; // Path to the file in the project root
 
   try {

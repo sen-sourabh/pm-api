@@ -1,6 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 import { printMigrationErrorLogs } from '../../core/helpers/file-operations';
+import { ApiErrorResponse } from '../../core/modules/activity-logs/utils/types';
 import { FieldTypeEnum } from '../../core/modules/custom-fields/enums';
 
 export class CreateCustomFields1723704408486 implements MigrationInterface {
@@ -115,7 +116,7 @@ export class CreateCustomFields1723704408486 implements MigrationInterface {
       );
       this.logger.log(`Up: Create custom_fields executed`);
     } catch (error) {
-      printMigrationErrorLogs(this.logger, 'custom_fields', error?.message);
+      printMigrationErrorLogs(this.logger, 'custom_fields', (error as ApiErrorResponse)?.message);
     }
   }
 
@@ -124,7 +125,10 @@ export class CreateCustomFields1723704408486 implements MigrationInterface {
       await queryRunner.dropTable('custom_fields');
       this.logger.log(`Down: Drop custom_fields executed`);
     } catch (error) {
-      this.logger.error(`Down: Drop custom_fields has an error: `, error?.message);
+      this.logger.error(
+        `Down: Drop custom_fields has an error: `,
+        (error as ApiErrorResponse)?.message,
+      );
     }
   }
 }
