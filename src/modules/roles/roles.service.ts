@@ -8,6 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../core/helpers/serializers';
 import { isMissing } from '../../core/helpers/validations';
+import { ApiErrorResponse } from '../../core/modules/activity-logs/utils/types';
 import { OrderEnum } from '../../core/shared/enums';
 import { ApiResponseModel } from '../../core/shared/interfaces/api-response.interface';
 import { ListQueryRolesDto } from './dto/list-role.dto';
@@ -36,8 +37,10 @@ export class RolesService {
         metadata: { query },
       };
     } catch (error) {
-      Logger.error(`Error in list roles: ${error.message}`);
-      throw new InternalServerErrorException(`Error in list roles: ${error.message}`);
+      Logger.error(`Error in list roles: ${(error as ApiErrorResponse).message}`);
+      throw new InternalServerErrorException(
+        `Error in list roles: ${(error as ApiErrorResponse).message}`,
+      );
     }
   }
 
@@ -59,7 +62,7 @@ export class RolesService {
       }
       return true;
     } catch (error) {
-      Logger.error(`Error in role operation: ${error.message}`);
+      Logger.error(`Error in role operation: ${(error as ApiErrorResponse).message}`);
       return false;
     }
   }

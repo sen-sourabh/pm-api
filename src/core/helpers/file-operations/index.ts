@@ -4,7 +4,7 @@ import * as fs from 'fs';
 
 const logger = new Logger();
 
-export const writeJsonToFile = (data: any) => {
+export const writeJsonToFile = (data: Record<string, unknown>) => {
   const filePath = 'vault-oas.json'; // Path to the file in the project root
 
   try {

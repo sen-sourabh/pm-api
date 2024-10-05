@@ -5,6 +5,7 @@ import { compile } from 'handlebars';
 import { generateOTP } from '../../helpers/security';
 import { isMissing } from '../../helpers/validations';
 import { ActivityLogsService } from '../activity-logs/activity-logs.service';
+import { ApiErrorResponse } from '../activity-logs/utils/types';
 import { VerificationEmailRequestDto } from './dtos/messenger-request.dto';
 
 @Injectable()
@@ -71,11 +72,11 @@ export class MessengerService {
         linkWithEmail: `https://www.google.com/search?q=${data?.email?.[0]}`,
       };
 
-      const response = await this.#triggerEmail({
+      const response = (await this.#triggerEmail({
         data,
         content,
         hbsTemplatePath: '/emails/account_verification.hbs',
-      });
+      })) as Record<string, unknown>;
 
       if (isMissing(response.messageId) && isMissing(response?.accepted)) {
         return false;
@@ -84,8 +85,10 @@ export class MessengerService {
 
       return true;
     } catch (error) {
-      Logger.error(`Error in account verification email operation: ${error?.message}`);
-      return error;
+      Logger.error(
+        `Error in account verification email operation: ${(error as ApiErrorResponse)?.message}`,
+      );
+      return (error as ApiErrorResponse)?.message;
     }
   }
 
@@ -98,11 +101,11 @@ export class MessengerService {
         otp: generateOTP(),
       };
 
-      const response = await this.#triggerEmail({
+      const response = (await this.#triggerEmail({
         data,
         content,
         hbsTemplatePath: '/emails/simple.hbs',
-      });
+      })) as Record<string, unknown>;
 
       if (isMissing(response.messageId) && isMissing(response?.accepted)) {
         return false;
@@ -110,8 +113,8 @@ export class MessengerService {
 
       return true;
     } catch (error) {
-      Logger.error(`Error in otp email operation: ${error?.message}`);
-      return error;
+      Logger.error(`Error in otp email operation: ${(error as ApiErrorResponse)?.message}`);
+      return (error as ApiErrorResponse)?.message;
     }
   }
 
@@ -128,21 +131,21 @@ export class MessengerService {
   }) {
     try {
       //Send Email
-      const response = await this.mailerService.sendMail({
+      const response = (await this.mailerService.sendMail({
         to: data?.email,
         subject: data?.subject,
         template: 'otp',
         attachments: fileAttached,
         html: await this.#hbsCompiler(hbsTemplatePath, content),
-      });
+      })) as Record<string, unknown>;
       return response;
     } catch (error) {
-      Logger.error(`Error in sending email: ${error?.message}`);
-      return error;
+      Logger.error(`Error in sending email: ${(error as ApiErrorResponse)?.message}`);
+      return (error as ApiErrorResponse)?.message;
     }
   }
 
-  async #hbsCompiler(templatePath: string, content: Record<string, unknown>) {
+  async #hbsCompiler(templatePath: string, content: Record<string, unknown>): Promise<string> {
     try {
       const htmlContent = await fsPromises.readFile(__dirname + templatePath, {
         encoding: 'utf8',
@@ -152,8 +155,8 @@ export class MessengerService {
       if (!template) throw new NotFoundException('Failed to compile the template');
       return template(content);
     } catch (error) {
-      Logger.error('Failed to read the template file: ', error?.message.toString());
-      return error;
+      Logger.error('Failed to read the template file: ', (error as ApiErrorResponse)?.message);
+      return (error as ApiErrorResponse)?.message;
     }
   }
 }

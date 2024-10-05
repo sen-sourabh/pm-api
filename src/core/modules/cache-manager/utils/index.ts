@@ -1,4 +1,6 @@
-export const generateCacheKey = (request: Request): string => {
-  const { url, method, query, params } = request as any;
+import { CustomRequest } from '../../../shared/interfaces/types';
+
+export const generateCacheKey = (request: CustomRequest): string => {
+  const { url, method, query, params } = request;
   return JSON.stringify({ url, method, query, params });
 };

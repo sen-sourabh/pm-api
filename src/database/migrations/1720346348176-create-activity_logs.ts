@@ -1,6 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 import { printMigrationErrorLogs } from '../../core/helpers/file-operations';
+import { ApiErrorResponse } from '../../core/modules/activity-logs/utils/types';
 
 export class CreateActivityLogs1720346348176 implements MigrationInterface {
   private readonly logger = new Logger(CreateActivityLogs1720346348176.name);
@@ -86,7 +87,7 @@ export class CreateActivityLogs1720346348176 implements MigrationInterface {
       );
       this.logger.log(`Up: Create activity_logs executed`);
     } catch (error) {
-      printMigrationErrorLogs(this.logger, 'activity_logs', error?.message);
+      printMigrationErrorLogs(this.logger, 'activity_logs', (error as ApiErrorResponse)?.message);
     }
   }
 
@@ -95,7 +96,10 @@ export class CreateActivityLogs1720346348176 implements MigrationInterface {
       await queryRunner.dropTable('activity_logs');
       this.logger.log(`Down: Drop activity_logs executed`);
     } catch (error) {
-      this.logger.error(`Down: Drop activity_logs has an error: `, error?.message);
+      this.logger.error(
+        `Down: Drop activity_logs has an error: `,
+        (error as ApiErrorResponse)?.message,
+      );
     }
   }
 }

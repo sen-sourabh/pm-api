@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { CustomRequest, CustomResponse } from '../../../shared/interfaces/types';
 
 @Entity('activity_logs')
 export class ActivityLog {
@@ -63,7 +64,7 @@ export class ActivityLog {
   @Column({ type: 'json', default: null })
   @IsJSON()
   @IsOptional()
-  headers?: Record<string, unknown>;
+  headers?: Headers;
 
   @ApiPropertyOptional({
     description: 'actual request that includes query/body/path params',
@@ -72,7 +73,7 @@ export class ActivityLog {
   @Column({ type: 'json', default: null })
   @IsJSON()
   @IsOptional()
-  request?: Record<string, unknown>;
+  request?: CustomRequest;
 
   @ApiPropertyOptional({
     description: 'response of the request',
@@ -81,7 +82,7 @@ export class ActivityLog {
   @Column({ type: 'json', default: null })
   @IsJSON()
   @IsOptional()
-  response?: Record<string, unknown>;
+  response?: CustomResponse;
 
   @ApiPropertyOptional({
     description: 'ipAddress of the request',

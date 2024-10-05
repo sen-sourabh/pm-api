@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { MigrationInterface, QueryRunner } from 'typeorm';
+import { ApiErrorResponse } from '../../core/modules/activity-logs/utils/types';
 
 export class InsertAccountTypes1716716825550 implements MigrationInterface {
   private readonly logger = new Logger(InsertAccountTypes1716716825550.name);
@@ -11,7 +12,10 @@ export class InsertAccountTypes1716716825550 implements MigrationInterface {
       );
       this.logger.log(`Up: Insert account_types executed`);
     } catch (error) {
-      this.logger.error(`Up: Insert account_types have an error: `, error?.message);
+      this.logger.error(
+        `Up: Insert account_types have an error: `,
+        (error as ApiErrorResponse)?.message,
+      );
     }
   }
 

@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { MigrationInterface, QueryRunner } from 'typeorm';
+import { ApiErrorResponse } from '../../core/modules/activity-logs/utils/types';
 
 export class InsertRoles1716714693144 implements MigrationInterface {
   private readonly logger = new Logger(InsertRoles1716714693144.name);
@@ -11,7 +12,7 @@ export class InsertRoles1716714693144 implements MigrationInterface {
       );
       this.logger.log(`Up: Insert roles executed`);
     } catch (error) {
-      this.logger.error(`Up: Insert roles have an error: `, error?.message);
+      this.logger.error(`Up: Insert roles have an error: `, (error as ApiErrorResponse)?.message);
     }
   }
 

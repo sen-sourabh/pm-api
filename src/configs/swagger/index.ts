@@ -39,7 +39,7 @@ const SwaggerLoader = () => {
 };
 
 //Swagger Initialization
-export const SwaggerConfig = (app: INestApplication<any>): void => {
+export const SwaggerConfig = (app: INestApplication): void => {
   const document = SwaggerModule.createDocument(app, SwaggerLoader(), SwaggerDocumentOption);
   writeJsonToFile(document);
   SwaggerModule.setup('api', app, document, SwaggerCustomOption);

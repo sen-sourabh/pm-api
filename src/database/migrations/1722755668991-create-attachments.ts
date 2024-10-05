@@ -1,6 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 import { printMigrationErrorLogs } from '../../core/helpers/file-operations';
+import { ApiErrorResponse } from '../../core/modules/activity-logs/utils/types';
 import { CategoryEnum, FileFormatEnum } from '../../core/modules/files/enums';
 
 export class CreateAttachments1722755668991 implements MigrationInterface {
@@ -110,7 +111,7 @@ export class CreateAttachments1722755668991 implements MigrationInterface {
       );
       this.logger.log(`Up: Create attachments executed`);
     } catch (error) {
-      printMigrationErrorLogs(this.logger, 'attachments', error?.message);
+      printMigrationErrorLogs(this.logger, 'attachments', (error as ApiErrorResponse)?.message);
     }
   }
 
@@ -119,7 +120,10 @@ export class CreateAttachments1722755668991 implements MigrationInterface {
       await queryRunner.dropTable('attachments');
       this.logger.log(`Down: Drop attachments executed`);
     } catch (error) {
-      this.logger.error(`Down: Drop attachments has an error: `, error?.message);
+      this.logger.error(
+        `Down: Drop attachments has an error: `,
+        (error as ApiErrorResponse)?.message,
+      );
     }
   }
 }

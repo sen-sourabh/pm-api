@@ -29,6 +29,7 @@ const commonResponses = {
 // Create a decorator factory for applying common decorators
 export const ApiXResponses =
   (...args: string[]) =>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (target: any, propertyKey?: string | symbol, descriptor?: PropertyDescriptor) => {
     const decorators = [];
 
@@ -42,5 +43,6 @@ export const ApiXResponses =
     }
 
     // Apply the decorators using applyDecorators
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     return applyDecorators(...decorators)(target, propertyKey, descriptor);
   };

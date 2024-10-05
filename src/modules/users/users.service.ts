@@ -10,6 +10,7 @@ import { Repository } from 'typeorm';
 import { generateSecretKey } from '../../core/helpers/security';
 import { getPagination } from '../../core/helpers/serializers';
 import { isMissing, validateEmail } from '../../core/helpers/validations';
+import { ApiErrorResponse } from '../../core/modules/activity-logs/utils/types';
 import { AuthUserPayload } from '../../core/modules/auth/types';
 import { CacheManagerService } from '../../core/modules/cache-manager/cache-manager.service';
 import { EmailPurposeEnum } from '../../core/modules/messenger/enums';
@@ -59,9 +60,9 @@ export class UsersService {
 
       // INFO: Initiate webhook sender on `user:created` event
       this.webhooksService.prepareToSendWebhooks({
-        user: request?.['user']?.id,
+        user: (request?.['user'] as AuthUserPayload)?.id,
         event: WebhookEventEnum.UserCreated,
-        payload: data,
+        payload: data as Record<string, unknown>,
       });
 
       return {
@@ -72,8 +73,10 @@ export class UsersService {
           : 'User created successfully',
       };
     } catch (error) {
-      Logger.error(`Error in create user: ${error.message}`);
-      throw new InternalServerErrorException(`Error in create user: ${error.message}`);
+      Logger.error(`Error in create user: ${(error as ApiErrorResponse).message}`);
+      throw new InternalServerErrorException(
+        `Error in create user: ${(error as ApiErrorResponse).message}`,
+      );
     }
   }
 
@@ -91,19 +94,19 @@ export class UsersService {
         return {
           data,
           metadata: { query: listQueryUsersData },
-        };
+        } as ApiResponseModel<User[]>;
       }
 
       // Not From Cache
       const { skip, take, relations } = getPagination(listQueryUsersData);
 
-      data = await this.usersRepository.find({
+      data = (await this.usersRepository.find({
         where: listQueryUsersData,
         relations: relations && ['role', 'accountType'],
         skip,
         take,
         order: { updatedAt: OrderEnum.DESC },
-      });
+      })) as Record<string, unknown>[];
 
       // Set in Cache
       await this.cacheManagerService.cacheSetData({
@@ -116,8 +119,10 @@ export class UsersService {
         metadata: { query: listQueryUsersData },
       };
     } catch (error) {
-      Logger.error(`Error in list user: ${error.message}`);
-      throw new InternalServerErrorException(`Error in list user: ${error.message}`);
+      Logger.error(`Error in list user: ${(error as ApiErrorResponse).message}`);
+      throw new InternalServerErrorException(
+        `Error in list user: ${(error as ApiErrorResponse).message}`,
+      );
     }
   }
 
@@ -136,16 +141,17 @@ export class UsersService {
       return {
         data,
         metadata: { query },
-      };
+      } as ApiResponseModel<User>;
     }
 
     // Not From Cache
     const { relations } = getPagination(query);
 
-    data = await this.usersRepository.findOne({
+    data = (await this.usersRepository.findOne({
       where: { id },
       relations: relations && ['role', 'accountType'],
-    });
+    })) as Record<string, unknown>;
+
     if (isMissing(data)) {
       throw new NotFoundException(`Record not found with id: ${id}`);
     }
@@ -180,9 +186,9 @@ export class UsersService {
 
     // INFO: Initiate webhook sender on `user:updated` event
     this.webhooksService.prepareToSendWebhooks({
-      user: request?.['user']?.id,
+      user: (request?.['user'] as AuthUserPayload)?.id,
       event: WebhookEventEnum.UserUpdated,
-      payload: data,
+      payload: data as Record<string, unknown>,
     });
 
     return {
@@ -216,9 +222,9 @@ export class UsersService {
 
     // INFO: Initiate webhook sender on `user:deleted` event
     this.webhooksService.prepareToSendWebhooks({
-      user: request?.['user']?.id,
+      user: (request?.['user'] as AuthUserPayload)?.id,
       event: WebhookEventEnum.UserDeleted,
-      payload: data,
+      payload: data as Record<string, unknown>,
     });
 
     return {
@@ -238,7 +244,7 @@ export class UsersService {
       }
       return true;
     } catch (error) {
-      Logger.error(`Error in user operation: ${error.message}`);
+      Logger.error(`Error in user operation: ${(error as ApiErrorResponse).message}`);
       return false;
     }
   }
@@ -253,7 +259,7 @@ export class UsersService {
       }
       return data;
     } catch (error) {
-      Logger.error(`Error in user operation: ${error.message}`);
+      Logger.error(`Error in user operation: ${(error as ApiErrorResponse).message}`);
       return null;
     }
   }
@@ -269,16 +275,16 @@ export class UsersService {
     if (!validateEmail(createUserData?.email)) throw new BadRequestException(`Email is invalid`);
 
     //Find/Create one user
-    let user = await this.usersRepository.findOneBy(createUserData);
-    if (!user) {
-      user = await this.usersRepository.save({ ...createUserData, secretKey: generateSecretKey() });
+    let data = await this.usersRepository.findOneBy(createUserData);
+    if (!data) {
+      data = await this.usersRepository.save({ ...createUserData, secretKey: generateSecretKey() });
       // INFO: Initiate to Webhook Sender
       this.webhooksService.prepareToSendWebhooks({
-        user: request?.['user']?.id,
+        user: (request?.['user'] as AuthUserPayload)?.id,
         event: WebhookEventEnum.UserCreated,
-        payload: user,
+        payload: data as Record<string, unknown>,
       });
     }
-    return user?.id;
+    return data?.id;
   }
 }

@@ -1,9 +1,12 @@
 import { base64Decode } from '../../../helpers/security';
+import { REGEX } from '../../../shared/constants';
 import { LoginRequestDto } from '../dtos/login.dto';
 
 // INFO: Function Not In-Use
-export const fetchHeaders = (request: any) => {
-  const payload = base64Decode(request?.headers?.authorization?.split(' ')?.[1]);
+export const fetchHeaders = (request: Request) => {
+  const payload = base64Decode(
+    (request.headers?.['authorization'] as string)?.split(REGEX.space)?.[1] as string,
+  );
   const userdata = payload?.split(':');
 
   return {

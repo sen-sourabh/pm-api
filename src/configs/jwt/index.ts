@@ -6,8 +6,8 @@ config();
 const configService = new ConfigService();
 
 export const jwtModuleOptions: JwtModuleOptions = {
-  secret: configService.getOrThrow('JWT_SECRET_KEY'),
+  secret: configService.getOrThrow<string>('JWT_SECRET_KEY'),
   signOptions: {
-    expiresIn: configService.getOrThrow('JWT_SIGN_EXPIRY'),
+    expiresIn: configService.getOrThrow<string>('JWT_SIGN_EXPIRY'),
   },
 };

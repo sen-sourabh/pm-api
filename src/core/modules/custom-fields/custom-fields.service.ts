@@ -12,6 +12,8 @@ import { isMissing } from '../../helpers/validations';
 import { OrderEnum } from '../../shared/enums';
 import { ApiResponseModel } from '../../shared/interfaces/api-response.interface';
 import { ApiQueryParamUnifiedModel } from '../../shared/models/api-query.model';
+import { ApiErrorResponse } from '../activity-logs/utils/types';
+import { AuthUserPayload } from '../auth/types';
 import { CacheManagerService } from '../cache-manager/cache-manager.service';
 import { WebhookEventEnum } from '../webhooks/enums';
 import { WebhooksService } from '../webhooks/webhooks.service';
@@ -39,21 +41,21 @@ export class CustomFieldsService {
     try {
       //Verify uniqueness of custom_field name within the user
       await this.#checkCustomFieldNameIsUnique({
-        key: createCustomFieldData?.['key'],
-        addedBy: request?.['user']?.id,
+        key: createCustomFieldData?.['key'] as string,
+        addedBy: (request?.['user'] as AuthUserPayload as AuthUserPayload)?.id as string,
       });
 
       const newCustomField = this.customFieldsRepository.create({
         ...createCustomFieldData,
-        addedBy: request?.['user']?.id,
+        addedBy: (request?.['user'] as AuthUserPayload as AuthUserPayload)?.id,
       });
       const data = await this.customFieldsRepository.save(newCustomField);
 
       // INFO: Initiate webhook sender on `customField:created` event
       this.webhooksService.prepareToSendWebhooks({
-        user: request?.['user']?.id,
+        user: (request?.['user'] as AuthUserPayload as AuthUserPayload)?.id,
         event: WebhookEventEnum.CustomFieldCreated,
-        payload: data,
+        payload: data as Record<string, unknown>,
       });
 
       return {
@@ -62,7 +64,7 @@ export class CustomFieldsService {
         message: 'CustomField created successfully',
       };
     } catch (error) {
-      Logger.error(`Error in create custom field: ${error.message}`);
+      Logger.error(`Error in create custom field: ${(error as ApiErrorResponse)?.message}`);
       throw error;
     }
   }
@@ -81,19 +83,19 @@ export class CustomFieldsService {
         return {
           data,
           metadata: { query: listQueryCustomFieldsData },
-        };
+        } as ApiResponseModel<CustomField[]>;
       }
 
       // Not From Cache
       const { skip, take, relations } = getPagination(listQueryCustomFieldsData);
 
-      data = await this.customFieldsRepository.find({
+      data = (await this.customFieldsRepository.find({
         where: listQueryCustomFieldsData,
         relations: relations && ['addedBy'],
         skip,
         take,
         order: { updatedAt: OrderEnum.DESC },
-      });
+      })) as Record<string, unknown>[];
 
       // Set in Cache
       await this.cacheManagerService.cacheSetData({
@@ -106,7 +108,7 @@ export class CustomFieldsService {
         metadata: { query: listQueryCustomFieldsData },
       };
     } catch (error) {
-      Logger.error(`Error in list custom field: ${error.message}`);
+      Logger.error(`Error in list custom field: ${(error as ApiErrorResponse)?.message}`);
       throw error;
     }
   }
@@ -126,16 +128,17 @@ export class CustomFieldsService {
       return {
         data,
         metadata: { query },
-      };
+      } as ApiResponseModel<CustomField>;
     }
 
     // Not From Cache
     const { relations } = getPagination(query);
 
-    data = await this.customFieldsRepository.findOne({
+    data = (await this.customFieldsRepository.findOne({
       where: { id },
       relations: relations && ['addedBy'],
-    });
+    })) as Record<string, unknown>;
+
     if (isMissing(data)) {
       throw new NotFoundException(`Record not found with id: ${id}`);
     }
@@ -161,8 +164,8 @@ export class CustomFieldsService {
     //Verify uniqueness of custom_field name within the user
     if (!isMissing(updateCustomFieldData?.name)) {
       await this.#checkCustomFieldNameIsUnique({
-        key: updateCustomFieldData?.['key'],
-        addedBy: request?.['user']?.id,
+        key: updateCustomFieldData?.['key'] as string,
+        addedBy: (request?.['user'] as AuthUserPayload as AuthUserPayload)?.id,
       });
     }
 
@@ -178,9 +181,9 @@ export class CustomFieldsService {
 
     // INFO: Initiate webhook sender on `customField:updated` event
     this.webhooksService.prepareToSendWebhooks({
-      user: request?.['user']?.id,
+      user: (request?.['user'] as AuthUserPayload as AuthUserPayload)?.id,
       event: WebhookEventEnum.CustomFieldUpdated,
-      payload: data,
+      payload: data as Record<string, unknown>,
     });
 
     return {
@@ -214,9 +217,9 @@ export class CustomFieldsService {
 
     // INFO: Initiate webhook sender on `customField:deleted` event
     this.webhooksService.prepareToSendWebhooks({
-      user: request?.['user']?.id,
+      user: (request?.['user'] as AuthUserPayload as AuthUserPayload)?.id,
       event: WebhookEventEnum.CustomFieldDeleted,
-      payload: data,
+      payload: data as Record<string, unknown>,
     });
 
     return {
@@ -236,7 +239,7 @@ export class CustomFieldsService {
       }
       return true;
     } catch (error) {
-      Logger.error(`Error in custom field operation: ${error.message}`);
+      Logger.error(`Error in custom field operation: ${(error as ApiErrorResponse)?.message}`);
       return false;
     }
   }

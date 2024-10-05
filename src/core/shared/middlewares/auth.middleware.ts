@@ -4,8 +4,10 @@ import { NextFunction, Request, Response } from 'express';
 import { jwtModuleOptions } from '../../../configs/jwt';
 import { UsersService } from '../../../modules/users/users.service';
 import { isMissing } from '../../helpers/validations';
+import { ApiErrorResponse } from '../../modules/activity-logs/utils/types';
 import { AuthUserPayload } from '../../modules/auth/types';
 import { TokenExpiredExceptionFilter } from '../exception-filters/token-expire.filter';
+import { ApiJWTDecoded } from '../interfaces/types';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
@@ -29,7 +31,7 @@ export class AuthMiddleware implements NestMiddleware {
       await this.#userLogoutIfJwtExpired({ request, token });
 
       //Logged error and throw
-      Logger.error(`Error in token: ${error?.message}`);
+      Logger.error(`Error in token: ${(error as ApiErrorResponse)?.message}`);
       throw new TokenExpiredExceptionFilter();
     }
 
@@ -42,10 +44,12 @@ export class AuthMiddleware implements NestMiddleware {
   }
 
   #userLogoutIfJwtExpired = async ({ request, token }: { request: Request; token: string }) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const decoded = await this.jwtService.decode(token, { complete: true, json: true });
+
     await this.usersService.updateUser({
-      request: request?.['user'] as AuthUserPayload,
-      id: decoded?.payload?.id,
+      request: request?.['user'] as AuthUserPayload as AuthUserPayload,
+      id: (decoded as ApiJWTDecoded)?.payload?.id as string,
       updateUserData: { isLogin: false },
     });
   };

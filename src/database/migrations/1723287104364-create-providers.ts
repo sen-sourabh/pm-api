@@ -1,6 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 import { printMigrationErrorLogs } from '../../core/helpers/file-operations';
+import { ApiErrorResponse } from '../../core/modules/activity-logs/utils/types';
 
 export class CreateProviders1723287104364 implements MigrationInterface {
   private readonly logger = new Logger(CreateProviders1723287104364.name);
@@ -99,7 +100,7 @@ export class CreateProviders1723287104364 implements MigrationInterface {
       );
       this.logger.log(`Up: Create providers executed`);
     } catch (error) {
-      printMigrationErrorLogs(this.logger, 'providers', error?.message);
+      printMigrationErrorLogs(this.logger, 'providers', (error as ApiErrorResponse)?.message);
     }
   }
 
@@ -108,7 +109,10 @@ export class CreateProviders1723287104364 implements MigrationInterface {
       await queryRunner.dropTable('providers');
       this.logger.log(`Down: Drop providers executed`);
     } catch (error) {
-      this.logger.error(`Down: Drop providers has an error: `, error?.message);
+      this.logger.error(
+        `Down: Drop providers has an error: `,
+        (error as ApiErrorResponse)?.message,
+      );
     }
   }
 }

@@ -255,11 +255,22 @@
             "name": "pageSize",
             "required": false,
             "in": "query",
-            "description": "No of records will be fetched in single request",
+            "description": "No of records will be fetched in single page",
             "example": 25,
             "schema": {
               "default": 25,
               "type": "number"
+            }
+          },
+          {
+            "name": "relation",
+            "required": false,
+            "in": "query",
+            "description": "Fecth associate relation`s data via relation as true",
+            "example": true,
+            "schema": {
+              "default": false,
+              "type": "boolean"
             }
           }
         ],
@@ -504,11 +515,22 @@
             "name": "pageSize",
             "required": false,
             "in": "query",
-            "description": "No of records will be fetched in single request",
+            "description": "No of records will be fetched in single page",
             "example": 25,
             "schema": {
               "default": 25,
               "type": "number"
+            }
+          },
+          {
+            "name": "relation",
+            "required": false,
+            "in": "query",
+            "description": "Fecth associate relation`s data via relation as true",
+            "example": true,
+            "schema": {
+              "default": false,
+              "type": "boolean"
             }
           }
         ],
@@ -644,11 +666,22 @@
             "name": "pageSize",
             "required": false,
             "in": "query",
-            "description": "No of records will be fetched in single request",
+            "description": "No of records will be fetched in single page",
             "example": 25,
             "schema": {
               "default": 25,
               "type": "number"
+            }
+          },
+          {
+            "name": "relation",
+            "required": false,
+            "in": "query",
+            "description": "Fecth associate relation`s data via relation as true",
+            "example": true,
+            "schema": {
+              "default": false,
+              "type": "boolean"
             }
           }
         ],
@@ -847,7 +880,7 @@
             "name": "pageSize",
             "required": false,
             "in": "query",
-            "description": "No of records will be fetched in single request",
+            "description": "No of records will be fetched in single page",
             "example": 25,
             "schema": {
               "default": 25,
@@ -859,6 +892,7 @@
             "required": false,
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
+            "example": true,
             "schema": {
               "default": true,
               "type": "boolean"
@@ -1117,11 +1151,22 @@
             "name": "pageSize",
             "required": false,
             "in": "query",
-            "description": "No of records will be fetched in single request",
+            "description": "No of records will be fetched in single page",
             "example": 25,
             "schema": {
               "default": 25,
               "type": "number"
+            }
+          },
+          {
+            "name": "relation",
+            "required": false,
+            "in": "query",
+            "description": "Fecth associate relation`s data via relation as true",
+            "example": true,
+            "schema": {
+              "default": false,
+              "type": "boolean"
             }
           }
         ],
@@ -1320,7 +1365,7 @@
             "name": "pageSize",
             "required": false,
             "in": "query",
-            "description": "No of records will be fetched in single request",
+            "description": "No of records will be fetched in single page",
             "example": 25,
             "schema": {
               "default": 25,
@@ -1332,6 +1377,7 @@
             "required": false,
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
+            "example": true,
             "schema": {
               "default": true,
               "type": "boolean"
@@ -1635,7 +1681,7 @@
             "name": "pageSize",
             "required": false,
             "in": "query",
-            "description": "No of records will be fetched in single request",
+            "description": "No of records will be fetched in single page",
             "example": 25,
             "schema": {
               "default": 25,
@@ -1647,6 +1693,7 @@
             "required": false,
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
+            "example": true,
             "schema": {
               "default": true,
               "type": "boolean"
@@ -1942,7 +1989,7 @@
             "name": "pageSize",
             "required": false,
             "in": "query",
-            "description": "No of records will be fetched in single request",
+            "description": "No of records will be fetched in single page",
             "example": 25,
             "schema": {
               "default": 25,
@@ -1954,6 +2001,7 @@
             "required": false,
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
+            "example": true,
             "schema": {
               "default": true,
               "type": "boolean"
@@ -2157,7 +2205,7 @@
             "name": "pageSize",
             "required": false,
             "in": "query",
-            "description": "No of records will be fetched in single request",
+            "description": "No of records will be fetched in single page",
             "example": 25,
             "schema": {
               "default": 25,
@@ -2169,6 +2217,7 @@
             "required": false,
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
+            "example": true,
             "schema": {
               "default": true,
               "type": "boolean"
@@ -2488,7 +2537,7 @@
             "name": "pageSize",
             "required": false,
             "in": "query",
-            "description": "No of records will be fetched in single request",
+            "description": "No of records will be fetched in single page",
             "example": 25,
             "schema": {
               "default": 25,
@@ -2500,6 +2549,7 @@
             "required": false,
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
+            "example": true,
             "schema": {
               "default": true,
               "type": "boolean"
@@ -2773,7 +2823,7 @@
             "name": "pageSize",
             "required": false,
             "in": "query",
-            "description": "No of records will be fetched in single request",
+            "description": "No of records will be fetched in single page",
             "example": 25,
             "schema": {
               "default": 25,
@@ -2785,6 +2835,7 @@
             "required": false,
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
+            "example": true,
             "schema": {
               "default": true,
               "type": "boolean"
@@ -2980,16 +3031,6 @@
       "post": {
         "operationId": "create",
         "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateSubscriptionDto"
-              }
-            }
-          }
-        },
         "responses": {
           "201": {
             "description": ""
@@ -3051,26 +3092,7 @@
       },
       "patch": {
         "operationId": "update",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateSubscriptionDto"
-              }
-            }
-          }
-        },
+        "parameters": [],
         "responses": {
           "200": {
             "description": ""
@@ -3690,6 +3712,10 @@
           }
         }
       },
+      "Headers": {
+        "type": "object",
+        "properties": {}
+      },
       "ActivityLog": {
         "type": "object",
         "properties": {
@@ -3714,8 +3740,12 @@
             "description": "http status code of the final response"
           },
           "headers": {
-            "type": "object",
-            "description": "header of the request"
+            "description": "header of the request",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Headers"
+              }
+            ]
           },
           "request": {
             "type": "object",
@@ -4473,14 +4503,6 @@
             "description": "The user who added"
           }
         }
-      },
-      "CreateSubscriptionDto": {
-        "type": "object",
-        "properties": {}
-      },
-      "UpdateSubscriptionDto": {
-        "type": "object",
-        "properties": {}
       }
     }
   }

@@ -1,6 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 import { printMigrationErrorLogs } from '../../core/helpers/file-operations';
+import { ApiErrorResponse } from '../../core/modules/activity-logs/utils/types';
 
 export class CreateProviderFieldAssociations1723713302122 implements MigrationInterface {
   private readonly logger = new Logger(CreateProviderFieldAssociations1723713302122.name);
@@ -85,7 +86,11 @@ export class CreateProviderFieldAssociations1723713302122 implements MigrationIn
       );
       this.logger.log(`Up: Create provider_field_associations executed`);
     } catch (error) {
-      printMigrationErrorLogs(this.logger, 'provider_field_associations', error?.message);
+      printMigrationErrorLogs(
+        this.logger,
+        'provider_field_associations',
+        (error as ApiErrorResponse)?.message,
+      );
     }
   }
 
@@ -94,7 +99,10 @@ export class CreateProviderFieldAssociations1723713302122 implements MigrationIn
       await queryRunner.dropTable('provider_field_associations');
       this.logger.log(`Down: Drop provider_field_associations executed`);
     } catch (error) {
-      this.logger.error(`Down: Drop provider_field_associations has an error: `, error?.message);
+      this.logger.error(
+        `Down: Drop provider_field_associations has an error: `,
+        (error as ApiErrorResponse)?.message,
+      );
     }
   }
 }
