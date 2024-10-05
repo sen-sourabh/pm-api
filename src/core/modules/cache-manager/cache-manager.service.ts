@@ -18,7 +18,11 @@ export class CacheManagerService {
     try {
       const key = generateCacheKey(request as CustomRequest);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      await this.cacheManager?.set(key, data);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      await (this.cacheManager as unknown as { set: (key: string, data: unknown) => object })?.set(
+        key,
+        data,
+      );
       Logger.debug(`Cache added with key ${key}`);
     } catch (error) {
       Logger.error(`Error from cacheSetData: ${(error as ApiErrorResponse)?.message}`);
@@ -29,7 +33,9 @@ export class CacheManagerService {
     try {
       const key = generateCacheKey(request as CustomRequest);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      const response = (await this.cacheManager?.get(key)) as Record<string, unknown>;
+      const response = (
+        (await this.cacheManager) as unknown as { get: (key: string) => object }
+      )?.get(key) as Record<string, unknown>;
       if (response) {
         Logger.debug(`Cache found with key ${key}`);
       }
@@ -43,7 +49,8 @@ export class CacheManagerService {
     try {
       const key = generateCacheKey(request as CustomRequest);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      await this.cacheManager?.del(key);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      (this.cacheManager as unknown as { del: (key: string) => object })?.del(key);
       Logger.debug(`Cache deleted with key ${key}`);
     } catch (error) {
       Logger.error(`Error from cacheDelData: ${(error as ApiErrorResponse)?.message}`);
