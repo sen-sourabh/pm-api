@@ -125,7 +125,7 @@ export class Plan {
     required: true,
   })
   @Column({
-    type: 'simple-array',
+    type: 'json',
     nullable: false,
   })
   @ValidateNested({

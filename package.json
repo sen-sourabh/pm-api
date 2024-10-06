@@ -6,8 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "nest build",
-    "type:checker": "nest build --type-check",
+    "build": "nest build --type-check",
     "vault:doc": "npx @compodoc/compodoc -p tsconfig.json -s -w",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",

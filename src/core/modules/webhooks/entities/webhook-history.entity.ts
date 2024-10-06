@@ -39,7 +39,7 @@ export class WebhookHistory {
   webhook?: string;
 
   @ApiPropertyOptional({
-    description: 'http status code of the final response',
+    description: 'Http status code of the final response',
     required: true,
   })
   @Column({ type: 'int', default: null, nullable: true })

@@ -34,10 +34,9 @@ export class CreateWebhookHistories1724070867104 implements MigrationInterface {
             },
             {
               name: 'status',
-              type: 'varchar',
+              type: 'enum',
               enum: [WebhookStatusEnum.Success, WebhookStatusEnum.Failed],
               isNullable: false,
-              default: 'success',
             },
             {
               name: 'nextTriggered',

@@ -28,7 +28,7 @@ export class CreateWebhooks1724057477034 implements MigrationInterface {
             },
             {
               name: 'event',
-              type: 'varchar',
+              type: 'enum',
               enum: [
                 WebhookEventEnum.UserCreated,
                 WebhookEventEnum.UserUpdated,
