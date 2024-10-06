@@ -31,6 +31,12 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Type checker
-              run: nest build --type-check
+              run: npm run type:checker
             - name: Buib project
               run: npm run build
+              
+    build:
+      runs-on: ubuntu-latest
+      steps:
+          - name: Buib project
+            run: npm run build
