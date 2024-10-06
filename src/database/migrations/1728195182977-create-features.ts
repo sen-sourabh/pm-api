@@ -3,14 +3,14 @@ import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 import { printMigrationErrorLogs } from '../../core/helpers/file-operations';
 import { ApiErrorResponse } from '../../core/modules/activity-logs/utils/types';
 
-export class CreatePlans1727610358954 implements MigrationInterface {
-  private readonly logger = new Logger(CreatePlans1727610358954.name);
+export class CreateFeatures1728195182977 implements MigrationInterface {
+  private readonly logger = new Logger(CreateFeatures1728195182977.name);
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     try {
       await queryRunner.createTable(
         new Table({
-          name: 'plans',
+          name: 'features',
           columns: [
             {
               name: 'id',
@@ -23,46 +23,13 @@ export class CreatePlans1727610358954 implements MigrationInterface {
             {
               name: 'name',
               type: 'varchar',
-              length: '100',
-              isUnique: true,
-              isNullable: false,
-            },
-            {
-              name: 'heading',
-              type: 'varchar',
               length: '150',
               isNullable: false,
             },
             {
               name: 'description',
               type: 'mediumtext',
-              isNullable: false,
-            },
-            {
-              name: 'price',
-              type: 'int',
-              isNullable: false,
-            },
-            {
-              name: 'currency',
-              type: 'varchar',
-              length: '10',
-              isNullable: false,
-            },
-            {
-              name: 'discountPercentage',
-              type: 'int',
               isNullable: true,
-            },
-            {
-              name: 'discountPrice',
-              type: 'int',
-              isNullable: true,
-            },
-            {
-              name: 'features',
-              type: 'json',
-              isNullable: false,
             },
             {
               name: 'isEnabled',
@@ -91,18 +58,18 @@ export class CreatePlans1727610358954 implements MigrationInterface {
         }),
         false, // Skip table type check as it can vary across databases
       );
-      this.logger.log(`Up: Create plans executed`);
+      this.logger.log(`Up: Create features executed`);
     } catch (error) {
-      printMigrationErrorLogs(this.logger, 'plans', (error as ApiErrorResponse)?.message);
+      printMigrationErrorLogs(this.logger, 'features', (error as ApiErrorResponse)?.message);
     }
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     try {
-      await queryRunner.dropTable('plans');
-      this.logger.log(`Down: Drop plans executed`);
+      await queryRunner.dropTable('features');
+      this.logger.log(`Down: Drop features executed`);
     } catch (error) {
-      this.logger.error(`Down: Drop plans has an error: `, (error as ApiErrorResponse)?.message);
+      this.logger.error(`Down: Drop features has an error: `, (error as ApiErrorResponse)?.message);
     }
   }
 }
