@@ -1,9 +1,9 @@
-name: safe
+name: pipeline
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
-    
+
     lint:
         runs-on: ubuntu-latest
         steps: 
@@ -26,3 +26,11 @@ jobs:
               run: |
                 export NODE_OPTIONS=--max_old_space_size=4096
                 npm run lint --max-warnings=0
+
+    types:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Type checker
+              run: nest build --type-check
+            - name: Buib project
+              run: npm run build
