@@ -3,68 +3,29 @@ name: pipeline
 on: [pull_request]
 
 jobs:
-
-    lint:
-        runs-on: ubuntu-latest
-        steps: 
-            - uses: actions/checkout@v4
-              with:
-                fetch-depth: 0
-            - name: Use Node.js 20.16.0
-              uses: actions/setup-node@v4
-              with:
-                node-version: 20.16.0
-                cache: 'npm'
-            - name: Setup Cache
-              uses: actions/cache@v4
-              with:
-                path: .eslintcache
-                key: ${{ runner.os }}-noe-${{ hashFiles('**/package-lock.json', '**/eslintrc.js') }}
-            - name: Install Dependencies
-              run: npm ci
-            - name: Run ESLint
-              run: |
-                export NODE_OPTIONS=--max_old_space_size=4096
-                npm run lint --max-warnings=0
-
-    types:
-        runs-on: ubuntu-latest
-        steps: 
-          - uses: actions/checkout@v4
-            with:
-              fetch-depth: 0
-          - name: Use Node.js 20.16.0
-            uses: actions/setup-node@v4
-            with:
-              node-version: 20.16.0
-              cache: 'npm'
-          - name: Setup Cache
-            uses: actions/cache@v4
-            with:
-              path: .eslintcache
-              key: ${{ runner.os }}-noe-${{ hashFiles('**/package-lock.json', '**/eslintrc.js') }}
-          - name: Install Dependencies
-            run: npm ci
-          - name: Type checker
-            run: npm run type:checker
-              
-    build:
-      runs-on: ubuntu-latest
-      steps: 
-        - uses: actions/checkout@v4
-          with:
-            fetch-depth: 0
-        - name: Use Node.js 20.16.0
-          uses: actions/setup-node@v4
-          with:
-            node-version: 20.16.0
-            cache: 'npm'
-        - name: Setup Cache
-          uses: actions/cache@v4
-          with:
-            path: .eslintcache
-            key: ${{ runner.os }}-noe-${{ hashFiles('**/package-lock.json', '**/eslintrc.js') }}
-        - name: Install Dependencies
-          run: npm ci
-        - name: Buib project
-          run: npm run build
+  build:
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Use Node.js 20.16.0
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.16.0
+          cache: 'npm'
+      - name: Setup Cache
+        uses: actions/cache@v4
+        with:
+          path: .eslintcache
+          key: ${{ runner.os }}-noe-${{ hashFiles('**/package-lock.json', '**/eslintrc.js') }}
+      - name: Install Dependencies
+        run: npm ci
+      - name: Type checker
+        run: npm run type:checker
+      - name: Run ESLint
+        run: |
+          export NODE_OPTIONS=--max_old_space_size=4096
+          npm run lint --max-warnings=0
+      - name: Buib project
+        run: npm run build
