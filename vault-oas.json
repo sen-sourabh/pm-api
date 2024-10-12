@@ -195,7 +195,10 @@
                 "customField:deleted",
                 "attachment:created",
                 "attachment:updated",
-                "attachment:deleted"
+                "attachment:deleted",
+                "feature:created",
+                "feature:updated",
+                "feature:deleted"
               ],
               "type": "string"
             }
@@ -266,10 +269,8 @@
             "name": "relation",
             "required": false,
             "in": "query",
-            "description": "Fecth associate relation`s data via relation as true",
-            "example": true,
+            "description": "To fetch the entities with their relation`s data",
             "schema": {
-              "default": false,
               "type": "boolean"
             }
           }
@@ -324,7 +325,6 @@
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
             "schema": {
-              "default": true,
               "type": "boolean"
             }
           }
@@ -526,10 +526,8 @@
             "name": "relation",
             "required": false,
             "in": "query",
-            "description": "Fecth associate relation`s data via relation as true",
-            "example": true,
+            "description": "To fetch the entities with their relation`s data",
             "schema": {
-              "default": false,
               "type": "boolean"
             }
           }
@@ -677,10 +675,8 @@
             "name": "relation",
             "required": false,
             "in": "query",
-            "description": "Fecth associate relation`s data via relation as true",
-            "example": true,
+            "description": "To fetch the entities with their relation`s data",
             "schema": {
-              "default": false,
               "type": "boolean"
             }
           }
@@ -892,9 +888,7 @@
             "required": false,
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
-            "example": true,
             "schema": {
-              "default": true,
               "type": "boolean"
             }
           }
@@ -949,7 +943,6 @@
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
             "schema": {
-              "default": true,
               "type": "boolean"
             }
           }
@@ -1162,10 +1155,8 @@
             "name": "relation",
             "required": false,
             "in": "query",
-            "description": "Fecth associate relation`s data via relation as true",
-            "example": true,
+            "description": "To fetch the entities with their relation`s data",
             "schema": {
-              "default": false,
               "type": "boolean"
             }
           }
@@ -1220,7 +1211,6 @@
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
             "schema": {
-              "default": true,
               "type": "boolean"
             }
           }
@@ -1377,9 +1367,7 @@
             "required": false,
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
-            "example": true,
             "schema": {
-              "default": true,
               "type": "boolean"
             }
           }
@@ -1434,7 +1422,6 @@
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
             "schema": {
-              "default": true,
               "type": "boolean"
             }
           }
@@ -1693,9 +1680,7 @@
             "required": false,
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
-            "example": true,
             "schema": {
-              "default": true,
               "type": "boolean"
             }
           }
@@ -1750,7 +1735,6 @@
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
             "schema": {
-              "default": true,
               "type": "boolean"
             }
           }
@@ -2001,9 +1985,7 @@
             "required": false,
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
-            "example": true,
             "schema": {
-              "default": true,
               "type": "boolean"
             }
           }
@@ -2058,7 +2040,6 @@
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
             "schema": {
-              "default": true,
               "type": "boolean"
             }
           }
@@ -2217,9 +2198,7 @@
             "required": false,
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
-            "example": true,
             "schema": {
-              "default": true,
               "type": "boolean"
             }
           }
@@ -2274,7 +2253,6 @@
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
             "schema": {
-              "default": true,
               "type": "boolean"
             }
           }
@@ -2549,9 +2527,7 @@
             "required": false,
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
-            "example": true,
             "schema": {
-              "default": true,
               "type": "boolean"
             }
           }
@@ -2606,7 +2582,6 @@
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
             "schema": {
-              "default": true,
               "type": "boolean"
             }
           }
@@ -2835,9 +2810,7 @@
             "required": false,
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
-            "example": true,
             "schema": {
-              "default": true,
               "type": "boolean"
             }
           }
@@ -2892,7 +2865,6 @@
             "in": "query",
             "description": "To fetch the entities with their relation`s data",
             "schema": {
-              "default": true,
               "type": "boolean"
             }
           }
@@ -3126,6 +3098,199 @@
         },
         "tags": [
           "Subscriptions"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/features": {
+      "post": {
+        "operationId": "createFeature",
+        "summary": "Create a feature",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFeatureDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Return the created feature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Feature"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        },
+        "tags": [
+          "Features"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "findAllFeatures",
+        "summary": "Get all the features",
+        "parameters": [
+          {
+            "name": "name",
+            "required": false,
+            "in": "query",
+            "description": "The name of the feature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "isEnabled",
+            "required": false,
+            "in": "query",
+            "description": "whether feature is enabled or not",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "isDeleted",
+            "required": false,
+            "in": "query",
+            "description": "whether feature is deleted or not",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "pageNumber",
+            "required": false,
+            "in": "query",
+            "description": "Page number",
+            "example": 1,
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "description": "No of records will be fetched in single page",
+            "example": 25,
+            "schema": {
+              "default": 25,
+              "type": "number"
+            }
+          },
+          {
+            "name": "relation",
+            "required": false,
+            "in": "query",
+            "description": "To fetch the entities with their relation`s data",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return the list of features",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Feature"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [
+          "Features"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/features/{id}": {
+      "get": {
+        "operationId": "findOneFeature",
+        "summary": "Get a feature",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "relation",
+            "required": false,
+            "in": "query",
+            "description": "To fetch the entities with their relation`s data",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return the feature with the given identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Feature"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "tags": [
+          "Features"
         ],
         "security": [
           {
@@ -3454,7 +3619,10 @@
               "customField:deleted",
               "attachment:created",
               "attachment:updated",
-              "attachment:deleted"
+              "attachment:deleted",
+              "feature:created",
+              "feature:updated",
+              "feature:deleted"
             ]
           },
           "targetUrl": {
@@ -3510,7 +3678,10 @@
               "customField:deleted",
               "attachment:created",
               "attachment:updated",
-              "attachment:deleted"
+              "attachment:deleted",
+              "feature:created",
+              "feature:updated",
+              "feature:deleted"
             ]
           },
           "targetUrl": {
@@ -4501,6 +4672,60 @@
           "addedBy": {
             "type": "string",
             "description": "The user who added"
+          }
+        }
+      },
+      "CreateFeatureDto": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "The description of the feature"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the feature"
+          }
+        }
+      },
+      "Feature": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id is the unique uuid identifier",
+            "example": "e762634c-3e41-11eb-b897-0862660ccbd4",
+            "default": "uuid",
+            "nullable": false,
+            "uniqueItems": true
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the feature"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the feature"
+          },
+          "isEnabled": {
+            "type": "boolean",
+            "description": "whether feature is enabled or not"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "description": "whether feature is deleted or not"
+          },
+          "createdAt": {
+            "format": "T",
+            "type": "string",
+            "description": "The datetime of record at creation",
+            "nullable": false
+          },
+          "updatedAt": {
+            "format": "T",
+            "type": "string",
+            "description": "The datetime of record at updation",
+            "nullable": true
           }
         }
       }
