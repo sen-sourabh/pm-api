@@ -27,6 +27,10 @@ export enum WebhookEventEnum {
   AttachmentCreated = 'attachment:created',
   AttachmentUpdated = 'attachment:updated',
   AttachmentDeleted = 'attachment:deleted',
+  //Feature event
+  FeatureCreated = 'feature:created',
+  FeatureUpdated = 'feature:updated',
+  FeatureDeleted = 'feature:deleted',
 }
 
 export enum WebhookStatusEnum {

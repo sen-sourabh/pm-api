@@ -16,6 +16,7 @@ import { CustomFieldsModule } from './core/modules/custom-fields/custom-fields.m
 import { FilesModule } from './core/modules/files/files.module';
 import { MessengerController } from './core/modules/messenger/messenger.controller';
 import { MessengerModule } from './core/modules/messenger/messenger.module';
+import { FeaturesController } from './core/modules/subscription/features/feature.controller';
 import { SubscriptionModule } from './core/modules/subscription/subscription.module';
 import { WebhooksController } from './core/modules/webhooks/webhooks.controller';
 import { WebhooksModule } from './core/modules/webhooks/webhooks.module';
@@ -104,6 +105,7 @@ export class AppModule {
         ProviderFieldAssociationsController,
         WebhooksController,
         MessengerController,
+        FeaturesController,
       );
   }
 }

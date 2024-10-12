@@ -8,12 +8,13 @@ export class PathParamsPipe implements PipeTransform {
     if (isMissing(value)) {
       throw new BadRequestException(`id is required`);
     }
-    // if (!isMissing(value?.relation)) {
-    //   value = {
-    //     ...value,
-    //     relation: value?.relation,
-    //   };
-    // }
+
+    if (!isMissing(value?.relation)) {
+      value = {
+        ...value,
+        relation: (value?.relation as unknown as string) === 'true',
+      };
+    }
 
     return value;
   }

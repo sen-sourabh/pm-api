@@ -26,9 +26,8 @@ export class ApiQueryUnifiedModel {
   pageSize?: number;
 
   @ApiPropertyOptional({
-    description: 'Fecth associate relation`s data via relation as true',
-    example: true,
-    default: false,
+    description: 'To fetch the entities with their relation`s data',
+    type: 'boolean',
     required: false,
   })
   @Type(() => Boolean)
