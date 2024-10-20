@@ -5,9 +5,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Feature } from './feature.entity';
 
 @ApiTags('Plan')
 @Entity('plans')
@@ -124,6 +126,7 @@ export class Plan {
     description: 'The features of the plan',
     required: true,
   })
+  @ManyToMany(() => Feature)
   @Column({
     type: 'json',
     nullable: false,
@@ -131,7 +134,7 @@ export class Plan {
   @ValidateNested({
     each: true,
   })
-  @IsString({ message: 'features must be a string array seperated by comma' })
+  @IsString({ message: 'features must be a string array of features id seperated by comma' })
   @IsOptional()
   features?: string[];
 
