@@ -1,4 +1,10 @@
-import { ConflictException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getPagination } from '../../../helpers/serializers';
@@ -13,10 +19,11 @@ import { WebhookEventEnum } from '../../webhooks/enums';
 import { WebhooksService } from '../../webhooks/webhooks.service';
 import { CreateFeatureDto } from '../dto/features/create.feature.dto';
 import { ListQueryFeaturesDto } from '../dto/features/list.feature.dto';
+import { UpdateFeatureDto } from '../dto/features/update.feature.dto';
 import { Feature } from '../entities/feature.entity';
 
 @Injectable()
-export class FeaturesServcie {
+export class FeaturesService {
   constructor(
     @InjectRepository(Feature)
     private readonly featuresRepository: Repository<Feature>,
@@ -137,6 +144,84 @@ export class FeaturesServcie {
     });
 
     return { data, metadata: { query } };
+  }
+
+  async updateFeature({
+    request,
+    id,
+    updateFeatureData,
+  }: {
+    request: Request;
+    id: string;
+    updateFeatureData: UpdateFeatureDto;
+  }): Promise<ApiResponseModel<Feature>> {
+    //Verified Uniquness of feature within the user
+    if (!isMissing(updateFeatureData?.name)) {
+      await this.#isFeatureNameIsUnique({
+        name: updateFeatureData?.name,
+      });
+    }
+
+    //Actual user update
+    const updated = await this.featuresRepository.update(id, {
+      ...updateFeatureData,
+    });
+    if (!updated?.affected) {
+      throw new BadRequestException(`Not updated`);
+    }
+    //Get updated user
+    const data = await this.featuresRepository.findOneBy({
+      id,
+    });
+
+    // INFO: Initiate webhook sender on `feature:updated` event
+    this.webhooksService.prepareToSendWebhooks({
+      user: (request?.['user'] as AuthUserPayload)?.id,
+      event: WebhookEventEnum.FeatureUpdated,
+      payload: data as Record<string, unknown>,
+    });
+
+    return {
+      data,
+      metadata: {
+        params: { id },
+        body: updateFeatureData,
+      },
+      message: 'Feature updated successfully',
+    };
+  }
+
+  async removeFeature({
+    request,
+    id,
+  }: {
+    request: Request;
+    id: string;
+  }): Promise<ApiResponseModel<Feature>> {
+    const deleted = await this.featuresRepository.update(id, {
+      isDeleted: true,
+      isEnabled: false,
+    });
+    if (!deleted?.affected) {
+      throw new BadRequestException(`Not deleted`);
+    }
+    //Get deleted user
+    const data = await this.featuresRepository.findOneBy({
+      id,
+    });
+
+    // INFO: Initiate webhook sender on `feature:deleted` event
+    this.webhooksService.prepareToSendWebhooks({
+      user: (request?.['user'] as AuthUserPayload)?.id,
+      event: WebhookEventEnum.FeatureDeleted,
+      payload: data as Record<string, unknown>,
+    });
+
+    return {
+      data,
+      metadata: { params: { id } },
+      message: 'Feature deleted successfully',
+    };
   }
 
   async findFeatureByValue(query: Record<string, unknown>): Promise<boolean> {
