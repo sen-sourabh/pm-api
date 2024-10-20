@@ -1,14 +1,17 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   Param,
+  Patch,
   Post,
   Query,
   Req,
   UseGuards,
   UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiXResponses } from '../../../shared/decorators/apply-filters/apply-filters.decorator';
@@ -21,15 +24,17 @@ import { PathParamsPipe } from '../../../shared/pipes/path-params.pipe';
 import { QueryParamsPipe } from '../../../shared/pipes/query-params.pipe';
 import { CreateFeatureDto } from '../dto/features/create.feature.dto';
 import { ListQueryFeaturesDto } from '../dto/features/list.feature.dto';
+import { UpdateFeatureDto } from '../dto/features/update.feature.dto';
 import { Feature } from '../entities/feature.entity';
-import { FeaturesServcie } from './feature.service';
+import { FeaturesService } from './feature.service';
+import { ValidateFeaturePipe } from './pipes/validate-feature.pipe';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @ApiTags('Features')
 @Controller('features')
 export class FeaturesController {
-  constructor(private readonly featuresService: FeaturesServcie) {}
+  constructor(private readonly featuresService: FeaturesService) {}
 
   @ApiOperation({
     summary: 'Create a feature',
@@ -95,5 +100,50 @@ export class FeaturesController {
     @Query() query?: ApiQueryParamUnifiedModel,
   ) {
     return this.featuresService.findOneFeature({ request, id, query });
+  }
+
+  @ApiOperation({
+    summary: 'Update a feature',
+  })
+  @ApiResponse({
+    description: 'Return the updated feature with the payload',
+    type: Feature,
+    status: 200,
+  })
+  @ApiXResponses(
+    ApiXResponsesEnum.Unauthorized,
+    ApiXResponsesEnum.BadRequest,
+    ApiXResponsesEnum.Conflict,
+    ApiXResponsesEnum.NotFound,
+  )
+  @UsePipes(new ValidationPipe({ whitelist: true }), new PathParamsPipe(), ValidateFeaturePipe)
+  @HttpCode(200)
+  @Patch(':id')
+  updateFeature(
+    @Req() request: Request,
+    @Param('id') id: string,
+    @Body() updateFeatureData: UpdateFeatureDto,
+  ) {
+    return this.featuresService.updateFeature({ request, id, updateFeatureData });
+  }
+
+  @ApiOperation({
+    summary: 'Delete a feature',
+  })
+  @ApiResponse({
+    description: 'Return the deleted feature with the given identifier',
+    type: Feature,
+    status: 200,
+  })
+  @ApiXResponses(
+    ApiXResponsesEnum.Unauthorized,
+    ApiXResponsesEnum.BadRequest,
+    ApiXResponsesEnum.NotFound,
+  )
+  @UsePipes(new PathParamsPipe(), ValidateFeaturePipe)
+  @HttpCode(200)
+  @Delete(':id')
+  removeFeature(@Req() request: Request, @Param('id') id: string) {
+    return this.featuresService.removeFeature({ request, id });
   }
 }
