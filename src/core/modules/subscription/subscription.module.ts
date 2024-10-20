@@ -7,6 +7,8 @@ import { Feature } from './entities/feature.entity';
 import { Plan } from './entities/plan.entity';
 import { FeaturesController } from './features/feature.controller';
 import { FeaturesService } from './features/feature.service';
+import { PlansController } from './plans/plan.controller';
+import { PlansService } from './plans/plan.service';
 import { SubscriptionController } from './subscription.controller';
 import { SubscriptionService } from './subscription.service';
 
@@ -17,8 +19,8 @@ import { SubscriptionService } from './subscription.service';
     WebhooksModule,
     CacheManagerModule,
   ],
-  controllers: [SubscriptionController, FeaturesController],
-  providers: [SubscriptionService, FeaturesService, Logger],
-  exports: [SubscriptionService, FeaturesService],
+  controllers: [SubscriptionController, FeaturesController, PlansController],
+  providers: [SubscriptionService, FeaturesService, PlansService, Logger],
+  exports: [SubscriptionService, FeaturesService, PlansService],
 })
 export class SubscriptionModule {}

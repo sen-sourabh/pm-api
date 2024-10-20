@@ -198,7 +198,10 @@
                 "attachment:deleted",
                 "feature:created",
                 "feature:updated",
-                "feature:deleted"
+                "feature:deleted",
+                "plan:created",
+                "plan:updated",
+                "plan:deleted"
               ],
               "type": "string"
             }
@@ -3291,6 +3294,299 @@
         ]
       }
     },
+    "/api/v1/plans": {
+      "post": {
+        "operationId": "createPlan",
+        "summary": "Create a plan",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePlanDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Return the created plan",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Plan"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        },
+        "tags": [
+          "Plans"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "findAllPlans",
+        "summary": "Get all the plans",
+        "parameters": [
+          {
+            "name": "name",
+            "required": false,
+            "in": "query",
+            "description": "The name of the plan",
+            "schema": {
+              "uniqueItems": true,
+              "type": "string"
+            }
+          },
+          {
+            "name": "isEnabled",
+            "required": false,
+            "in": "query",
+            "description": "whether plan is enabled or not",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "isDeleted",
+            "required": false,
+            "in": "query",
+            "description": "whether plan is deleted or not",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "pageNumber",
+            "required": false,
+            "in": "query",
+            "description": "Page number",
+            "example": 1,
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "description": "No of records will be fetched in single page",
+            "example": 25,
+            "schema": {
+              "default": 25,
+              "type": "number"
+            }
+          },
+          {
+            "name": "relation",
+            "required": false,
+            "in": "query",
+            "description": "To fetch the entities with their relation`s data",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return the list of plans",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Plan"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [
+          "Plans"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/plans/{id}": {
+      "get": {
+        "operationId": "findOnePlan",
+        "summary": "Get a plan",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "relation",
+            "required": false,
+            "in": "query",
+            "description": "To fetch the entities with their relation`s data",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return the plan with the given identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Plan"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "tags": [
+          "Plans"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "updatePlan",
+        "summary": "Update a plan",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePlanDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Return the updated plan with the payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Plan"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        },
+        "tags": [
+          "Plans"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "removePlan",
+        "summary": "Delete a plan",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return the deleted plan with the given identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Plan"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "tags": [
+          "Plans"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/api/v1/server": {
       "get": {
         "operationId": "isServerRunning",
@@ -3614,7 +3910,10 @@
               "attachment:deleted",
               "feature:created",
               "feature:updated",
-              "feature:deleted"
+              "feature:deleted",
+              "plan:created",
+              "plan:updated",
+              "plan:deleted"
             ]
           },
           "targetUrl": {
@@ -3673,7 +3972,10 @@
               "attachment:deleted",
               "feature:created",
               "feature:updated",
-              "feature:deleted"
+              "feature:deleted",
+              "plan:created",
+              "plan:updated",
+              "plan:deleted"
             ]
           },
           "targetUrl": {
@@ -4739,6 +5041,165 @@
           "isDeleted": {
             "type": "boolean",
             "description": "whether feature is deleted or not"
+          }
+        }
+      },
+      "CreatePlanDto": {
+        "type": "object",
+        "properties": {
+          "heading": {
+            "type": "string",
+            "description": "The heading of the plan"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the plan"
+          },
+          "price": {
+            "type": "number",
+            "description": "The price of the plan"
+          },
+          "currency": {
+            "type": "string",
+            "description": "The currency of the plan"
+          },
+          "discountPercentage": {
+            "type": "number",
+            "description": "The discount percentage of the plan"
+          },
+          "discountPrice": {
+            "type": "number",
+            "description": "The discount price of the plan"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the plan",
+            "uniqueItems": true
+          },
+          "features": {
+            "description": "The features of the plan",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Plan": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id is the unique uuid identifier",
+            "example": "e762634c-3e41-11eb-b897-0862660ccbd4",
+            "default": "uuid",
+            "nullable": false,
+            "uniqueItems": true
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the plan",
+            "uniqueItems": true
+          },
+          "heading": {
+            "type": "string",
+            "description": "The heading of the plan"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the plan"
+          },
+          "price": {
+            "type": "number",
+            "description": "The price of the plan"
+          },
+          "currency": {
+            "type": "string",
+            "description": "The currency of the plan"
+          },
+          "discountPercentage": {
+            "type": "number",
+            "description": "The discount percentage of the plan"
+          },
+          "discountPrice": {
+            "type": "number",
+            "description": "The discount price of the plan"
+          },
+          "features": {
+            "description": "The features of the plan",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "isEnabled": {
+            "type": "boolean",
+            "description": "whether plan is enabled or not"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "description": "whether plan is deleted or not"
+          },
+          "createdAt": {
+            "format": "T",
+            "type": "string",
+            "description": "The datetime of record at creation",
+            "nullable": false
+          },
+          "updatedAt": {
+            "format": "T",
+            "type": "string",
+            "description": "The datetime of record at updation",
+            "nullable": true
+          }
+        }
+      },
+      "UpdatePlanDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the plan",
+            "uniqueItems": true
+          },
+          "heading": {
+            "type": "string",
+            "description": "The heading of the plan"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the plan"
+          },
+          "price": {
+            "type": "number",
+            "description": "The price of the plan"
+          },
+          "currency": {
+            "type": "string",
+            "description": "The currency of the plan"
+          },
+          "discountPercentage": {
+            "type": "number",
+            "description": "The discount percentage of the plan"
+          },
+          "discountPrice": {
+            "type": "number",
+            "description": "The discount price of the plan"
+          },
+          "features": {
+            "description": "The features of the plan",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "isEnabled": {
+            "type": "boolean",
+            "description": "whether plan is enabled or not"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "description": "whether plan is deleted or not"
           }
         }
       }

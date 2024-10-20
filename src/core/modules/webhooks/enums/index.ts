@@ -31,6 +31,10 @@ export enum WebhookEventEnum {
   FeatureCreated = 'feature:created',
   FeatureUpdated = 'feature:updated',
   FeatureDeleted = 'feature:deleted',
+  //Plan event
+  PlanCreated = 'plan:created',
+  PlanUpdated = 'plan:updated',
+  PlanDeleted = 'plan:deleted',
 }
 
 export enum WebhookStatusEnum {
