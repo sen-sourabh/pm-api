@@ -1,5 +1,6 @@
 import { ApiPropertyOptional, PickType } from '@nestjs/swagger';
-import { IsString, ValidateNested } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsString } from 'class-validator';
 import { Plan } from '../../entities/plan.entity';
 
 export class CreatePlanDto extends PickType(Plan, [
@@ -22,9 +23,9 @@ export class CreatePlanDto extends PickType(Plan, [
     description: 'The features of the plan',
     required: true,
   })
-  @ValidateNested({
-    each: true,
-  })
   @IsString({ message: 'features must be a string array of features id seperated by comma' })
-  features: string[];
+  @Transform(({ value }: { value: string[] }) => {
+    return value.toString();
+  })
+  features: string;
 }
