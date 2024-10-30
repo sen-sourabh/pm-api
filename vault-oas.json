@@ -5077,11 +5077,8 @@
             "uniqueItems": true
           },
           "features": {
-            "description": "The features of the plan",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+            "type": "string",
+            "description": "The features of the plan"
           }
         }
       },
@@ -5126,11 +5123,8 @@
             "description": "The discount price of the plan"
           },
           "features": {
-            "description": "The features of the plan",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+            "type": "string",
+            "description": "The features of the plan"
           },
           "isEnabled": {
             "type": "boolean",
@@ -5187,11 +5181,8 @@
             "description": "The discount price of the plan"
           },
           "features": {
-            "description": "The features of the plan",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+            "type": "string",
+            "description": "The features of the plan"
           },
           "isEnabled": {
             "type": "boolean",

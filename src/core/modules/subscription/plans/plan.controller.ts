@@ -1,18 +1,17 @@
 /* eslint-disable prettier/prettier */
 import {
-	Body,
-	Controller,
-	Delete,
-	Get,
-	HttpCode,
-	Param,
-	Patch,
-	Post,
-	Query,
-	Req,
-	UseGuards,
-	UsePipes,
-	ValidationPipe,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  Patch,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+  UsePipes,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiXResponses } from '../../../shared/decorators/apply-filters/apply-filters.decorator';
@@ -117,7 +116,7 @@ export class PlansController {
     ApiXResponsesEnum.Conflict,
     ApiXResponsesEnum.NotFound,
   )
-  @UsePipes(new ValidationPipe({ whitelist: true }), new PathParamsPipe(), ValidatePlanPipe)
+  @UsePipes(new PathParamsPipe(), ValidatePlanPipe)
   @HttpCode(200)
   @Patch(':id')
   updatePlan(

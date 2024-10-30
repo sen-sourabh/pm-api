@@ -1,15 +1,17 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { ApiPropertyOptional, ApiTags } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsBoolean, IsDateString, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { IsBoolean, IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Feature } from './feature.entity';
 
 @ApiTags('Plan')
 @Entity('plans')
@@ -81,7 +83,7 @@ export class Plan {
     type: 'int',
     nullable: false,
   })
-  @IsString({ message: 'price must be a number' })
+  @IsNumber({ maxDecimalPlaces: 2, allowInfinity: false, allowNaN: false })
   @IsOptional()
   price?: number;
 
@@ -105,8 +107,9 @@ export class Plan {
   @Column({
     type: 'int',
     nullable: true,
+    default: 0,
   })
-  @IsString({ message: 'discount percentage must be a number' })
+  @IsNumber({ maxDecimalPlaces: 2, allowInfinity: false, allowNaN: false })
   @IsOptional()
   discountPercentage?: number;
 
@@ -117,8 +120,9 @@ export class Plan {
   @Column({
     type: 'int',
     nullable: true,
+    default: 0.0,
   })
-  @IsString({ message: 'discount price must be a number' })
+  @IsNumber({ maxDecimalPlaces: 2, allowInfinity: false, allowNaN: false })
   @IsOptional()
   discountPrice?: number;
 
@@ -126,17 +130,17 @@ export class Plan {
     description: 'The features of the plan',
     required: true,
   })
-  @ManyToMany(() => Feature)
   @Column({
-    type: 'json',
+    type: 'varchar',
     nullable: false,
   })
-  @ValidateNested({
-    each: true,
-  })
   @IsString({ message: 'features must be a string array of features id seperated by comma' })
+  @Transform(({ value }: { value: string[] }) => {
+    return value.toString();
+  })
   @IsOptional()
-  features?: string[];
+  // TODO: features should be forign key with Feature
+  features?: string;
 
   @ApiPropertyOptional({
     description: 'whether plan is enabled or not',
