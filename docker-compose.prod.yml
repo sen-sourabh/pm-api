@@ -1,0 +1,18 @@
+services:
+  vault-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - '4000:4000'
+    env_file:
+      - .env
+    volumes:
+      - ./src:/usr/src/app/src
+  mysql_db:
+    image: mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=vault_db
+      - MYSQL_TCP_PORT=3306
