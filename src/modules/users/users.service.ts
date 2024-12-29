@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { MenoService } from 'umeno';
 import { generateSecretKey } from '../../core/helpers/security';
 import { getPagination } from '../../core/helpers/serializers';
 import { isMissing, validateEmail } from '../../core/helpers/validations';
@@ -34,6 +35,7 @@ export class UsersService {
     private readonly messengerService: MessengerService,
     private readonly webhooksService: WebhooksService,
     private readonly cacheManagerService: CacheManagerService,
+    private readonly menoService: MenoService,
   ) {}
 
   async createUser({
@@ -88,6 +90,15 @@ export class UsersService {
     listQueryUsersData?: ListQueryUsersDto;
   }): Promise<ApiResponseModel<User[]>> {
     try {
+      const sentMessage = await this.menoService.sendMessage({
+        title: 'Vault',
+        body: {
+          name: 'Sourabh',
+        },
+      });
+
+      console.log('sentMessage: ', sentMessage);
+
       // From Cache
       let data = await this.cacheManagerService.cacheGetData(request);
       if (!isMissing(data)) {
